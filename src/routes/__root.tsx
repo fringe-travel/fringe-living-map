@@ -19,7 +19,7 @@ function NotFoundComponent() {
         <h1 className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Signal lost</h1>
         <p className="mt-3 text-4xl font-extrabold tracking-tighter">404 — Off the map</p>
         <p className="mt-3 text-sm text-foreground/60">
-          That region isn't broadcasting. Try another live zone.
+          That region isn't broadcasting. Try another signal zone.
         </p>
         <Link
           to="/"
