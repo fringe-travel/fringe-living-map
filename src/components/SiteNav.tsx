@@ -71,7 +71,7 @@ export function SiteNav() {
           <Link
             to="/"
             search={{ fullscreen: 1 } as any}
-            onClick={closeMenu}
+            onClick={handleExplore}
             className="hidden rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:inline-flex"
           >
             Explore the Globe
@@ -117,7 +117,7 @@ export function SiteNav() {
             <Link
               to="/"
               search={{ fullscreen: 1 } as any}
-              onClick={closeMenu}
+              onClick={handleExplore}
               className="mt-2 rounded-full bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground sm:hidden"
             >
               Explore the Globe
