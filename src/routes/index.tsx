@@ -29,6 +29,16 @@ function HomePage() {
   return (
     <>
       <LivingGlobe />
+      <section className="border-t border-border bg-background px-6 py-20 text-center">
+        <div className="mx-auto max-w-3xl">
+          <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-foreground md:text-6xl lg:text-7xl">
+            Real vibes. Real places. Right now.
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-base text-foreground/70 md:text-lg">
+            A giant, always-rotating globe of fresh signals from real people on the ground.
+          </p>
+        </div>
+      </section>
       <FourCTAs />
     </>
   );
