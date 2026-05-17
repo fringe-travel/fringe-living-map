@@ -99,6 +99,17 @@ export function LivingGlobe() {
     return () => document.removeEventListener("fullscreenchange", onChange);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("fullscreen") === "1" && sectionRef.current && !document.fullscreenElement) {
+      sectionRef.current.requestFullscreen?.().catch(() => {});
+      const url = new URL(window.location.href);
+      url.searchParams.delete("fullscreen");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, []);
+
   const toggleFullscreen = () => {
     const el = sectionRef.current;
     if (!el) return;
