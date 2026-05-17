@@ -224,12 +224,18 @@ export function LivingGlobe() {
       }, 2000);
     });
 
-    timer = setTimeout(loop, 1500);
+      timer = setTimeout(loop, 1500);
+
+      cleanup = () => {
+        if (timer) clearTimeout(timer);
+        map.remove();
+        mapRef.current = null;
+      };
+    })();
 
     return () => {
-      if (timer) clearTimeout(timer);
-      map.remove();
-      mapRef.current = null;
+      cancelled = true;
+      cleanup?.();
     };
   }, [points]);
 
