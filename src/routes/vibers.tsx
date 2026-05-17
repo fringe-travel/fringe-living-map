@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import appPreview from "@/assets/fringe-app-preview.jpeg";
 
 export const Route = createFileRoute("/vibers")({
   head: () => ({
