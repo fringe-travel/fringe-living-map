@@ -59,8 +59,6 @@ type GlobePoint = {
   isRegion?: boolean;
 };
 
-type Projected = GlobePoint & { x: number; y: number; z: number; visible: boolean };
-
 function buildPoints(): GlobePoint[] {
   const pts: GlobePoint[] = [];
 
@@ -83,207 +81,67 @@ function buildPoints(): GlobePoint[] {
   return pts;
 }
 
-function project(lng: number, lat: number, rotation: number, cx: number, cy: number, r: number): Projected["visible"] extends boolean ? { x: number; y: number; z: number; visible: boolean } : never {
-  const lambda = ((lng + rotation) * Math.PI) / 180;
-  const phi = (lat * Math.PI) / 180;
-  const cosPhi = Math.cos(phi);
-  const x3 = cosPhi * Math.sin(lambda);
-  const y3 = Math.sin(phi);
-  const z3 = cosPhi * Math.cos(lambda);
-  return { x: cx + r * x3, y: cy - r * y3, z: z3, visible: z3 > -0.08 } as never;
+function pointStyle([lng, lat]: [number, number], offset = 0) {
+  const x = ((lng + 180) / 360) * 100 + offset;
+  const y = ((90 - lat) / 180) * 100;
+  return { left: `${x}%`, top: `${y}%` };
 }
 
-function drawSphere(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.clip();
-
-  const ocean = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.38, r * 0.1, cx, cy, r * 1.08);
-  ocean.addColorStop(0, "#1a797f");
-  ocean.addColorStop(0.34, "#0b4057");
-  ocean.addColorStop(0.72, "#061d35");
-  ocean.addColorStop(1, "#020811");
-  ctx.fillStyle = ocean;
-  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
-
-  ctx.strokeStyle = "rgba(103,232,249,0.16)";
-  ctx.lineWidth = 1;
-  for (let lat = -60; lat <= 60; lat += 15) {
-    const y = cy - r * Math.sin((lat * Math.PI) / 180);
-    const width = r * Math.cos((lat * Math.PI) / 180);
-    ctx.beginPath();
-    ctx.ellipse(cx, y, width, r * 0.022, 0, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-  for (let i = -75; i <= 75; i += 15) {
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, r * Math.cos((i * Math.PI) / 180), r, 0, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-
-  const land = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
-  land.addColorStop(0, "rgba(35,115,72,0.72)");
-  land.addColorStop(1, "rgba(94,140,78,0.7)");
-  ctx.fillStyle = land;
-  const blobs = [
-    [-103, 48, 0.28, 0.18, -0.35],
-    [-70, -17, 0.15, 0.28, 0.2],
-    [18, 6, 0.31, 0.21, -0.1],
-    [72, 35, 0.38, 0.2, 0.15],
-    [103, 4, 0.24, 0.16, -0.18],
-    [135, -25, 0.18, 0.12, 0.2],
-    [44, -20, 0.1, 0.14, -0.1],
-    [-42, 72, 0.14, 0.08, 0.1],
-  ];
-  for (const [lng, lat, wr, hr, rot] of blobs) {
-    const p = project(lng, lat, 0, cx, cy, r);
-    if (!p.visible) continue;
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(rot);
-    ctx.globalAlpha = Math.max(0.12, p.z * 0.7);
-    ctx.beginPath();
-    ctx.ellipse(0, 0, r * wr, r * hr, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  const shade = ctx.createRadialGradient(cx - r * 0.28, cy - r * 0.25, r * 0.18, cx + r * 0.26, cy + r * 0.06, r * 1.1);
-  shade.addColorStop(0, "rgba(255,255,255,0.2)");
-  shade.addColorStop(0.42, "rgba(255,255,255,0)");
-  shade.addColorStop(0.78, "rgba(0,0,0,0.28)");
-  shade.addColorStop(1, "rgba(0,0,0,0.78)");
-  ctx.fillStyle = shade;
-  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
-  ctx.restore();
-
-  ctx.save();
-  ctx.strokeStyle = "rgba(45,246,200,0.5)";
-  ctx.lineWidth = 2;
-  ctx.shadowColor = "rgba(45,246,200,0.9)";
-  ctx.shadowBlur = 28;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r + 1, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.restore();
-}
+const LAND_BLOBS = [
+  { left: "8%", top: "18%", width: "24%", height: "24%", rotate: "-18deg" },
+  { left: "18%", top: "48%", width: "14%", height: "32%", rotate: "10deg" },
+  { left: "43%", top: "25%", width: "18%", height: "20%", rotate: "-8deg" },
+  { left: "52%", top: "37%", width: "16%", height: "28%", rotate: "12deg" },
+  { left: "60%", top: "19%", width: "31%", height: "25%", rotate: "6deg" },
+  { left: "71%", top: "43%", width: "22%", height: "19%", rotate: "-12deg" },
+  { left: "78%", top: "65%", width: "13%", height: "14%", rotate: "15deg" },
+  { left: "31%", top: "10%", width: "10%", height: "8%", rotate: "8deg" },
+];
 
 export function LivingGlobe() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const points = useMemo(buildPoints, []);
   const totalVibes = points.filter((p) => p.vibe).length + 33;
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let width = 0;
-    let height = 0;
-    let frame = 0;
-    let projectedPoints: Projected[] = [];
-
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = rect.width;
-      height = rect.height;
-      canvas.width = Math.max(1, Math.floor(width * dpr));
-      canvas.height = Math.max(1, Math.floor(height * dpr));
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
-    resize();
-
-    const draw = (time: number) => {
-      const cx = width / 2;
-      const cy = height * 0.52;
-      const r = Math.min(width * 0.43, height * 0.46, 390);
-      const rotation = 210 - time * 0.006;
-
-      ctx.clearRect(0, 0, width, height);
-      const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(width, height) * 0.65);
-      bg.addColorStop(0, "rgba(45,246,200,0.2)");
-      bg.addColorStop(0.42, "rgba(14,165,233,0.08)");
-      bg.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, width, height);
-
-      ctx.save();
-      ctx.fillStyle = "rgba(255,255,255,0.72)";
-      for (let i = 0; i < 130; i++) {
-        const x = (Math.sin(i * 91.7) * 0.5 + 0.5) * width;
-        const y = (Math.cos(i * 47.3) * 0.5 + 0.5) * height;
-        const alpha = 0.22 + ((i % 7) / 7) * 0.45;
-        ctx.globalAlpha = alpha;
-        ctx.fillRect(x, y, i % 11 === 0 ? 2 : 1, i % 11 === 0 ? 2 : 1);
-      }
-      ctx.restore();
-
-      drawSphere(ctx, cx, cy, r);
-
-      projectedPoints = points
-        .map((point) => ({ ...point, ...project(point.coords[0], point.coords[1], rotation, cx, cy, r * 1.035) }))
-        .filter((point) => point.visible)
-        .sort((a, b) => a.z - b.z);
-
-      for (const p of projectedPoints) {
-        const pulse = 1 + Math.sin(time * 0.006 + p.x * 0.03) * 0.26;
-        const isRegion = !!p.isRegion;
-        const isVibe = !!p.vibe;
-        const dot = (isRegion ? 7 : isVibe ? 5 : 3.5) * pulse;
-        const color = isRegion ? "#ffd166" : isVibe ? "#2df6c8" : "#fb923c";
-        const opacity = Math.max(0.2, Math.min(1, p.z));
-
-        ctx.save();
-        ctx.globalAlpha = opacity;
-        ctx.shadowColor = color;
-        ctx.shadowBlur = isRegion ? 24 : 16;
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, dot, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = opacity * 0.28;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, dot * 3.4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.globalAlpha = opacity;
-        ctx.font = isRegion ? "700 12px Inter, sans-serif" : "700 10px Inter, sans-serif";
-        ctx.fillStyle = isRegion ? "#ffe08a" : isVibe ? "rgba(255,255,255,0.86)" : "rgba(255,255,255,0.55)";
-        ctx.fillText(p.label, p.x + dot + 6, p.y + 4);
-        ctx.restore();
-      }
-
-      frame = requestAnimationFrame(draw);
-    };
-
-    frame = requestAnimationFrame(draw);
-
-    const handleClick = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const hit = projectedPoints.find((p) => p.slug && Math.hypot(p.x - x, p.y - y) < 32);
-      if (hit?.slug) window.location.href = `/regions/${hit.slug}`;
-    };
-    canvas.addEventListener("click", handleClick);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      canvas.removeEventListener("click", handleClick);
-      ro.disconnect();
-    };
-  }, [points]);
+  const markerPasses = [0, 100];
 
   return (
     <div className="relative h-[calc(100svh-64px)] min-h-[640px] w-full overflow-hidden bg-black">
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,#02060a,#000)]" />
-      <canvas ref={canvasRef} className="absolute inset-0 size-full cursor-pointer" aria-label="Rotating Living Globe with live vibes" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(45,246,200,0.18),transparent_32%),linear-gradient(180deg,#02060a,#000)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-70 [background-image:radial-gradient(circle,rgba(255,255,255,0.34)_1px,transparent_1px)] [background-size:84px_84px]" />
+
+      <div className="absolute inset-0 flex items-center justify-center px-4 pt-8 pb-28 md:pb-20">
+        <div className="living-globe" aria-label="Rotating Living Globe with live vibes">
+          <div className="globe-map">
+            {[0, 100].map((offset) => (
+              <div key={`land-${offset}`} className="absolute inset-y-0 w-1/2" style={{ left: `${offset}%` }}>
+                {LAND_BLOBS.map((blob, index) => (
+                  <span
+                    key={`${offset}-${index}`}
+                    className="absolute rounded-[48%] bg-emerald-500/45 blur-[0.2px]"
+                    style={{ ...blob, transform: `rotate(${blob.rotate})` }}
+                  />
+                ))}
+              </div>
+            ))}
+
+            {markerPasses.flatMap((offset) =>
+              points.map((point) => (
+                <a
+                  key={`${point.id}-${offset}`}
+                  href={point.slug ? `/regions/${point.slug}` : undefined}
+                  className={`vibe-pin ${point.isRegion ? "is-region" : point.vibe ? "is-vibe" : "is-ambient"}`}
+                  style={pointStyle(point.coords, offset)}
+                  aria-label={point.label}
+                >
+                  <span className="pin-dot" />
+                  <span className="pin-label">{point.label}</span>
+                </a>
+              )),
+            )}
+          </div>
+          <div className="globe-grid" />
+          <div className="globe-shine" />
+        </div>
+      </div>
 
       <div className="pointer-events-none absolute left-6 top-6 z-10 flex items-start gap-3 md:left-8 md:top-8">
         <div className="pointer-events-auto">
@@ -321,6 +179,120 @@ export function LivingGlobe() {
           <p className="max-w-sm text-sm text-white/60">Tap any glow to drop into the region. No uploads. No edits. No filters. Only delete.</p>
         </div>
       </div>
+
+      <style>{`
+        .living-globe {
+          position: relative;
+          width: min(82vw, 760px);
+          aspect-ratio: 1;
+          border-radius: 9999px;
+          overflow: hidden;
+          background:
+            radial-gradient(circle at 34% 24%, rgba(255,255,255,0.22), transparent 18%),
+            radial-gradient(circle at 45% 42%, #155e75 0%, #0f3c57 42%, #06162a 76%, #020711 100%);
+          box-shadow:
+            0 0 0 1px rgba(45,246,200,0.28),
+            0 0 72px rgba(45,246,200,0.32),
+            inset -60px -24px 90px rgba(0,0,0,0.76),
+            inset 28px 18px 44px rgba(255,255,255,0.1);
+        }
+        .living-globe::before {
+          content: "";
+          position: absolute;
+          inset: -3%;
+          border-radius: inherit;
+          border: 2px solid rgba(45,246,200,0.46);
+          box-shadow: 0 0 40px rgba(45,246,200,0.58), inset 0 0 38px rgba(45,246,200,0.18);
+          z-index: 4;
+          pointer-events: none;
+        }
+        .globe-map {
+          position: absolute;
+          inset: 0;
+          width: 200%;
+          height: 100%;
+          animation: globePan 34s linear infinite;
+          background:
+            repeating-linear-gradient(0deg, transparent 0 10%, rgba(103,232,249,0.08) 10.2% 10.45%, transparent 10.7% 20%),
+            repeating-linear-gradient(90deg, transparent 0 8%, rgba(103,232,249,0.08) 8.1% 8.35%, transparent 8.55% 16%);
+        }
+        .globe-grid,
+        .globe-shine {
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          pointer-events: none;
+        }
+        .globe-grid {
+          z-index: 3;
+          background: radial-gradient(circle at 34% 26%, transparent 0 28%, rgba(0,0,0,0.14) 58%, rgba(0,0,0,0.72) 100%);
+          mix-blend-mode: multiply;
+        }
+        .globe-shine {
+          z-index: 5;
+          background: radial-gradient(circle at 28% 22%, rgba(255,255,255,0.24), transparent 18%), linear-gradient(110deg, rgba(255,255,255,0.08), transparent 42%);
+        }
+        .vibe-pin {
+          position: absolute;
+          z-index: 6;
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          transform: translate(-50%, -50%);
+          text-decoration: none;
+          white-space: nowrap;
+        }
+        .pin-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 9999px;
+          background: #2df6c8;
+          box-shadow: 0 0 0 4px rgba(45,246,200,0.2), 0 0 18px rgba(45,246,200,0.95);
+          animation: vibePulse 2.4s ease-in-out infinite;
+          flex: none;
+        }
+        .pin-label {
+          color: rgba(255,255,255,0.82);
+          font-size: 10px;
+          font-weight: 800;
+          line-height: 1;
+          text-shadow: 0 1px 8px rgba(0,0,0,0.95);
+        }
+        .vibe-pin.is-region .pin-dot {
+          width: 13px;
+          height: 13px;
+          background: #ffd166;
+          box-shadow: 0 0 0 5px rgba(255,209,102,0.22), 0 0 24px rgba(255,209,102,1);
+        }
+        .vibe-pin.is-region .pin-label {
+          color: #ffe08a;
+          font-size: 12px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .vibe-pin.is-ambient .pin-dot {
+          width: 6px;
+          height: 6px;
+          background: #fb923c;
+          box-shadow: 0 0 0 3px rgba(251,146,60,0.18), 0 0 14px rgba(251,146,60,0.7);
+        }
+        .vibe-pin.is-ambient .pin-label {
+          color: rgba(255,255,255,0.55);
+          font-weight: 600;
+        }
+        @keyframes globePan {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @keyframes vibePulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.38); opacity: 0.82; }
+        }
+        @media (max-width: 720px) {
+          .living-globe { width: min(108vw, 560px); }
+          .pin-label { display: none; }
+        }
+      `}</style>
     </div>
   );
 }
