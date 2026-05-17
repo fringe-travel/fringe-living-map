@@ -68,6 +68,27 @@ function Page() {
       {/* Support a Region */}
       <SupportRegionBlock regionName="your favorite region" />
 
+      {/* Sponsors */}
+      <div className="rounded-3xl border border-primary/30 bg-primary/5 p-8 md:p-10">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Sponsors</p>
+        <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
+          Sponsor the Living Globe.
+        </h2>
+        <p className="mt-3 max-w-2xl text-foreground/60">
+          Brands and organizations who believe in real signal over filtered content can sponsor a
+          region, a sport, or the whole globe. Your support keeps vibers on the ground and the map
+          honest — no ads, no algorithm, just credit where it belongs.
+        </p>
+        <div className="mt-6">
+          <a
+            href="mailto:sponsors@fringe.travel?subject=Sponsor%20the%20Living%20Globe"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-all hover:brightness-110"
+          >
+            Become a Sponsor →
+          </a>
+        </div>
+      </div>
+
       <p className="border-t border-border pt-12 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/40">
         Premium memberships for power users are coming later — once the globe feels magical to
         everyone first.
