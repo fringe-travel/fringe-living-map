@@ -22,7 +22,7 @@ export function SiteNav() {
         <Link to="/" className="flex flex-col leading-none">
           <span className="text-xl font-extrabold tracking-tighter text-foreground">FRiNGE</span>
           <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary">
-            The Living Globe
+            Discover Your Adventure
           </span>
         </Link>
 
