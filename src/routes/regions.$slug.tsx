@@ -123,25 +123,25 @@ function Page() {
             const older = sorted.filter((d) => d.minutesAgo >= 20);
             return (
               <div className="mt-10 grid gap-6 lg:grid-cols-5">
-                {/* Locked Now column */}
+                {/* Now column — locked unless user has access */}
                 <div className="relative lg:col-span-3">
                   <div className="mb-3 flex items-center justify-between">
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
                       <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-signal align-middle" />
-                      Now · last 20 min · locked
+                      Now · last 20 min {access.hasAccess ? "· live" : "· locked"}
                     </p>
-                    <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                      Pass required
+                    <span className={`rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] ${access.hasAccess ? "border-signal/40 bg-signal/10 text-signal" : "border-primary/30 bg-primary/10 text-primary"}`}>
+                      {access.hasAccess ? "Unlocked" : "Pass required"}
                     </span>
                   </div>
-                  <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-background">
+                  <div className={`relative overflow-hidden rounded-3xl border bg-background ${access.hasAccess ? "border-signal/40" : "border-primary/30"}`}>
                     <ul className="divide-y divide-border">
                       {recent.map((d: SignalDrop, i: number) => (
                         <li key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-5 p-5 md:p-6">
                           <div className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/40 bg-surface font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
                             {d.tag.slice(0, 3)}
                           </div>
-                          <div className="select-none [filter:blur(6px)]">
+                          <div className={access.hasAccess ? "" : "select-none [filter:blur(6px)]"}>
                             <p className="text-xs font-mono uppercase tracking-[0.18em] text-foreground/40">
                               {d.spot} · @{d.by}
                             </p>
@@ -153,18 +153,28 @@ function Page() {
                         </li>
                       ))}
                     </ul>
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background/90" />
-                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 p-6 text-center">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-                        {recent.length} drops happening right now
-                      </p>
-                      <button className="rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-105">
-                        Unlock the Now — ${region.pricePerDay} today
-                      </button>
-                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
-                        or ${region.pricePerMonth}/mo · full Now Map
-                      </p>
-                    </div>
+                    {!access.hasAccess && (
+                      <>
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background/90" />
+                        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 p-6 text-center">
+                          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+                            {recent.length} drops happening right now
+                          </p>
+                          {prices && (
+                            <UnlockButton
+                              priceId={prices.day}
+                              reason={`Unlock the Now in ${region.name}`}
+                              className="rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
+                            >
+                              Unlock the Now — ${region.pricePerDay} today
+                            </UnlockButton>
+                          )}
+                          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
+                            or ${region.pricePerMonth}/mo · full Now Map
+                          </p>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
 
