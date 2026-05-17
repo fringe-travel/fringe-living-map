@@ -170,8 +170,8 @@ function Page() {
           </h2>
 
           <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {region.spots.map((s) => {
-              const hasFresh = region.previewFeed.some((d) => d.spot.includes(s));
+            {region.spots.map((s: string) => {
+              const hasFresh = region.previewFeed.some((d: SignalDrop) => d.spot.includes(s));
               return (
                 <div
                   key={s}
