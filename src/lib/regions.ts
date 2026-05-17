@@ -2,6 +2,14 @@ import boracayImg from "@/assets/region-boracay.jpg";
 import rioImg from "@/assets/region-rio.jpg";
 import hoodRiverImg from "@/assets/region-hood-river.jpg";
 
+export type SignalDrop = {
+  minutesAgo: number;
+  spot: string;
+  vibe: string;
+  by: string;
+  tag: "crowd" | "wind" | "sunset" | "food" | "music" | "surf" | "vibe";
+};
+
 export type Region = {
   slug: string;
   name: string;
@@ -16,6 +24,7 @@ export type Region = {
   pricePerMonth: number;
   status: "signal" | "high" | "quiet";
   description: string;
+  previewFeed: SignalDrop[];
 };
 
 export const regions: Region[] = [
