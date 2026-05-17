@@ -41,6 +41,7 @@ function HomePage() {
       </section>
       <FourCTAs />
     </>
+  );
 }
 
 /* ───────── Four CTAs Band ───────── */
