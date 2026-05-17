@@ -1,29 +1,33 @@
 import { Link } from "@tanstack/react-router";
 import type { Region } from "@/lib/regions";
 import { UnlockButton } from "@/components/UnlockButton";
-import { getRegionPriceIds } from "@/lib/pricing-ids";
+import { REGION_SUPPORT_PRICE_IDS, VIBE_REQUEST_PRICE_IDS } from "@/lib/pricing-ids";
 
 const statusBadge: Record<Region["status"], { label: string; cls: string }> = {
-  signal: { label: "On Air", cls: "bg-signal text-primary-foreground" },
+  signal: { label: "Live Signal", cls: "bg-signal text-primary-foreground" },
   high: { label: "High Activity", cls: "bg-sunset text-primary-foreground" },
   quiet: { label: "Quiet Hour", cls: "bg-foreground/20 text-foreground" },
 };
 
 export function RegionCard({ region }: { region: Region }) {
   const badge = statusBadge[region.status];
-  const priceIds = getRegionPriceIds(region.slug);
+  const recent = [...region.previewFeed]
+    .sort((a, b) => a.minutesAgo - b.minutesAgo)
+    .slice(0, 3);
+  const shortName = region.name.replace(" Signal", "");
+
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-surface transition-all duration-500 hover:border-primary/40">
       <Link
         to="/regions/$slug"
         params={{ slug: region.slug }}
-        aria-label={`Open ${region.name}`}
+        aria-label={`Open ${shortName}`}
         className="absolute inset-0 z-10"
       />
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={region.image}
-          alt={`${region.name} — ${region.country}`}
+          alt={`${shortName} — ${region.country}`}
           loading="lazy"
           width={1024}
           height={768}
@@ -44,52 +48,55 @@ export function RegionCard({ region }: { region: Region }) {
       </div>
 
       <div className="flex flex-1 flex-col p-7">
-        <div className="mb-5 flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-2xl font-bold tracking-tight">{region.name}</h3>
-            <p className="mt-1 text-sm text-foreground/50">{region.tags}</p>
-          </div>
-          <div className="shrink-0 text-right">
-            <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-foreground/40">From</p>
-            <p className="font-bold text-primary">${region.pricePerDay}/day</p>
-          </div>
+        <div className="mb-5">
+          <h3 className="text-2xl font-bold tracking-tight">{shortName}</h3>
+          <p className="mt-1 text-sm text-foreground/50">{region.tags}</p>
         </div>
 
         <div className="mb-5 grid grid-cols-3 gap-2">
-          <Stat value={String(region.freshVibes)} label="Fresh Vibes" />
-          <Stat value={String(region.activeSpots)} label="Active Spots" />
-          <Stat value={`${region.lastUpdatedMin}m`} label="Ago" highlight />
+          <Stat value={String(region.freshVibes)} label="Fresh Signals" />
+          <Stat value={String(region.activeSpots)} label="Active Spots" highlight />
+          <Stat value={`${region.lastUpdatedMin}m`} label="Last vibe" />
         </div>
 
-        <div className="mb-6 flex flex-wrap gap-1.5">
-          {region.spots.slice(0, 4).map((s) => (
-            <span
-              key={s}
-              className="rounded-full border border-border bg-background/50 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-foreground/60"
-            >
-              {s}
-            </span>
+        <ul className="mb-6 space-y-2 text-sm">
+          {recent.map((d, i) => (
+            <li key={i} className="flex items-start justify-between gap-3 text-foreground/70">
+              <div className="min-w-0">
+                <p className="truncate font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/40">
+                  {d.spot} · @{d.by}
+                </p>
+                <p className="mt-0.5 truncate text-foreground/80">{d.vibe}</p>
+              </div>
+              <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
+                {d.minutesAgo}m
+              </span>
+            </li>
           ))}
-        </div>
+        </ul>
 
-        <div className="relative z-20 mt-auto">
-          {priceIds ? (
-            <UnlockButton
-              priceId={priceIds.day}
-              reason={`Unlock ${region.name}`}
-              className="block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary disabled:opacity-60"
-            >
-              Unlock {region.name} — ${region.pricePerDay} today
-            </UnlockButton>
-          ) : (
-            <Link
-              to="/regions/$slug"
-              params={{ slug: region.slug }}
-              className="block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary"
-            >
-              Unlock {region.name}
-            </Link>
-          )}
+        <div className="relative z-20 mt-auto grid grid-cols-3 gap-2">
+          <Link
+            to="/regions/$slug"
+            params={{ slug: region.slug }}
+            className="rounded-xl bg-foreground px-3 py-3 text-center text-xs font-bold text-background transition-colors hover:bg-primary"
+          >
+            Explore
+          </Link>
+          <UnlockButton
+            priceId={VIBE_REQUEST_PRICE_IDS.basic}
+            reason={`Request a vibe from ${shortName}`}
+            className="rounded-xl border border-border bg-background px-3 py-3 text-center text-xs font-bold text-foreground transition-colors hover:bg-surface-2 disabled:opacity-60"
+          >
+            Request
+          </UnlockButton>
+          <UnlockButton
+            priceId={REGION_SUPPORT_PRICE_IDS.supporter}
+            reason={`Support ${shortName}`}
+            className="rounded-xl border border-signal/40 bg-signal/10 px-3 py-3 text-center text-xs font-bold text-signal transition-colors hover:bg-signal/20 disabled:opacity-60"
+          >
+            Support
+          </UnlockButton>
         </div>
       </div>
     </div>

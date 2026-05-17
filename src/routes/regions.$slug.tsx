@@ -1,9 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getRegion, type SignalDrop } from "@/lib/regions";
 import { SignalMapMockup } from "@/components/SignalMapMockup";
+import { ShakaButton } from "@/components/ShakaButton";
+import { RequestVibeBlock } from "@/components/RequestVibeBlock";
+import { SupportRegionBlock } from "@/components/SupportRegionBlock";
+import { PartnerHereBlock } from "@/components/PartnerHereBlock";
 import { UnlockButton } from "@/components/UnlockButton";
-import { useRegionAccess } from "@/hooks/useRegionAccess";
-import { getRegionPriceIds } from "@/lib/pricing-ids";
+import { VIBE_REQUEST_PRICE_IDS } from "@/lib/pricing-ids";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
@@ -13,8 +16,9 @@ export const Route = createFileRoute("/regions/$slug")({
   },
   head: ({ loaderData }) => {
     const r = loaderData?.region;
-    const title = r ? `${r.name} Pass — FRiNGE` : "Region — FRiNGE";
-    const desc = r ? r.description : "Signal region pass on FRiNGE.";
+    const shortName = r ? r.name.replace(" Signal", "") : "Region";
+    const title = r ? `${shortName} — Live on FRiNGE` : "Region — FRiNGE";
+    const desc = r ? r.description : "A live region on FRiNGE.";
     return {
       meta: [
         { title },
@@ -30,8 +34,29 @@ export const Route = createFileRoute("/regions/$slug")({
 
 function Page() {
   const { region } = Route.useLoaderData();
-  const access = useRegionAccess(region.slug);
-  const prices = getRegionPriceIds(region.slug);
+  const shortName = region.name.replace(" Signal", "");
+
+  const requestExamples =
+    region.slug === "boracay"
+      ? [
+          "Capture the Station 1 sunset right now",
+          "Check the crowd at D'Mall",
+          "Show the wind at Bulabog",
+          "Capture the beach energy near Station 2",
+        ]
+      : region.slug === "rio"
+      ? [
+          "Show the Arpoador sunset clap",
+          "Check the swell at Barra",
+          "Capture the samba near Ipanema Posto 9",
+          "Show the line at Lapa right now",
+        ]
+      : [
+          "Check the wind at The Hook",
+          "Show what's launching at Event Site",
+          "Capture sunset at the Spit",
+          "Check the line at pFriem",
+        ];
 
   return (
     <>
@@ -40,46 +65,35 @@ function Page() {
         <div className="absolute inset-0 radial-glow" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <Link to="/signal-regions" className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40 hover:text-primary">
-              ← All signal regions
+            <Link
+              to="/signal-regions"
+              className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40 hover:text-primary"
+            >
+              ← The Living Globe
             </Link>
             <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-              {region.country} · Signal Region Pass
+              {region.country} · Live Region
             </p>
             <h1 className="mt-3 text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
-              See what's happening in {region.name.replace(" Signal", "")} right now.
+              {shortName} is live right now.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-foreground/60">{region.description}</p>
 
-            {access.hasAccess ? (
-              <div className="mt-9 inline-flex items-center gap-3 rounded-2xl border border-signal/40 bg-signal/10 px-5 py-4">
-                <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-signal" />
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-signal">
-                  Active — {access.reason === "global" ? "Global Pass" : access.reason === "region_monthly" ? "Monthly Pass" : "24h Day Pass"}
-                </p>
-              </div>
-            ) : (
-              <div className="mt-9 flex flex-wrap gap-3">
-                {prices && (
-                  <>
-                    <UnlockButton
-                      priceId={prices.day}
-                      reason={`Unlock ${region.name}`}
-                      className="rounded-xl bg-primary px-7 py-4 text-base font-bold text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
-                    >
-                      Unlock {region.name} — ${region.pricePerDay} today
-                    </UnlockButton>
-                    <UnlockButton
-                      priceId={prices.month}
-                      reason={`Monthly access to ${region.name}`}
-                      className="rounded-xl border border-border bg-surface px-7 py-4 text-base font-bold hover:bg-surface-2 disabled:opacity-60"
-                    >
-                      Monthly access — ${region.pricePerMonth}/mo
-                    </UnlockButton>
-                  </>
-                )}
-              </div>
-            )}
+            <div className="mt-9 flex flex-wrap gap-3">
+              <UnlockButton
+                priceId={VIBE_REQUEST_PRICE_IDS.basic}
+                reason={`Request a vibe from ${shortName}`}
+                className="rounded-xl bg-primary px-7 py-4 text-base font-bold text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
+              >
+                Request a Vibe
+              </UnlockButton>
+              <a
+                href="#support"
+                className="rounded-xl border border-border bg-surface px-7 py-4 text-base font-bold hover:bg-surface-2"
+              >
+                Support {shortName}
+              </a>
+            </div>
           </div>
           <div className="lg:col-span-5">
             <SignalMapMockup />
@@ -87,209 +101,148 @@ function Page() {
         </div>
       </section>
 
-      {/* Today's activity */}
+      {/* Live stats */}
       <section className="border-b border-border bg-surface/30 py-16">
         <div className="mx-auto grid max-w-7xl gap-6 px-6 md:grid-cols-3">
-          <Stat big={String(region.freshVibes)} label="Fresh vibes today" />
-          <Stat big={String(region.activeSpots)} label="Active spots right now" />
-          <Stat big={`${region.lastUpdatedMin}m`} label="Since last vibe" highlight />
+          <Stat big={String(region.freshVibes)} label="Fresh signals today" />
+          <Stat big={String(region.activeSpots)} label="Active spots right now" highlight />
+          <Stat big={`${region.lastUpdatedMin}m`} label="Since last vibe" />
         </div>
       </section>
 
-      {/* Now Preview — recent = locked, older = free */}
+      {/* Recent vibes feed */}
       <section className="border-b border-border py-20">
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
                 <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-signal align-middle" />
-                Signal feed · {region.name.replace(" Signal", "")}
+                Recent vibes · {shortName}
               </p>
               <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
-                The Now is locked. Older vibes are free.
+                Fresh signals from people on the ground.
               </h2>
-              <p className="mt-3 max-w-xl text-foreground/60">
-                Anything within the last 20 minutes is part of the live signal — only pass holders can read it. Older drops stay open as a delayed preview, so you can feel the texture of the place before unlocking.
-              </p>
             </div>
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">
               {region.previewFeed.length} drops · last hour
             </div>
           </div>
 
-          {(() => {
-            const sorted = [...region.previewFeed].sort((a, b) => a.minutesAgo - b.minutesAgo);
-            const recent = sorted.filter((d) => d.minutesAgo < 20);
-            const older = sorted.filter((d) => d.minutesAgo >= 20);
-            return (
-              <div className="mt-10 grid gap-6 lg:grid-cols-5">
-                {/* Now column — locked unless user has access */}
-                <div className="relative lg:col-span-3">
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-                      <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-signal align-middle" />
-                      Now · last 20 min {access.hasAccess ? "· live" : "· locked"}
+          <ul className="mt-10 grid gap-4 md:grid-cols-2">
+            {[...region.previewFeed]
+              .sort((a, b) => a.minutesAgo - b.minutesAgo)
+              .map((d: SignalDrop, i: number) => (
+                <li
+                  key={i}
+                  className="flex flex-col rounded-3xl border border-border bg-background p-6"
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+                      {d.spot} · @{d.by}
                     </p>
-                    <span className={`rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] ${access.hasAccess ? "border-signal/40 bg-signal/10 text-signal" : "border-primary/30 bg-primary/10 text-primary"}`}>
-                      {access.hasAccess ? "Unlocked" : "Pass required"}
+                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                      {d.minutesAgo}m ago
                     </span>
                   </div>
-                  <div className={`relative overflow-hidden rounded-3xl border bg-background ${access.hasAccess ? "border-signal/40" : "border-primary/30"}`}>
-                    <ul className="divide-y divide-border">
-                      {recent.map((d: SignalDrop, i: number) => (
-                        <li key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-5 p-5 md:p-6">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/40 bg-surface font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
-                            {d.tag.slice(0, 3)}
-                          </div>
-                          <div className={access.hasAccess ? "" : "select-none [filter:blur(6px)]"}>
-                            <p className="text-xs font-mono uppercase tracking-[0.18em] text-foreground/40">
-                              {d.spot} · @{d.by}
-                            </p>
-                            <p className="mt-1 text-base font-medium text-foreground/90">{d.vibe}</p>
-                          </div>
-                          <div className="text-right font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                            {d.minutesAgo}m ago
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                    {!access.hasAccess && (
-                      <>
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background/90" />
-                        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 p-6 text-center">
-                          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-                            {recent.length} drops happening right now
-                          </p>
-                          {prices && (
-                            <UnlockButton
-                              priceId={prices.day}
-                              reason={`Unlock the Now in ${region.name}`}
-                              className="rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
-                            >
-                              Unlock the Now — ${region.pricePerDay} today
-                            </UnlockButton>
-                          )}
-                          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
-                            or ${region.pricePerMonth}/mo · full Now Map
-                          </p>
-                        </div>
-                      </>
-                    )}
+                  <p className="mt-3 text-base font-medium text-foreground/90">{d.vibe}</p>
+                  <div className="mt-5 flex flex-wrap items-center gap-2">
+                    <ShakaButton viberName={d.by} />
+                    <UnlockButton
+                      priceId={VIBE_REQUEST_PRICE_IDS.basic}
+                      reason={`Request a vibe similar to @${d.by}'s drop`}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-bold text-foreground/70 transition-colors hover:bg-surface-2 disabled:opacity-60"
+                    >
+                      Request similar
+                    </UnlockButton>
                   </div>
-                </div>
-
-                {/* Free delayed column */}
-                <div className="lg:col-span-2">
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
-                      Delayed · 20m+ · free
-                    </p>
-                    <span className="rounded-full border border-border bg-surface px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/60">
-                      Open
-                    </span>
-                  </div>
-                  <ul className="divide-y divide-border overflow-hidden rounded-3xl border border-border bg-background">
-                    {older.map((d: SignalDrop, i: number) => (
-                      <li key={i} className="grid grid-cols-[auto_1fr] items-start gap-4 p-5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/60">
-                          {d.tag.slice(0, 3)}
-                        </div>
-                        <div>
-                          <div className="flex items-center justify-between gap-3">
-                            <p className="text-xs font-mono uppercase tracking-[0.18em] text-foreground/40">
-                              {d.spot} · @{d.by}
-                            </p>
-                            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
-                              {d.minutesAgo}m ago
-                            </span>
-                          </div>
-                          <p className="mt-1 text-sm text-foreground/80">{d.vibe}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            );
-          })()}
+                </li>
+              ))}
+          </ul>
         </div>
       </section>
 
-      {/* Popular spots */}
+      {/* Popular spots — with empty-spot CTAs */}
       <section className="border-b border-border bg-surface/30 py-20">
         <div className="mx-auto max-w-7xl px-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Popular spots</p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
             The places people are vibing right now.
           </h2>
-          <div className="mt-10 flex flex-wrap gap-3">
-            {region.spots.map((s: string) => (
-              <span key={s} className="rounded-full border border-border bg-surface px-5 py-2.5 text-sm font-medium text-foreground/80">
-                {s}
-              </span>
-            ))}
+
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {region.spots.map((s: string) => {
+              const hasFresh = region.previewFeed.some((d: SignalDrop) => d.spot.includes(s));
+              return (
+                <div
+                  key={s}
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-background p-4"
+                >
+                  <div>
+                    <p className="font-bold">{s}</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/40">
+                      {hasFresh ? "Fresh signal in feed" : "No fresh signal yet"}
+                    </p>
+                  </div>
+                  {!hasFresh && (
+                    <UnlockButton
+                      priceId={VIBE_REQUEST_PRICE_IDS.basic}
+                      reason={`Request a vibe from ${s}`}
+                      className="rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-bold text-primary transition-colors hover:bg-primary/20 disabled:opacity-60"
+                    >
+                      Request
+                    </UnlockButton>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* What you unlock */}
-      <section className="border-b border-border bg-surface/30 py-20">
+      {/* Request a Vibe */}
+      <section className="border-b border-border py-20">
         <div className="mx-auto max-w-7xl px-6">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">What you unlock</p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
-            Full real-time access to {region.name.replace(" Signal", "")}.
-          </h2>
-          <div className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
-            {[
-              "Fresh fresh vibes",
-              "Active spot map",
-              "Recent replays",
-              "Local food and nightlife activity",
-              "Beach and sunset conditions",
-              "Real-time discovery feed",
-            ].map((x) => (
-              <div key={x} className="bg-background p-6">
-                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">+</span>
-                <p className="mt-2 font-bold">{x}</p>
-              </div>
-            ))}
-          </div>
+          <RequestVibeBlock regionName={shortName} examples={requestExamples} />
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* Support */}
+      <section id="support" className="border-b border-border bg-surface/30 py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <SupportRegionBlock regionName={shortName} />
+        </div>
+      </section>
+
+      {/* Partner */}
+      <section className="border-b border-border py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <PartnerHereBlock regionName={shortName} />
+        </div>
+      </section>
+
+      {/* Footer line */}
       <section className="py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="text-balance text-4xl font-extrabold tracking-tighter md:text-5xl">
-            Unlock {region.name}.
+            Help keep {shortName} fresh.
           </h2>
           <p className="mt-4 text-foreground/60">
-            One pass. Full Now Map. Fresh vibes. Real-time intel.
+            Support local vibers capturing real signals from beaches, food spots, sunsets,
+            nightlife, and adventure areas.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            {prices && !access.hasAccess && (
-              <>
-                <UnlockButton
-                  priceId={prices.day}
-                  reason={`Unlock ${region.name}`}
-                  className="rounded-xl bg-primary px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
-                >
-                  Unlock for ${region.pricePerDay} today
-                </UnlockButton>
-                <UnlockButton
-                  priceId={prices.month}
-                  reason={`Monthly access to ${region.name}`}
-                  className="font-mono text-xs uppercase tracking-[0.2em] text-foreground/50 hover:text-foreground disabled:opacity-60"
-                >
-                  Get monthly access — ${region.pricePerMonth}/mo →
-                </UnlockButton>
-              </>
-            )}
-            {access.hasAccess && (
-              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-signal">
-                ✓ You're in. Enjoy the signal.
-              </p>
-            )}
+            <a
+              href="#support"
+              className="rounded-xl bg-primary px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-primary-foreground transition-transform hover:scale-105"
+            >
+              Support {shortName}
+            </a>
+            <a
+              href={`mailto:admin@fringe.travel?subject=${encodeURIComponent(`Partner in ${shortName}`)}`}
+              className="font-mono text-xs uppercase tracking-[0.2em] text-foreground/50 hover:text-foreground"
+            >
+              Partner here →
+            </a>
           </div>
         </div>
       </section>

@@ -5,11 +5,11 @@ import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/integrations/supabase/client";
 
 const links = [
-  { to: "/signal-regions", label: "Signal Regions" },
+  { to: "/signal-regions", label: "Living Globe" },
   { to: "/now-map", label: "Now Map" },
-  { to: "/vibers", label: "For Vibers" },
-  { to: "/businesses", label: "For Businesses" },
-  { to: "/pricing", label: "Pricing" },
+  { to: "/vibers", label: "Become a Viber" },
+  { to: "/businesses", label: "Partner Here" },
+  { to: "/pricing", label: "Support" },
 ] as const;
 
 export function SiteNav() {
@@ -22,7 +22,7 @@ export function SiteNav() {
         <Link to="/" className="flex flex-col leading-none">
           <span className="text-xl font-extrabold tracking-tighter text-foreground">FRiNGE</span>
           <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary">
-            Signal Regions
+            The Living Globe
           </span>
         </Link>
 
@@ -59,7 +59,7 @@ export function SiteNav() {
             to="/signal-regions"
             className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105"
           >
-            Explore Regions
+            Explore the Globe
           </Link>
         </div>
       </div>
@@ -67,4 +67,3 @@ export function SiteNav() {
     </nav>
   );
 }
-
