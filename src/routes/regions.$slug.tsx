@@ -70,66 +70,112 @@ function Page() {
         </div>
       </section>
 
-      {/* Now Preview — live feed teaser */}
+      {/* Now Preview — recent = locked, older = free */}
       <section className="border-b border-border py-20">
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
                 <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-signal align-middle" />
-                Now preview · last hour
+                Signal feed · {region.name.replace(" Signal", "")}
               </p>
               <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
-                What's happening in {region.name.replace(" Signal", "")} right now.
+                The Now is locked. Older vibes are free.
               </h2>
               <p className="mt-3 max-w-xl text-foreground/60">
-                A taste of the signal. See the latest two drops free — unlock the pass to read every vibe, watch replays, and tune the full Now Map.
+                Anything within the last 20 minutes is part of the live signal — only pass holders can read it. Older drops stay open as a delayed preview, so you can feel the texture of the place before unlocking.
               </p>
             </div>
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">
-              {region.previewFeed.length} drops in feed
+              {region.previewFeed.length} drops · last hour
             </div>
           </div>
 
-          <div className="relative mt-10">
-            <ul className="divide-y divide-border overflow-hidden rounded-3xl border border-border bg-background">
-              {region.previewFeed.map((d: SignalDrop, i: number) => {
-                const locked = i >= 2;
-                return (
-                  <li key={i} className="relative grid grid-cols-[auto_1fr_auto] items-center gap-5 p-5 md:p-6">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
-                      {d.tag.slice(0, 3)}
-                    </div>
-                    <div className={locked ? "select-none blur-[6px] [filter:blur(6px)]" : ""}>
-                      <p className="text-xs font-mono uppercase tracking-[0.18em] text-foreground/40">
-                        {d.spot} · @{d.by}
+          {(() => {
+            const sorted = [...region.previewFeed].sort((a, b) => a.minutesAgo - b.minutesAgo);
+            const recent = sorted.filter((d) => d.minutesAgo < 20);
+            const older = sorted.filter((d) => d.minutesAgo >= 20);
+            return (
+              <div className="mt-10 grid gap-6 lg:grid-cols-5">
+                {/* Locked Now column */}
+                <div className="relative lg:col-span-3">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+                      <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-signal align-middle" />
+                      Now · last 20 min · locked
+                    </p>
+                    <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                      Pass required
+                    </span>
+                  </div>
+                  <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-background">
+                    <ul className="divide-y divide-border">
+                      {recent.map((d: SignalDrop, i: number) => (
+                        <li key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-5 p-5 md:p-6">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/40 bg-surface font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
+                            {d.tag.slice(0, 3)}
+                          </div>
+                          <div className="select-none [filter:blur(6px)]">
+                            <p className="text-xs font-mono uppercase tracking-[0.18em] text-foreground/40">
+                              {d.spot} · @{d.by}
+                            </p>
+                            <p className="mt-1 text-base font-medium text-foreground/90">{d.vibe}</p>
+                          </div>
+                          <div className="text-right font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                            {d.minutesAgo}m ago
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background/90" />
+                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 p-6 text-center">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+                        {recent.length} drops happening right now
                       </p>
-                      <p className="mt-1 text-base font-medium text-foreground/90">{d.vibe}</p>
+                      <button className="rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-105">
+                        Unlock the Now — ${region.pricePerDay} today
+                      </button>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
+                        or ${region.pricePerMonth}/mo · full Now Map
+                      </p>
                     </div>
-                    <div className="text-right font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
-                      {d.minutesAgo}m ago
-                    </div>
-                    {locked && (
-                      <span className="absolute right-5 top-1/2 -translate-y-1/2 rounded-full border border-border bg-surface px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/60">
-                        Locked
-                      </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+                  </div>
+                </div>
 
-            {/* Fade + CTA over locked items */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 rounded-b-3xl bg-gradient-to-t from-background via-background/90 to-transparent" />
-            <div className="absolute inset-x-0 bottom-6 flex flex-col items-center gap-3 px-6 text-center">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-                {region.previewFeed.length - 2} more drops behind the pass
-              </p>
-              <button className="pointer-events-auto rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-105">
-                Unlock the full feed — ${region.pricePerDay} today
-              </button>
-            </div>
-          </div>
+                {/* Free delayed column */}
+                <div className="lg:col-span-2">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
+                      Delayed · 20m+ · free
+                    </p>
+                    <span className="rounded-full border border-border bg-surface px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/60">
+                      Open
+                    </span>
+                  </div>
+                  <ul className="divide-y divide-border overflow-hidden rounded-3xl border border-border bg-background">
+                    {older.map((d: SignalDrop, i: number) => (
+                      <li key={i} className="grid grid-cols-[auto_1fr] items-start gap-4 p-5">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/60">
+                          {d.tag.slice(0, 3)}
+                        </div>
+                        <div>
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="text-xs font-mono uppercase tracking-[0.18em] text-foreground/40">
+                              {d.spot} · @{d.by}
+                            </p>
+                            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
+                              {d.minutesAgo}m ago
+                            </span>
+                          </div>
+                          <p className="mt-1 text-sm text-foreground/80">{d.vibe}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </section>
 
