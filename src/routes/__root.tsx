@@ -11,8 +11,6 @@ import {
 import appCss from "../styles.css?url";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
-import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
-import { AuthProvider } from "@/hooks/useAuth";
 
 function NotFoundComponent() {
   return (
@@ -73,10 +71,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "FRiNGE is a signal map of real places. Unlock real-time vibes, active spots, and what's happening now from beaches, cities, and adventure spots around the world.",
       },
-      { property: "og:title", content: "FRiNGE — Signal Regions" },
-      { property: "og:description", content: "A signal map of real places, powered by people on the ground." },
+      { property: "og:title", content: "FRiNGE — See what's happening there right now." },
+      { property: "og:description", content: "Unlock real-time access to live places and see what's happening now." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "FRiNGE — See what's happening there right now." },
+      { name: "description", content: "Unlock real-time access to live places and see what's happening now." },
+      { name: "twitter:description", content: "Unlock real-time access to live places and see what's happening now." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1a8915c7-c1b3-470e-8f37-e96a006093bc/id-preview-1611a8b4--b7e0e219-6368-4829-97dc-f381a04bf701.lovable.app-1779002735700.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1a8915c7-c1b3-470e-8f37-e96a006093bc/id-preview-1611a8b4--b7e0e219-6368-4829-97dc-f381a04bf701.lovable.app-1779002735700.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -112,16 +115,13 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <div className="flex min-h-screen flex-col bg-background">
-          <PaymentTestModeBanner />
-          <SiteNav />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <SiteFooter />
-        </div>
-      </AuthProvider>
+      <div className="flex min-h-screen flex-col bg-background">
+        <SiteNav />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <SiteFooter />
+      </div>
     </QueryClientProvider>
   );
 }
