@@ -258,6 +258,41 @@ function NowMapFeatures() {
   );
 }
 
+/* ───────── See It. Feel It. Go. Banner ───────── */
+function SeeFeelGoBanner() {
+  return (
+    <section className="border-t border-border">
+      <div className="relative overflow-hidden bg-gradient-to-br from-background via-surface to-background">
+        <div className="absolute inset-0 radial-glow opacity-60" />
+        <div className="absolute -right-32 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-primary/10 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
+          <h2 className="text-balance text-6xl font-extrabold leading-[0.9] tracking-tighter md:text-8xl lg:text-9xl">
+            <span className="block text-foreground">SEE IT.</span>
+            <span className="block text-primary">FEEL IT.</span>
+            <span className="block text-foreground">GO.</span>
+          </h2>
+          <p className="mt-8 max-w-xl text-pretty text-base text-foreground/60 md:text-lg">
+            Real moments from real locals — Boracay, Rio, Hood River and beyond.
+            See what's happening.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {regions.map((r) => (
+              <Link
+                key={r.slug}
+                to="/regions/$slug"
+                params={{ slug: r.slug }}
+                className="rounded-xl border border-border bg-surface/80 px-5 py-3 text-sm font-bold backdrop-blur transition-colors hover:border-primary/50 hover:bg-surface-2"
+              >
+                {r.name.replace(" Signal", "")}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ───────── Locked Conversion ───────── */
 function LockedConversion() {
   return (
