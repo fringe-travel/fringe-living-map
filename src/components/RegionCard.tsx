@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import type { Region } from "@/lib/regions";
 
 const statusBadge: Record<Region["status"], { label: string; cls: string }> = {
-  live: { label: "On Air", cls: "bg-signal text-primary-foreground" },
+  signal: { label: "On Air", cls: "bg-signal text-primary-foreground" },
   high: { label: "High Activity", cls: "bg-sunset text-primary-foreground" },
   quiet: { label: "Quiet Hour", cls: "bg-foreground/20 text-foreground" },
 };
