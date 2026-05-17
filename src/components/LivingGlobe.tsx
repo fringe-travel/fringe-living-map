@@ -272,14 +272,35 @@ export function LivingGlobe() {
             2D
           </button>
         </div>
-        <button
-          type="button"
-          onClick={toggleFullscreen}
-          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/60 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-foreground/80 backdrop-blur-md transition-colors hover:text-foreground"
-          aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
-        >
-          {isFullscreen ? "Exit Full" : "Full Screen"}
-        </button>
+        <div className="pointer-events-auto inline-flex items-center gap-2">
+          <div className="inline-flex overflow-hidden rounded-full border border-foreground/20 bg-background/60 backdrop-blur-md">
+            <button
+              type="button"
+              onClick={() => mapRef.current?.zoomIn()}
+              className="px-3 py-1 font-mono text-base font-bold text-foreground/80 transition-colors hover:text-foreground"
+              aria-label="Zoom in"
+            >
+              +
+            </button>
+            <span className="w-px bg-foreground/20" />
+            <button
+              type="button"
+              onClick={() => mapRef.current?.zoomOut()}
+              className="px-3 py-1 font-mono text-base font-bold text-foreground/80 transition-colors hover:text-foreground"
+              aria-label="Zoom out"
+            >
+              −
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/60 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-foreground/80 backdrop-blur-md transition-colors hover:text-foreground"
+            aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
+          >
+            {isFullscreen ? "Exit Full" : "Full Screen"}
+          </button>
+        </div>
       </div>
 
       {/* Bottom hint */}
