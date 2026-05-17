@@ -91,7 +91,10 @@ export function RegionMap({
 
       const ro = new ResizeObserver(() => map.resize());
       ro.observe(containerRef.current);
+      requestAnimationFrame(() => map.resize());
       setTimeout(() => map.resize(), 100);
+      setTimeout(() => map.resize(), 500);
+      setTimeout(() => map.resize(), 1200);
       (map as any).__cleanup = () => ro.disconnect();
     })();
 
