@@ -61,13 +61,10 @@ export function RegionCard({ region }: { region: Region }) {
 
         <ul className="mb-6 space-y-2 text-sm">
           {recent.map((d, i) => (
-            <li key={i} className="flex items-start justify-between gap-3 text-foreground/70">
-              <div className="min-w-0">
-                <p className="truncate font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/40">
-                  {d.spot} · @{d.by}
-                </p>
-                <p className="mt-0.5 truncate text-foreground/80">{d.vibe}</p>
-              </div>
+            <li key={i} className="flex items-center justify-between gap-3 text-foreground/70">
+              <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/60">
+                {d.spot}
+              </p>
               <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
                 {d.minutesAgo}m
               </span>
