@@ -215,8 +215,8 @@ export function LivingGlobe() {
         </div>
       )}
 
-      {/* Top overlay */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex flex-col items-center gap-3 px-6 pt-8 text-center md:pt-12">
+      {/* Top overlay: live badge + 2D/3D toggle */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 px-6 pt-6 md:pt-8">
         <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/60 px-3 py-1.5 backdrop-blur-md">
           <span className="relative inline-flex size-1.5">
             <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
@@ -226,12 +226,22 @@ export function LivingGlobe() {
             The Living Globe is on
           </span>
         </div>
-        <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-foreground drop-shadow-[0_2px_20px_rgba(0,0,0,0.7)] md:text-6xl lg:text-7xl">
-          Real vibes. Real places. Right now.
-        </h1>
-        <p className="max-w-xl text-sm text-foreground/80 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)] md:text-base">
-          A giant, always-rotating globe of fresh signals from real people on the ground.
-        </p>
+        <div className="pointer-events-auto inline-flex overflow-hidden rounded-full border border-foreground/20 bg-background/60 backdrop-blur-md">
+          <button
+            type="button"
+            onClick={() => setMode("3d")}
+            className={`px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] transition-colors ${mode === "3d" ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"}`}
+          >
+            3D
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("2d")}
+            className={`px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] transition-colors ${mode === "2d" ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"}`}
+          >
+            2D
+          </button>
+        </div>
       </div>
 
       {/* Bottom hint */}
