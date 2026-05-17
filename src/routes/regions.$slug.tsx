@@ -75,14 +75,12 @@ function Page() {
 
       {/* Intro */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="mx-auto max-w-7xl px-6 py-10">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
             {region.country} · Live Region
           </p>
           <div className="mt-3 flex flex-wrap items-end justify-between gap-6">
-            <h1 className="text-balance text-4xl font-extrabold tracking-tighter md:text-5xl">
-              {shortName} is live right now.
-            </h1>
+            <p className="max-w-2xl text-foreground/60">{region.description}</p>
             <div className="flex flex-wrap gap-3">
               <UnlockButton
                 priceId={VIBE_REQUEST_PRICE_IDS.basic}
@@ -99,7 +97,6 @@ function Page() {
               </a>
             </div>
           </div>
-          <p className="mt-4 max-w-2xl text-foreground/60">{region.description}</p>
         </div>
       </section>
 
