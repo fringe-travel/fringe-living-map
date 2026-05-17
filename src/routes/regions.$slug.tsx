@@ -70,8 +70,71 @@ function Page() {
         </div>
       </section>
 
-      {/* Popular spots */}
+      {/* Now Preview — live feed teaser */}
       <section className="border-b border-border py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex items-end justify-between gap-6 flex-wrap">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+                <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-signal align-middle" />
+                Now preview · last hour
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
+                What's happening in {region.name.replace(" Signal", "")} right now.
+              </h2>
+              <p className="mt-3 max-w-xl text-foreground/60">
+                A taste of the signal. See the latest two drops free — unlock the pass to read every vibe, watch replays, and tune the full Now Map.
+              </p>
+            </div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">
+              {region.previewFeed.length} drops in feed
+            </div>
+          </div>
+
+          <div className="relative mt-10">
+            <ul className="divide-y divide-border overflow-hidden rounded-3xl border border-border bg-background">
+              {region.previewFeed.map((d, i) => {
+                const locked = i >= 2;
+                return (
+                  <li key={i} className="relative grid grid-cols-[auto_1fr_auto] items-center gap-5 p-5 md:p-6">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
+                      {d.tag.slice(0, 3)}
+                    </div>
+                    <div className={locked ? "select-none blur-[6px] [filter:blur(6px)]" : ""}>
+                      <p className="text-xs font-mono uppercase tracking-[0.18em] text-foreground/40">
+                        {d.spot} · @{d.by}
+                      </p>
+                      <p className="mt-1 text-base font-medium text-foreground/90">{d.vibe}</p>
+                    </div>
+                    <div className="text-right font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+                      {d.minutesAgo}m ago
+                    </div>
+                    {locked && (
+                      <span className="absolute right-5 top-1/2 -translate-y-1/2 rounded-full border border-border bg-surface px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/60">
+                        Locked
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+
+            {/* Fade + CTA over locked items */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 rounded-b-3xl bg-gradient-to-t from-background via-background/90 to-transparent" />
+            <div className="absolute inset-x-0 bottom-6 flex flex-col items-center gap-3 px-6 text-center">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+                {region.previewFeed.length - 2} more drops behind the pass
+              </p>
+              <button className="pointer-events-auto rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-105">
+                Unlock the full feed — ${region.pricePerDay} today
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular spots */}
+      <section className="border-b border-border bg-surface/30 py-20">
         <div className="mx-auto max-w-7xl px-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Popular spots</p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
