@@ -78,7 +78,7 @@ function Page() {
             The places people are vibing right now.
           </h2>
           <div className="mt-10 flex flex-wrap gap-3">
-            {region.spots.map((s) => (
+            {region.spots.map((s: string) => (
               <span key={s} className="rounded-full border border-border bg-surface px-5 py-2.5 text-sm font-medium text-foreground/80">
                 {s}
               </span>
