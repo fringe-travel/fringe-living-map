@@ -40,7 +40,7 @@ function HomePage() {
         </div>
       </section>
       <FourCTAs />
-    </>
+    </div>
   );
 }
 
