@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VibersRouteImport } from './routes/vibers'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as NowMapRouteImport } from './routes/now-map'
 import { Route as LiveRegionsRouteImport } from './routes/live-regions'
@@ -20,6 +21,11 @@ import { Route as RegionsSlugRouteImport } from './routes/regions.$slug'
 const VibersRoute = VibersRouteImport.update({
   id: '/vibers',
   path: '/vibers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/live-regions': typeof LiveRegionsRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/live-regions': typeof LiveRegionsRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/live-regions': typeof LiveRegionsRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/live-regions'
     | '/now-map'
     | '/pricing'
+    | '/sitemap.xml'
     | '/vibers'
     | '/regions/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/live-regions'
     | '/now-map'
     | '/pricing'
+    | '/sitemap.xml'
     | '/vibers'
     | '/regions/$slug'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/live-regions'
     | '/now-map'
     | '/pricing'
+    | '/sitemap.xml'
     | '/vibers'
     | '/regions/$slug'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   LiveRegionsRoute: typeof LiveRegionsRoute
   NowMapRoute: typeof NowMapRoute
   PricingRoute: typeof PricingRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VibersRoute: typeof VibersRoute
   RegionsSlugRoute: typeof RegionsSlugRoute
 }
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/vibers'
       fullPath: '/vibers'
       preLoaderRoute: typeof VibersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -181,9 +201,20 @@ const rootRouteChildren: RootRouteChildren = {
   LiveRegionsRoute: LiveRegionsRoute,
   NowMapRoute: NowMapRoute,
   PricingRoute: PricingRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   VibersRoute: VibersRoute,
   RegionsSlugRoute: RegionsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
