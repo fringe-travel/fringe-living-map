@@ -14,14 +14,14 @@ export type Region = {
   spots: string[];
   pricePerDay: number;
   pricePerMonth: number;
-  status: "live" | "high" | "quiet";
+  status: "signal" | "high" | "quiet";
   description: string;
 };
 
 export const regions: Region[] = [
   {
     slug: "boracay",
-    name: "Boracay Live",
+    name: "Boracay Signal",
     country: "Philippines",
     tags: "Beach · Sunset · Nightlife · Island energy",
     image: boracayImg,
@@ -31,12 +31,12 @@ export const regions: Region[] = [
     spots: ["Station 1", "D'Mall", "Bulabog", "Station 2", "White Beach", "Sunset Beach"],
     pricePerDay: 1.99,
     pricePerMonth: 4.99,
-    status: "live",
+    status: "signal",
     description: "Unlock real-time vibes from beaches, food spots, sunsets, nightlife, and local activity across the island.",
   },
   {
     slug: "rio",
-    name: "Rio Live",
+    name: "Rio Signal",
     country: "Brazil",
     tags: "Kite · Surf · Beach · Nightlife · Local movement",
     image: rioImg,
@@ -51,7 +51,7 @@ export const regions: Region[] = [
   },
   {
     slug: "maui",
-    name: "Maui Live",
+    name: "Maui Signal",
     country: "Hawaii",
     tags: "Wind · Waves · Beaches · Island conditions",
     image: mauiImg,

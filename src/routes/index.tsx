@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A live map of real places, powered by people on the ground. Unlock real-time vibes from beaches, cities, and adventure spots worldwide.",
+          "A signal map of real places, powered by people on the ground. Unlock real-time vibes from beaches, cities, and adventure spots worldwide.",
       },
     ],
   }),
@@ -47,7 +47,7 @@ function Hero() {
               <span className="relative size-2 rounded-full bg-primary" />
             </span>
             <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-              Live data feed active
+              Signal feed active
             </span>
           </div>
 
@@ -56,17 +56,17 @@ function Hero() {
           </h1>
 
           <p className="mt-7 max-w-[52ch] text-pretty text-lg text-foreground/60 md:text-xl">
-            FRiNGE is a live map of real places, powered by people on the ground.
+            FRiNGE is a signal map of real places, powered by people on the ground.
             Unlock real-time vibes from beaches, cities, events, and adventure
             spots around the world.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
-              to="/live-regions"
+              to="/signal-regions"
               className="rounded-xl bg-foreground px-7 py-4 text-base font-bold text-background transition-colors hover:bg-primary"
             >
-              Explore Live Regions
+              Explore Signal Regions
             </Link>
             <Link
               to="/vibers"
@@ -96,7 +96,7 @@ function Marketplace() {
     <section className="border-t border-border bg-surface/30 py-24">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeader
-          tag="World — Live Marketplace"
+          tag="World — Signal Marketplace"
           title="Unlock real-time access to places around the world."
           subtitle="Choose a region and see fresh vibes, active spots, and what's actually happening right now."
         />
@@ -122,7 +122,7 @@ function WhyItMatters() {
     {
       tag: "FRiNGE way",
       title: "Open. See. Go.",
-      items: ["Fresh vibes", "Real people on the ground", "Active map pins", "Live region access"],
+      items: ["Fresh vibes", "Real people on the ground", "Active map pins", "Signal region access"],
       tone: "primary" as const,
     },
     {
@@ -188,7 +188,7 @@ function HowItWorks() {
   const steps = [
     {
       n: "01",
-      title: "Vibers go live",
+      title: "Vibers tune in",
       body: "People on the ground share short real-time vibes from beaches, cities, events, and adventure spots.",
     },
     {
@@ -199,14 +199,14 @@ function HowItWorks() {
     {
       n: "03",
       title: "Users unlock the region",
-      body: "Pay to access the live map, fresh vibes, active spots, and recent replays for that place.",
+      body: "Pay to access the signal map, fresh vibes, active spots, and recent replays for that place.",
     },
   ];
 
   return (
     <section className="border-t border-border bg-surface/30 py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <SectionHeader tag="How it works" title="How FRiNGE turns places into live regions." />
+        <SectionHeader tag="How it works" title="How FRiNGE turns places into signal regions." />
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {steps.map((s) => (
             <div key={s.n} className="rounded-3xl border border-border bg-background p-8">
@@ -224,11 +224,11 @@ function HowItWorks() {
 /* ───────── Now Map Features ───────── */
 function NowMapFeatures() {
   const feats = [
-    { title: "Live pins", body: "See which spots have fresh activity." },
+    { title: "Signal pins", body: "See which spots have fresh activity." },
     { title: "Auto-location association", body: "Vibes connect automatically to the right spot, zone, and region." },
     { title: "Freshness indicators", body: "Know if a vibe is 2 minutes, 30 minutes, or a day old." },
     { title: "Locked premium spots", body: "Free users preview. Paid users unlock the full region." },
-    { title: "Replay layer", body: "See recent moments even after the live vibe ends." },
+    { title: "Replay layer", body: "See recent moments even after the fresh vibe ends." },
     { title: "Spot intelligence", body: "Know if a place is active, quiet, crowded, windy, fun, or dead." },
   ];
   return (
@@ -236,7 +236,7 @@ function NowMapFeatures() {
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeader
           tag="Now Map"
-          title="The map is alive."
+          title="The map is on."
           subtitle="The FRiNGE Now Map shows where real activity is happening — not just where places exist."
         />
         <div className="grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
@@ -276,7 +276,7 @@ function LockedConversion() {
               This spot is active right now.
             </h2>
             <p className="mx-auto mt-5 max-w-lg text-pretty text-foreground/60">
-              Unlock Boracay Live to see fresh vibes, active spots, and real-time updates
+              Unlock Boracay Signal to see fresh vibes, active spots, and real-time updates
               from people on the ground.
             </p>
 
@@ -335,12 +335,12 @@ function Pricing() {
             blurb="Good for discovering regions."
             features={[
               "View public vibes",
-              "Preview live regions",
+              "Preview signal regions",
               "See limited map activity",
               "Browse available places",
             ]}
             cta="Start exploring"
-            ctaTo="/live-regions"
+            ctaTo="/signal-regions"
           />
           <PriceCard
             name="Region Pass"
@@ -348,13 +348,13 @@ function Pricing() {
             unit="/day"
             blurb="For travelers and locals checking one place."
             features={[
-              "Unlock one live region",
+              "Unlock one signal region",
               "Full Now Map access",
               "Fresh vibes & active spots",
               "Recent replays",
             ]}
             cta="Choose a region"
-            ctaTo="/live-regions"
+            ctaTo="/signal-regions"
             highlight
           />
           <PriceCard
@@ -363,13 +363,13 @@ function Pricing() {
             unit="/month"
             blurb="For nomads and explorers following multiple zones."
             features={[
-              "Unlock all live regions",
+              "Unlock all signal regions",
               "Access every Now Map",
               "Save favorite spots",
               "Early access to new regions",
             ]}
             cta="Unlock all regions"
-            ctaTo="/live-regions"
+            ctaTo="/signal-regions"
           />
         </div>
       </div>
@@ -381,7 +381,7 @@ function PriceCard({
   name, price, unit, blurb, features, cta, ctaTo, highlight,
 }: {
   name: string; price: string; unit?: string; blurb: string;
-  features: string[]; cta: string; ctaTo: "/live-regions"; highlight?: boolean;
+  features: string[]; cta: string; ctaTo: "/signal-regions"; highlight?: boolean;
 }) {
   return (
     <div
@@ -429,14 +429,14 @@ function VibersBusinesses() {
       <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-2">
         <div className="rounded-3xl border border-border bg-surface p-10">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">For Vibers</p>
-          <h3 className="mt-3 text-3xl font-bold tracking-tight">Go live. FRiNGE maps the moment.</h3>
+          <h3 className="mt-3 text-3xl font-bold tracking-tight">Tune in. FRiNGE maps the moment.</h3>
           <p className="mt-4 text-foreground/60">
             When you share a vibe, FRiNGE automatically connects it to the right place.
             Build status in your region, help people discover where to go, and earn through
             tips, rewards, or sponsored coverage.
           </p>
           <ul className="mt-6 grid grid-cols-2 gap-2 text-sm text-foreground/70">
-            {["No manual tagging", "Auto spot association", "Show up on the live map", "Earn through coverage"].map((x) => (
+            {["No manual tagging", "Auto spot association", "Show up on the signal map", "Earn through coverage"].map((x) => (
               <li key={x} className="flex items-center gap-2"><span className="text-primary">+</span>{x}</li>
             ))}
           </ul>
@@ -450,11 +450,11 @@ function VibersBusinesses() {
           <h3 className="mt-3 text-3xl font-bold tracking-tight">Be discovered when people are deciding where to go.</h3>
           <p className="mt-4 text-foreground/60">
             FRiNGE puts your business inside real-time activity moments. Sponsor a spot,
-            drop a live offer, or power coverage across an entire region.
+            drop a real-time offer, or power coverage across an entire region.
           </p>
           <ul className="mt-6 space-y-2 text-sm text-foreground/70">
-            <li className="flex items-center gap-2"><span className="text-sunset">→</span>Sponsored Spot — appear near relevant live activity</li>
-            <li className="flex items-center gap-2"><span className="text-sunset">→</span>Live Drop — time-limited offer during an active moment</li>
+            <li className="flex items-center gap-2"><span className="text-sunset">→</span>Sponsored Spot — appear near relevant active signal</li>
+            <li className="flex items-center gap-2"><span className="text-sunset">→</span>Signal Drop — time-limited offer during an active moment</li>
             <li className="flex items-center gap-2"><span className="text-sunset">→</span>Region Sponsor — power coverage for an entire region</li>
           </ul>
           <Link to="/businesses" className="mt-8 inline-flex rounded-xl bg-sunset px-6 py-3 text-sm font-bold text-primary-foreground hover:brightness-110 transition-all">

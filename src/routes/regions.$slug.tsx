@@ -11,7 +11,7 @@ export const Route = createFileRoute("/regions/$slug")({
   head: ({ loaderData }) => {
     const r = loaderData?.region;
     const title = r ? `${r.name} Pass — FRiNGE` : "Region — FRiNGE";
-    const desc = r ? r.description : "Live region pass on FRiNGE.";
+    const desc = r ? r.description : "Signal region pass on FRiNGE.";
     return {
       meta: [
         { title },
@@ -35,14 +35,14 @@ function Page() {
         <div className="absolute inset-0 radial-glow" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <Link to="/live-regions" className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40 hover:text-primary">
-              ← All live regions
+            <Link to="/signal-regions" className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40 hover:text-primary">
+              ← All signal regions
             </Link>
             <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-              {region.country} · Live Region Pass
+              {region.country} · Signal Region Pass
             </p>
             <h1 className="mt-3 text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
-              See what's happening in {region.name.replace(" Live", "")} right now.
+              See what's happening in {region.name.replace(" Signal", "")} right now.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-foreground/60">{region.description}</p>
 
@@ -92,11 +92,11 @@ function Page() {
         <div className="mx-auto max-w-7xl px-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">What you unlock</p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
-            Full real-time access to {region.name.replace(" Live", "")}.
+            Full real-time access to {region.name.replace(" Signal", "")}.
           </h2>
           <div className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
             {[
-              "Fresh live vibes",
+              "Fresh fresh vibes",
               "Active spot map",
               "Recent replays",
               "Local food and nightlife activity",

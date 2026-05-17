@@ -69,10 +69,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "FRiNGE is a live map of real places. Unlock real-time vibes, active spots, and what's happening now from beaches, cities, and adventure spots around the world.",
+          "FRiNGE is a signal map of real places. Unlock real-time vibes, active spots, and what's happening now from beaches, cities, and adventure spots around the world.",
       },
-      { property: "og:title", content: "FRiNGE — Live Regions" },
-      { property: "og:description", content: "A live map of real places, powered by people on the ground." },
+      { property: "og:title", content: "FRiNGE — Signal Regions" },
+      { property: "og:description", content: "A signal map of real places, powered by people on the ground." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

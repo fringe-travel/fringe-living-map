@@ -4,7 +4,7 @@ export const Route = createFileRoute("/businesses")({
   head: () => ({
     meta: [
       { title: "For Businesses — FRiNGE" },
-      { name: "description", content: "Be discovered when people nearby are deciding where to go. Sponsor a spot, run a live drop, power a region." },
+      { name: "description", content: "Be discovered when people nearby are deciding where to go. Sponsor a spot, run a signal drop, power a region." },
       { property: "og:title", content: "For Businesses — FRiNGE" },
       { property: "og:description", content: "Appear inside real-time activity moments." },
     ],
@@ -15,20 +15,20 @@ export const Route = createFileRoute("/businesses")({
 const options = [
   {
     name: "Sponsored Spot",
-    body: "Your business appears near relevant live activity.",
+    body: "Your business appears near relevant active signal.",
     good: ["Beach bars", "Restaurants", "Kite schools", "Surf shops", "Tour operators", "Hostels"],
     cta: "Sponsor a spot",
   },
   {
-    name: "Live Drop",
+    name: "Signal Drop",
     body: "Launch a time-limited offer during an active moment.",
     good: ["Show this vibe today and get a free drink with lunch."],
-    cta: "Run a live drop",
+    cta: "Run a signal drop",
   },
   {
     name: "Region Sponsor",
-    body: "Power live coverage across an entire region.",
-    good: ["Boracay Live powered by [Brand]."],
+    body: "Power signal coverage across an entire region.",
+    good: ["Boracay Signal powered by [Brand]."],
     cta: "Sponsor a region",
   },
 ];

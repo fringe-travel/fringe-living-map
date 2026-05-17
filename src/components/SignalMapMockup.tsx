@@ -15,7 +15,7 @@ export function SignalMapMockup() {
     <div className="relative aspect-square w-full overflow-hidden rounded-3xl border border-border bg-surface shadow-[0_30px_120px_-30px] shadow-primary/30">
       <img
         src={mapImg}
-        alt="Live region map"
+        alt="Signal region map"
         width={1280}
         height={1280}
         className="absolute inset-0 h-full w-full object-cover opacity-70"
@@ -27,14 +27,14 @@ export function SignalMapMockup() {
       <div className="absolute inset-x-0 top-0 flex items-start justify-between p-5">
         <div className="rounded-lg border border-border bg-background/70 px-3 py-2 backdrop-blur-md">
           <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/50">Viewing</p>
-          <p className="text-sm font-bold">Boracay Live</p>
+          <p className="text-sm font-bold">Boracay Signal</p>
         </div>
-        <div className="flex items-center gap-2 rounded-full border border-live/30 bg-live/10 px-3 py-1.5 backdrop-blur-md">
+        <div className="flex items-center gap-2 rounded-full border border-signal/30 bg-signal/10 px-3 py-1.5 backdrop-blur-md">
           <span className="relative inline-flex size-1.5">
-            <span className="absolute inset-0 animate-ping rounded-full bg-live opacity-70" />
-            <span className="relative size-1.5 rounded-full bg-live" />
+            <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
+            <span className="relative size-1.5 rounded-full bg-signal" />
           </span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-live">Live Now</span>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-signal">On Air</span>
         </div>
       </div>
 
@@ -72,7 +72,7 @@ export function SignalMapMockup() {
 function PinMarker({ pin }: { pin: Pin }) {
   const isActive = pin.state === "active";
   const isLocked = pin.state === "locked";
-  const color = isActive ? "text-live" : pin.state === "warm" ? "text-sunset" : "text-foreground/30";
+  const color = isActive ? "text-signal" : pin.state === "warm" ? "text-sunset" : "text-foreground/30";
 
   return (
     <div
@@ -85,7 +85,7 @@ function PinMarker({ pin }: { pin: Pin }) {
         )}
         <span
           className={`relative block size-3 rounded-full border-2 border-background ${
-            isActive ? "bg-live" : pin.state === "warm" ? "bg-sunset" : "bg-foreground/40"
+            isActive ? "bg-signal" : pin.state === "warm" ? "bg-sunset" : "bg-foreground/40"
           }`}
         />
       </div>
