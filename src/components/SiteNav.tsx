@@ -17,6 +17,18 @@ export function SiteNav() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const handleExplore = (e: React.MouseEvent) => {
+    closeMenu();
+    if (typeof window === "undefined") return;
+    const el = document.getElementById("living-globe");
+    if (el && window.location.pathname === "/") {
+      e.preventDefault();
+      el.scrollIntoView({ behavior: "smooth" });
+      el.requestFullscreen?.().catch(() => {});
+    }
+    // else: let the Link navigate to "/?fullscreen=1" — LivingGlobe's mount effect handles it
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -59,7 +71,7 @@ export function SiteNav() {
           <Link
             to="/"
             search={{ fullscreen: 1 } as any}
-            onClick={closeMenu}
+            onClick={handleExplore}
             className="hidden rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:inline-flex"
           >
             Explore the Globe
@@ -105,7 +117,7 @@ export function SiteNav() {
             <Link
               to="/"
               search={{ fullscreen: 1 } as any}
-              onClick={closeMenu}
+              onClick={handleExplore}
               className="mt-2 rounded-full bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground sm:hidden"
             >
               Explore the Globe
