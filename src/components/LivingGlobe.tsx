@@ -88,7 +88,15 @@ export function LivingGlobe() {
   const mapRef = useRef<any>(null);
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
+  const [mode, setMode] = useState<"3d" | "2d">("3d");
   const pins = useMemo(buildPins, []);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+    try {
+      mapRef.current.setProjection(mode === "3d" ? "globe" : "mercator");
+    } catch {}
+  }, [mode]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !containerRef.current) return;
