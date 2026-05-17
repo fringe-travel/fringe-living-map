@@ -267,12 +267,29 @@ function Page() {
             One pass. Full Now Map. Fresh vibes. Real-time intel.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <button className="rounded-xl bg-primary px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-primary-foreground transition-transform hover:scale-105">
-              Unlock for ${region.pricePerDay} today
-            </button>
-            <button className="font-mono text-xs uppercase tracking-[0.2em] text-foreground/50 hover:text-foreground">
-              Get monthly access — ${region.pricePerMonth}/mo →
-            </button>
+            {prices && !access.hasAccess && (
+              <>
+                <UnlockButton
+                  priceId={prices.day}
+                  reason={`Unlock ${region.name}`}
+                  className="rounded-xl bg-primary px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
+                >
+                  Unlock for ${region.pricePerDay} today
+                </UnlockButton>
+                <UnlockButton
+                  priceId={prices.month}
+                  reason={`Monthly access to ${region.name}`}
+                  className="font-mono text-xs uppercase tracking-[0.2em] text-foreground/50 hover:text-foreground disabled:opacity-60"
+                >
+                  Get monthly access — ${region.pricePerMonth}/mo →
+                </UnlockButton>
+              </>
+            )}
+            {access.hasAccess && (
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-signal">
+                ✓ You're in. Enjoy the signal.
+              </p>
+            )}
           </div>
         </div>
       </section>
