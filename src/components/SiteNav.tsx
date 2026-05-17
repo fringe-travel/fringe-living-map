@@ -56,7 +56,8 @@ export function SiteNav() {
             </button>
           )}
           <Link
-            to="/signal-regions"
+            to="/"
+            search={{ fullscreen: 1 } as any}
             className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105"
           >
             Explore the Globe
