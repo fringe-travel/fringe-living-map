@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { UnlockButton } from "@/components/UnlockButton";
+import { GLOBAL_MONTH_PRICE_ID } from "@/lib/pricing-ids";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -74,16 +76,26 @@ function Page() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/signal-regions"
-              className={`mt-auto block rounded-xl py-3.5 text-center text-sm font-bold transition-colors ${
-                t.highlight
-                  ? "bg-primary text-primary-foreground hover:brightness-110"
-                  : "border border-border bg-background hover:bg-surface-2"
-              }`}
-            >
-              {t.cta}
-            </Link>
+            {t.name === "Global Pass" ? (
+              <UnlockButton
+                priceId={GLOBAL_MONTH_PRICE_ID}
+                reason="Unlock the Global Pass"
+                className="mt-auto block w-full rounded-xl border border-border bg-background py-3.5 text-center text-sm font-bold hover:bg-surface-2 disabled:opacity-60"
+              >
+                {t.cta}
+              </UnlockButton>
+            ) : (
+              <Link
+                to="/signal-regions"
+                className={`mt-auto block rounded-xl py-3.5 text-center text-sm font-bold transition-colors ${
+                  t.highlight
+                    ? "bg-primary text-primary-foreground hover:brightness-110"
+                    : "border border-border bg-background hover:bg-surface-2"
+                }`}
+              >
+                {t.cta}
+              </Link>
+            )}
           </div>
         ))}
       </div>
