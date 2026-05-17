@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import type { Region } from "@/lib/regions";
+import { UnlockButton } from "@/components/UnlockButton";
+import { getRegionPriceIds } from "@/lib/pricing-ids";
 
 const statusBadge: Record<Region["status"], { label: string; cls: string }> = {
   signal: { label: "On Air", cls: "bg-signal text-primary-foreground" },
