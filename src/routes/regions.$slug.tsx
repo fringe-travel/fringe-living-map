@@ -1,6 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getRegion, type SignalDrop } from "@/lib/regions";
 import { SignalMapMockup } from "@/components/SignalMapMockup";
+import { UnlockButton } from "@/components/UnlockButton";
+import { useRegionAccess } from "@/hooks/useRegionAccess";
+import { getRegionPriceIds } from "@/lib/pricing-ids";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
@@ -27,6 +30,8 @@ export const Route = createFileRoute("/regions/$slug")({
 
 function Page() {
   const { region } = Route.useLoaderData();
+  const access = useRegionAccess(region.slug);
+  const prices = getRegionPriceIds(region.slug);
 
   return (
     <>
@@ -46,14 +51,35 @@ function Page() {
             </h1>
             <p className="mt-5 max-w-xl text-lg text-foreground/60">{region.description}</p>
 
-            <div className="mt-9 flex flex-wrap gap-3">
-              <button className="rounded-xl bg-primary px-7 py-4 text-base font-bold text-primary-foreground transition-transform hover:scale-105">
-                Unlock {region.name} — ${region.pricePerDay} today
-              </button>
-              <button className="rounded-xl border border-border bg-surface px-7 py-4 text-base font-bold hover:bg-surface-2">
-                Monthly access — ${region.pricePerMonth}/mo
-              </button>
-            </div>
+            {access.hasAccess ? (
+              <div className="mt-9 inline-flex items-center gap-3 rounded-2xl border border-signal/40 bg-signal/10 px-5 py-4">
+                <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-signal" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-signal">
+                  Active — {access.reason === "global" ? "Global Pass" : access.reason === "region_monthly" ? "Monthly Pass" : "24h Day Pass"}
+                </p>
+              </div>
+            ) : (
+              <div className="mt-9 flex flex-wrap gap-3">
+                {prices && (
+                  <>
+                    <UnlockButton
+                      priceId={prices.day}
+                      reason={`Unlock ${region.name}`}
+                      className="rounded-xl bg-primary px-7 py-4 text-base font-bold text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
+                    >
+                      Unlock {region.name} — ${region.pricePerDay} today
+                    </UnlockButton>
+                    <UnlockButton
+                      priceId={prices.month}
+                      reason={`Monthly access to ${region.name}`}
+                      className="rounded-xl border border-border bg-surface px-7 py-4 text-base font-bold hover:bg-surface-2 disabled:opacity-60"
+                    >
+                      Monthly access — ${region.pricePerMonth}/mo
+                    </UnlockButton>
+                  </>
+                )}
+              </div>
+            )}
           </div>
           <div className="lg:col-span-5">
             <SignalMapMockup />
