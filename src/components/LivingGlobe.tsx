@@ -121,28 +121,35 @@ function buildPoints(): GlobePoint[] {
 
 export function LivingGlobe() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const mapRef = useRef<MapboxNS.Map | null>(null);
   const points = useMemo(buildPoints, []);
   const [ready, setReady] = useState(false);
   const totalVibes = points.filter((p) => p.vibe).length + 33;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
-    mapboxgl.accessToken = MAPBOX_TOKEN;
+    let cancelled = false;
+    let cleanup: (() => void) | null = null;
 
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: "mapbox://styles/mapbox/satellite-v9",
-      projection: { name: "globe" },
-      zoom: 1.6,
-      center: [-40, 18],
-      pitch: 0,
-      bearing: 0,
-      interactive: true,
-      attributionControl: false,
-    });
+    (async () => {
+      const mod = await import("mapbox-gl");
+      const mapboxgl = mod.default;
+      if (cancelled || !containerRef.current) return;
+      mapboxgl.accessToken = MAPBOX_TOKEN;
 
-    mapRef.current = map;
+      const map = new mapboxgl.Map({
+        container: containerRef.current,
+        style: "mapbox://styles/mapbox/satellite-v9",
+        projection: { name: "globe" } as any,
+        zoom: 1.6,
+        center: [-40, 18],
+        pitch: 0,
+        bearing: 0,
+        interactive: true,
+        attributionControl: false,
+      });
+
+      mapRef.current = map;
 
     map.on("style.load", () => {
       map.setFog({
