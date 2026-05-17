@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { RegionCard } from "@/components/RegionCard";
 import { regions } from "@/lib/regions";
 
-export const Route = createFileRoute("/live-regions")({
+export const Route = createFileRoute("/signal-regions")({
   head: () => ({
     meta: [
       { title: "Live Regions — FRiNGE" },
