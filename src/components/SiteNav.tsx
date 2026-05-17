@@ -17,6 +17,18 @@ export function SiteNav() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const handleExplore = (e: React.MouseEvent) => {
+    closeMenu();
+    if (typeof window === "undefined") return;
+    const el = document.getElementById("living-globe");
+    if (el && window.location.pathname === "/") {
+      e.preventDefault();
+      el.scrollIntoView({ behavior: "smooth" });
+      el.requestFullscreen?.().catch(() => {});
+    }
+    // else: let the Link navigate to "/?fullscreen=1" — LivingGlobe's mount effect handles it
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
