@@ -1,4 +1,8 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/useAuth";
+import { AuthDialog } from "@/components/AuthDialog";
+import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/signal-regions", label: "Signal Regions" },
@@ -9,6 +13,9 @@ const links = [
 ] as const;
 
 export function SiteNav() {
+  const { user } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -32,13 +39,32 @@ export function SiteNav() {
           ))}
         </div>
 
-        <Link
-          to="/signal-regions"
-          className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105"
-        >
-          Explore Regions
-        </Link>
+        <div className="flex items-center gap-3">
+          {user ? (
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="hidden text-xs font-mono uppercase tracking-[0.18em] text-foreground/60 hover:text-foreground md:inline"
+            >
+              Sign out
+            </button>
+          ) : (
+            <button
+              onClick={() => setAuthOpen(true)}
+              className="hidden text-sm font-medium text-foreground/60 hover:text-foreground md:inline"
+            >
+              Sign in
+            </button>
+          )}
+          <Link
+            to="/signal-regions"
+            className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105"
+          >
+            Explore Regions
+          </Link>
+        </div>
       </div>
+      <AuthDialog open={authOpen} onClose={() => setAuthOpen(false)} />
     </nav>
   );
 }
+
