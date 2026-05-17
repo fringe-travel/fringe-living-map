@@ -86,7 +86,7 @@ function Page() {
           </p>
           <div className="mt-8">
             <a
-              href="https://apps.apple.com/app/fringe-travel/id0"
+              href="https://apps.apple.com/us/app/fringe-travel/id6756793528"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 rounded-2xl bg-foreground px-6 py-3.5 text-background transition-transform hover:scale-105"
