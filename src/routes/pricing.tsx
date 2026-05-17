@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ShakaButton } from "@/components/ShakaButton";
 import { RequestVibeBlock } from "@/components/RequestVibeBlock";
 import { SupportRegionBlock } from "@/components/SupportRegionBlock";
-import { PartnerHereBlock } from "@/components/PartnerHereBlock";
+
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({

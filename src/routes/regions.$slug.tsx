@@ -4,7 +4,7 @@ import { SignalMapMockup } from "@/components/SignalMapMockup";
 import { ShakaButton } from "@/components/ShakaButton";
 import { RequestVibeBlock } from "@/components/RequestVibeBlock";
 import { SupportRegionBlock } from "@/components/SupportRegionBlock";
-import { PartnerHereBlock } from "@/components/PartnerHereBlock";
+
 import { UnlockButton } from "@/components/UnlockButton";
 import { VIBE_REQUEST_PRICE_IDS } from "@/lib/pricing-ids";
 
