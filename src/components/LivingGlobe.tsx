@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { regions } from "@/lib/regions";
 
 const SPOT_COORDS: Record<string, [number, number]> = {
