@@ -230,12 +230,6 @@ function Page() {
             >
               Support {shortName}
             </a>
-            <a
-              href={`mailto:admin@fringe.travel?subject=${encodeURIComponent(`Partner in ${shortName}`)}`}
-              className="font-mono text-xs uppercase tracking-[0.2em] text-foreground/50 hover:text-foreground"
-            >
-              Partner here →
-            </a>
           </div>
         </div>
       </section>

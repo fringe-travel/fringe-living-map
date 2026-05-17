@@ -74,15 +74,6 @@ function FourCTAs() {
             priceId={REGION_SUPPORT_PRICE_IDS.supporter}
             reason="Support a region"
           />
-          <CTA
-            tag="Partner Here"
-            title="For local businesses"
-            body="Help fund coverage in your community. Partners support the signal — they do not control the vibe."
-            tone="muted"
-            actionLabel="Get in touch"
-            href="mailto:admin@fringe.travel?subject=Partner%20with%20FRiNGE"
-            external
-          />
         </div>
       </div>
     </section>
