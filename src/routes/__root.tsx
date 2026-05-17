@@ -9,6 +9,9 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import ogGlobe from "@/assets/og-globe.jpg";
+
+const OG_IMAGE_URL = `https://real-time-vibe-map.lovable.app${ogGlobe}`;
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 
