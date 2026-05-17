@@ -28,6 +28,7 @@ function HomePage() {
       <WhyItMatters />
       <HowItWorks />
       <NowMapFeatures />
+      <SeeFeelGoBanner />
       <LockedConversion />
       <Pricing />
       <VibersBusinesses />
