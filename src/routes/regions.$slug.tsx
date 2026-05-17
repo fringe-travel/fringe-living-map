@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getRegion } from "@/lib/regions";
+import { getRegion, type SignalDrop } from "@/lib/regions";
 import { SignalMapMockup } from "@/components/SignalMapMockup";
 
 export const Route = createFileRoute("/regions/$slug")({
@@ -93,7 +93,7 @@ function Page() {
 
           <div className="relative mt-10">
             <ul className="divide-y divide-border overflow-hidden rounded-3xl border border-border bg-background">
-              {region.previewFeed.map((d, i) => {
+              {region.previewFeed.map((d: SignalDrop, i: number) => {
                 const locked = i >= 2;
                 return (
                   <li key={i} className="relative grid grid-cols-[auto_1fr_auto] items-center gap-5 p-5 md:p-6">
