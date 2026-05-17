@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LiveMapMockup } from "@/components/LiveMapMockup";
+import { SignalMapMockup } from "@/components/SignalMapMockup";
 
 export const Route = createFileRoute("/now-map")({
   head: () => ({
@@ -39,7 +39,7 @@ function Page() {
             </p>
           </div>
           <div className="lg:col-span-5">
-            <LiveMapMockup />
+            <SignalMapMockup />
           </div>
         </div>
       </section>

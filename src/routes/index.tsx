@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { LiveMapMockup } from "@/components/LiveMapMockup";
+import { SignalMapMockup } from "@/components/SignalMapMockup";
 import { RegionCard } from "@/components/RegionCard";
 import { regions } from "@/lib/regions";
 import lockedBg from "@/assets/locked-bg.jpg";
@@ -83,7 +83,7 @@ function Hero() {
         </div>
 
         <div className="lg:col-span-5">
-          <LiveMapMockup />
+          <SignalMapMockup />
         </div>
       </div>
     </section>

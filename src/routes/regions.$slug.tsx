@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getRegion } from "@/lib/regions";
-import { LiveMapMockup } from "@/components/LiveMapMockup";
+import { SignalMapMockup } from "@/components/SignalMapMockup";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
@@ -56,7 +56,7 @@ function Page() {
             </div>
           </div>
           <div className="lg:col-span-5">
-            <LiveMapMockup />
+            <SignalMapMockup />
           </div>
         </div>
       </section>

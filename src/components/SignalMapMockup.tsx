@@ -10,7 +10,7 @@ const pins: Pin[] = [
   { x: 80, y: 72, label: "Beach Bar", state: "locked" },
 ];
 
-export function LiveMapMockup() {
+export function SignalMapMockup() {
   return (
     <div className="relative aspect-square w-full overflow-hidden rounded-3xl border border-border bg-surface shadow-[0_30px_120px_-30px] shadow-primary/30">
       <img
