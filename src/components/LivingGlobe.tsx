@@ -151,16 +151,22 @@ export function LivingGlobe() {
 
       mapRef.current = map;
 
-    map.on("style.load", () => {
-      map.setFog({
-        color: "rgb(8, 10, 16)",
-        "high-color": "rgb(36, 60, 110)",
-        "horizon-blend": 0.08,
-        "space-color": "rgb(2, 4, 10)",
-        "star-intensity": 0.9,
-      } as any);
-      setReady(true);
-    });
+      // Ensure canvas matches container size after layout settles.
+      const ro = new ResizeObserver(() => map.resize());
+      ro.observe(containerRef.current!);
+      setTimeout(() => map.resize(), 50);
+      setTimeout(() => map.resize(), 400);
+
+      map.on("style.load", () => {
+        map.setFog({
+          color: "rgb(8, 10, 16)",
+          "high-color": "rgb(36, 60, 110)",
+          "horizon-blend": 0.08,
+          "space-color": "rgb(2, 4, 10)",
+          "star-intensity": 0.9,
+        } as any);
+        setReady(true);
+      });
 
     // Add markers
     for (const p of points) {
@@ -296,13 +302,6 @@ export function LivingGlobe() {
         </div>
       </div>
 
-      {!ready && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-white/60">
-            Spinning up the Living Globe…
-          </p>
-        </div>
-      )}
 
       <style>{`
         .vibe-marker { pointer-events: auto; }
