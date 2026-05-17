@@ -73,32 +73,6 @@ function Page() {
         </div>
       </section>
 
-      {/* Intro */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-6 py-10">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-            {region.country} · Live Region
-          </p>
-          <div className="mt-3 flex flex-wrap items-end justify-between gap-6">
-            <p className="max-w-2xl text-foreground/60">{region.description}</p>
-            <div className="flex flex-wrap gap-3">
-              <UnlockButton
-                priceId={VIBE_REQUEST_PRICE_IDS.basic}
-                reason={`Request a vibe from ${shortName}`}
-                className="rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
-              >
-                Request a Vibe
-              </UnlockButton>
-              <a
-                href="#support"
-                className="rounded-xl border border-border bg-surface px-6 py-3 text-sm font-bold hover:bg-surface-2"
-              >
-                Support {shortName}
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Live stats */}
       <section className="border-b border-border bg-surface/30 py-16">
