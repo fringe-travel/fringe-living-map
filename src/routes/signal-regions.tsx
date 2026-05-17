@@ -17,7 +17,7 @@ export const Route = createFileRoute("/signal-regions")({
 function Page() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Marketplace</p>
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Signal Regions</p>
       <h1 className="mt-3 max-w-3xl text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
         Every signal region, on one map.
       </h1>
