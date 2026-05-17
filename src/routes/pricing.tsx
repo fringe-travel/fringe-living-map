@@ -6,7 +6,7 @@ export const Route = createFileRoute("/pricing")({
       { title: "Pricing — FRiNGE" },
       { name: "description", content: "Free Preview, Region Pass from $1.99/day, or Global Pass at $9.99/month." },
       { property: "og:title", content: "Pricing — FRiNGE" },
-      { property: "og:description", content: "Choose how you want to explore the live layer of the real world." },
+      { property: "og:description", content: "Choose how you want to explore the signal layer of the real world." },
     ],
   }),
   component: Page,
@@ -17,7 +17,7 @@ const tiers = [
     name: "Free Preview",
     price: "$0",
     blurb: "Good for discovering regions.",
-    features: ["View public vibes", "Preview live regions", "See limited map activity", "Browse available places"],
+    features: ["View public vibes", "Preview signal regions", "See limited map activity", "Browse available places"],
     cta: "Start exploring",
   },
   {
@@ -25,7 +25,7 @@ const tiers = [
     price: "$1.99",
     unit: "/day",
     blurb: "Best for travelers and locals checking one place.",
-    features: ["Unlock one live region", "Full Now Map access", "Fresh vibes", "Active spots", "Recent replays", "Local updates"],
+    features: ["Unlock one signal region", "Full Now Map access", "Fresh vibes", "Active spots", "Recent replays", "Local updates"],
     cta: "Choose a region",
     highlight: true,
   },
@@ -34,7 +34,7 @@ const tiers = [
     price: "$9.99",
     unit: "/month",
     blurb: "Best for nomads and explorers following multiple places.",
-    features: ["Unlock all live regions", "Access every Now Map", "Save favorite spots", "Follow active places", "Early access to new regions"],
+    features: ["Unlock all signal regions", "Access every Now Map", "Save favorite spots", "Follow active places", "Early access to new regions"],
     cta: "Unlock all regions",
   },
 ];
@@ -75,7 +75,7 @@ function Page() {
               ))}
             </ul>
             <Link
-              to="/live-regions"
+              to="/signal-regions"
               className={`mt-auto block rounded-xl py-3.5 text-center text-sm font-bold transition-colors ${
                 t.highlight
                   ? "bg-primary text-primary-foreground hover:brightness-110"

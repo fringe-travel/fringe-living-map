@@ -4,7 +4,7 @@ export const Route = createFileRoute("/vibers")({
   head: () => ({
     meta: [
       { title: "For Vibers — FRiNGE" },
-      { name: "description", content: "Go live and FRiNGE maps the moment. Become a Viber and put your region on the live map." },
+      { name: "description", content: "Tune in and FRiNGE maps the moment. Become a Viber and put your region on the signal map." },
       { property: "og:title", content: "For Vibers — FRiNGE" },
       { property: "og:description", content: "Share real-time vibes. Build status in your region. Earn from coverage." },
     ],
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/vibers")({
 const benefits = [
   "No manual tagging",
   "Automatic spot association",
-  "Show up on the live map",
+  "Show up on the signal map",
   "Build status in your region",
   "Help people discover where to go",
   "Earn from tips, rewards, sponsored coverage",
@@ -26,7 +26,7 @@ function Page() {
     <section className="mx-auto max-w-5xl px-6 py-24">
       <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">For Vibers</p>
       <h1 className="mt-3 text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
-        Go live. FRiNGE maps the moment.
+        Tune in. FRiNGE maps the moment.
       </h1>
       <p className="mt-5 max-w-2xl text-lg text-foreground/60">
         Vibers help the world see what's happening now. When you share a vibe,

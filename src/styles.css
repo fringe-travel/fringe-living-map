@@ -32,7 +32,7 @@
   --color-ring: var(--ring);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
-  --color-live: var(--live);
+  --color-signal: var(--signal);
   --color-sunset: var(--sunset);
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -57,8 +57,8 @@
 
   /* Sunset orange */
   --sunset: oklch(0.72 0.20 45);
-  /* Live green */
-  --live: oklch(0.78 0.20 155);
+  /* Signal green */
+  --signal: oklch(0.78 0.20 155);
 
   --secondary: oklch(0.24 0.02 240);
   --secondary-foreground: oklch(0.98 0.005 240);

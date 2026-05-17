@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LiveMapMockup } from "@/components/LiveMapMockup";
+import { SignalMapMockup } from "@/components/SignalMapMockup";
 
 export const Route = createFileRoute("/now-map")({
   head: () => ({
@@ -7,18 +7,18 @@ export const Route = createFileRoute("/now-map")({
       { title: "Now Map — FRiNGE" },
       { name: "description", content: "The FRiNGE Now Map shows where real activity is happening — not just where places exist." },
       { property: "og:title", content: "Now Map — FRiNGE" },
-      { property: "og:description", content: "Live pins, freshness, replays, and spot intelligence." },
+      { property: "og:description", content: "Signal pins, freshness, replays, and spot intelligence." },
     ],
   }),
   component: Page,
 });
 
 const feats = [
-  { title: "Live pins", body: "See which spots have fresh activity, in real time." },
+  { title: "Signal pins", body: "See which spots have fresh activity, in real time." },
   { title: "Auto-location association", body: "Every vibe connects to its spot, zone, and region automatically." },
   { title: "Freshness indicators", body: "Know if a vibe happened 2 minutes ago, 30 minutes ago, or yesterday." },
-  { title: "Locked premium spots", body: "Free users preview. Paid users unlock the full live region." },
-  { title: "Replay layer", body: "See recent moments even after the live vibe ends." },
+  { title: "Locked premium spots", body: "Free users preview. Paid users unlock the full signal region." },
+  { title: "Replay layer", body: "See recent moments even after the fresh vibe ends." },
   { title: "Spot intelligence", body: "Know if a place is active, quiet, crowded, windy, fun, or dead." },
 ];
 
@@ -31,7 +31,7 @@ function Page() {
           <div className="lg:col-span-7">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Now Map</p>
             <h1 className="mt-3 text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
-              The map is alive.
+              The map is on.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-foreground/60">
               The FRiNGE Now Map shows where real activity is happening — not just
@@ -39,7 +39,7 @@ function Page() {
             </p>
           </div>
           <div className="lg:col-span-5">
-            <LiveMapMockup />
+            <SignalMapMockup />
           </div>
         </div>
       </section>

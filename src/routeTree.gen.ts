@@ -11,9 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VibersRouteImport } from './routes/vibers'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SignalRegionsRouteImport } from './routes/signal-regions'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as NowMapRouteImport } from './routes/now-map'
-import { Route as LiveRegionsRouteImport } from './routes/live-regions'
 import { Route as BusinessesRouteImport } from './routes/businesses'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RegionsSlugRouteImport } from './routes/regions.$slug'
@@ -28,6 +28,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignalRegionsRoute = SignalRegionsRouteImport.update({
+  id: '/signal-regions',
+  path: '/signal-regions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
@@ -36,11 +41,6 @@ const PricingRoute = PricingRouteImport.update({
 const NowMapRoute = NowMapRouteImport.update({
   id: '/now-map',
   path: '/now-map',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LiveRegionsRoute = LiveRegionsRouteImport.update({
-  id: '/live-regions',
-  path: '/live-regions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusinessesRoute = BusinessesRouteImport.update({
@@ -62,9 +62,9 @@ const RegionsSlugRoute = RegionsSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/businesses': typeof BusinessesRoute
-  '/live-regions': typeof LiveRegionsRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/signal-regions': typeof SignalRegionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
@@ -72,9 +72,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/businesses': typeof BusinessesRoute
-  '/live-regions': typeof LiveRegionsRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/signal-regions': typeof SignalRegionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
@@ -83,9 +83,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/businesses': typeof BusinessesRoute
-  '/live-regions': typeof LiveRegionsRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/signal-regions': typeof SignalRegionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
@@ -95,9 +95,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/businesses'
-    | '/live-regions'
     | '/now-map'
     | '/pricing'
+    | '/signal-regions'
     | '/sitemap.xml'
     | '/vibers'
     | '/regions/$slug'
@@ -105,9 +105,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/businesses'
-    | '/live-regions'
     | '/now-map'
     | '/pricing'
+    | '/signal-regions'
     | '/sitemap.xml'
     | '/vibers'
     | '/regions/$slug'
@@ -115,9 +115,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/businesses'
-    | '/live-regions'
     | '/now-map'
     | '/pricing'
+    | '/signal-regions'
     | '/sitemap.xml'
     | '/vibers'
     | '/regions/$slug'
@@ -126,9 +126,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BusinessesRoute: typeof BusinessesRoute
-  LiveRegionsRoute: typeof LiveRegionsRoute
   NowMapRoute: typeof NowMapRoute
   PricingRoute: typeof PricingRoute
+  SignalRegionsRoute: typeof SignalRegionsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VibersRoute: typeof VibersRoute
   RegionsSlugRoute: typeof RegionsSlugRoute
@@ -150,6 +150,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signal-regions': {
+      id: '/signal-regions'
+      path: '/signal-regions'
+      fullPath: '/signal-regions'
+      preLoaderRoute: typeof SignalRegionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
@@ -162,13 +169,6 @@ declare module '@tanstack/react-router' {
       path: '/now-map'
       fullPath: '/now-map'
       preLoaderRoute: typeof NowMapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/live-regions': {
-      id: '/live-regions'
-      path: '/live-regions'
-      fullPath: '/live-regions'
-      preLoaderRoute: typeof LiveRegionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/businesses': {
@@ -198,9 +198,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BusinessesRoute: BusinessesRoute,
-  LiveRegionsRoute: LiveRegionsRoute,
   NowMapRoute: NowMapRoute,
   PricingRoute: PricingRoute,
+  SignalRegionsRoute: SignalRegionsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VibersRoute: VibersRoute,
   RegionsSlugRoute: RegionsSlugRoute,
@@ -208,3 +208,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
