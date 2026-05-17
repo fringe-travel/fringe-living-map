@@ -245,39 +245,40 @@ export function LivingGlobe() {
         </div>
       )}
 
-      {/* Top overlay: live badge + 2D/3D toggle */}
-      <div className="pointer-events-none absolute inset-x-0 top-16 z-10 flex items-center justify-between gap-3 px-6 pt-4 md:pt-6">
-        <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/60 px-3 py-1.5 backdrop-blur-md">
+      {/* Top overlay: live badge + controls */}
+      <div className="pointer-events-none absolute inset-x-0 top-16 z-10 flex flex-wrap items-center justify-between gap-2 px-3 pt-3 sm:gap-3 sm:px-6 sm:pt-4 md:pt-6">
+        <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/60 px-2.5 py-1 backdrop-blur-md sm:px-3 sm:py-1.5">
           <span className="relative inline-flex size-1.5">
             <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
             <span className="relative size-1.5 rounded-full bg-signal" />
           </span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-signal">
-            The Living Globe is on
+          <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-signal sm:text-[10px] sm:tracking-[0.25em]">
+            <span className="sm:hidden">Live</span>
+            <span className="hidden sm:inline">The Living Globe is on</span>
           </span>
         </div>
-        <div className="pointer-events-auto inline-flex overflow-hidden rounded-full border border-foreground/20 bg-background/60 backdrop-blur-md">
-          <button
-            type="button"
-            onClick={() => setMode("3d")}
-            className={`px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] transition-colors ${mode === "3d" ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"}`}
-          >
-            3D
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("2d")}
-            className={`px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] transition-colors ${mode === "2d" ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"}`}
-          >
-            2D
-          </button>
-        </div>
-        <div className="pointer-events-auto inline-flex items-center gap-2">
+        <div className="pointer-events-auto flex flex-wrap items-center justify-end gap-2">
+          <div className="inline-flex overflow-hidden rounded-full border border-foreground/20 bg-background/60 backdrop-blur-md">
+            <button
+              type="button"
+              onClick={() => setMode("3d")}
+              className={`px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] transition-colors sm:px-3 sm:py-1.5 sm:text-[10px] sm:tracking-[0.25em] ${mode === "3d" ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"}`}
+            >
+              3D
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("2d")}
+              className={`px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] transition-colors sm:px-3 sm:py-1.5 sm:text-[10px] sm:tracking-[0.25em] ${mode === "2d" ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"}`}
+            >
+              2D
+            </button>
+          </div>
           <div className="inline-flex overflow-hidden rounded-full border border-foreground/20 bg-background/60 backdrop-blur-md">
             <button
               type="button"
               onClick={() => mapRef.current?.zoomIn()}
-              className="px-3 py-1 font-mono text-base font-bold text-foreground/80 transition-colors hover:text-foreground"
+              className="px-2.5 py-0.5 font-mono text-sm font-bold text-foreground/80 transition-colors hover:text-foreground sm:px-3 sm:py-1 sm:text-base"
               aria-label="Zoom in"
             >
               +
@@ -286,7 +287,7 @@ export function LivingGlobe() {
             <button
               type="button"
               onClick={() => mapRef.current?.zoomOut()}
-              className="px-3 py-1 font-mono text-base font-bold text-foreground/80 transition-colors hover:text-foreground"
+              className="px-2.5 py-0.5 font-mono text-sm font-bold text-foreground/80 transition-colors hover:text-foreground sm:px-3 sm:py-1 sm:text-base"
               aria-label="Zoom out"
             >
               −
@@ -295,10 +296,11 @@ export function LivingGlobe() {
           <button
             type="button"
             onClick={toggleFullscreen}
-            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/60 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-foreground/80 backdrop-blur-md transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/60 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-foreground/80 backdrop-blur-md transition-colors hover:text-foreground sm:px-3 sm:py-1.5 sm:text-[10px] sm:tracking-[0.25em]"
             aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
           >
-            {isFullscreen ? "Exit Full" : "Full Screen"}
+            {isFullscreen ? "Exit" : "Full"}
+            <span className="hidden sm:inline">{isFullscreen ? " Full" : " Screen"}</span>
           </button>
         </div>
       </div>
