@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/signal-regions", label: "Living Globe" },
-  { to: "/now-map", label: "Now Map" },
+  
   { to: "/vibers", label: "Become a Viber" },
   { to: "/businesses", label: "Partner Here" },
   { to: "/pricing", label: "Support" },

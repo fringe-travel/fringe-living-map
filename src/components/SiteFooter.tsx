@@ -23,7 +23,7 @@ export function SiteFooter() {
           </h4>
           <ul className="space-y-3 text-sm">
             <li><Link to="/signal-regions" className="text-foreground/70 hover:text-foreground">Regions</Link></li>
-            <li><Link to="/now-map" className="text-foreground/70 hover:text-foreground">Now Map</Link></li>
+            
             <li><Link to="/pricing" className="text-foreground/70 hover:text-foreground">Support FRiNGE</Link></li>
           </ul>
         </div>
