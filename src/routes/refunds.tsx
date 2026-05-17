@@ -37,7 +37,7 @@ function RefundsPage() {
             and look up your order using the email address you used at checkout, or
           </li>
           <li>
-            Email us at <a href="mailto:support@fringe.example">support@fringe.example</a> and we'll
+            Email us at <a href="mailto:admin@fringe.travel">admin@fringe.travel</a> and we'll
             help coordinate with Paddle.
           </li>
         </ul>
@@ -65,7 +65,7 @@ function RefundsPage() {
 
       <Section title="Contact">
         Questions? Email{" "}
-        <a href="mailto:support@fringe.example">support@fringe.example</a>. For
+        <a href="mailto:admin@fringe.travel">admin@fringe.travel</a>. For
         anything billing-related, Paddle's support team can be reached at{" "}
         <a href="https://paddle.net" target="_blank" rel="noopener noreferrer">paddle.net</a>.
       </Section>

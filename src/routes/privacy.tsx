@@ -91,7 +91,7 @@ function PrivacyPage() {
         and to withdraw consent. UK/EEA users also have the right to lodge a complaint
         with their local supervisory authority. We aim to respond to requests within
         one month. To exercise a right, email{" "}
-        <a href="mailto:privacy@fringe.example">privacy@fringe.example</a>.
+        <a href="mailto:admin@fringe.travel">admin@fringe.travel</a>.
       </Section>
 
       <Section title="9. Security">
@@ -120,7 +120,7 @@ function PrivacyPage() {
 
       <Section title="13. Contact">
         Questions or requests? Email{" "}
-        <a href="mailto:privacy@fringe.example">privacy@fringe.example</a>.
+        <a href="mailto:admin@fringe.travel">admin@fringe.travel</a>.
       </Section>
     </article>
   );

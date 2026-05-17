@@ -144,7 +144,7 @@ function TermsPage() {
       </Section>
 
       <Section title="16. Contact">
-        Questions about these Terms? Email <a href="mailto:legal@fringe.example">legal@fringe.example</a>.
+        Questions about these Terms? Email <a href="mailto:admin@fringe.travel">admin@fringe.travel</a>.
         For billing or refund questions, contact Paddle at{" "}
         <a href="https://paddle.net" target="_blank" rel="noopener noreferrer">paddle.net</a>.
       </Section>
