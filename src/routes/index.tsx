@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   return (
-    <>
+    <div>
       <LivingGlobe />
       <section className="border-t border-border bg-background px-6 py-20 text-center">
         <div className="mx-auto max-w-3xl">
@@ -40,7 +40,7 @@ function HomePage() {
         </div>
       </section>
       <FourCTAs />
-    </>
+    </div>
   );
 }
 
