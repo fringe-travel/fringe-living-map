@@ -107,7 +107,7 @@ export function RegionMap({
   }, [slug, spots]);
 
   return (
-    <div className="relative h-[55vh] min-h-[420px] w-full overflow-hidden bg-surface">
+    <div className="relative h-[75vh] min-h-[520px] w-full overflow-hidden bg-surface">
       <div ref={containerRef} className="absolute inset-0" />
       <div className="pointer-events-none absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/70 px-3 py-1.5 backdrop-blur-md">
         <span className="relative inline-flex size-1.5">
