@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import type { Region } from "@/lib/regions";
+import { UnlockButton } from "@/components/UnlockButton";
+import { getRegionPriceIds } from "@/lib/pricing-ids";
 
 const statusBadge: Record<Region["status"], { label: string; cls: string }> = {
   signal: { label: "On Air", cls: "bg-signal text-primary-foreground" },
@@ -63,13 +65,26 @@ export function RegionCard({ region }: { region: Region }) {
           ))}
         </div>
 
-        <Link
-          to="/regions/$slug"
-          params={{ slug: region.slug }}
-          className="mt-auto block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary"
-        >
-          Unlock {region.name}
-        </Link>
+        {(() => {
+          const priceIds = getRegionPriceIds(region.slug);
+          return priceIds ? (
+            <UnlockButton
+              priceId={priceIds.day}
+              reason={`Unlock ${region.name}`}
+              className="mt-auto block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary disabled:opacity-60"
+            >
+              Unlock {region.name} — ${region.pricePerDay} today
+            </UnlockButton>
+          ) : (
+            <Link
+              to="/regions/$slug"
+              params={{ slug: region.slug }}
+              className="mt-auto block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary"
+            >
+              Unlock {region.name}
+            </Link>
+          );
+        })()}
       </div>
     </div>
   );
