@@ -1,104 +1,80 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { UnlockButton } from "@/components/UnlockButton";
-import { GLOBAL_MONTH_PRICE_ID } from "@/lib/pricing-ids";
+import { createFileRoute } from "@tanstack/react-router";
+import { ShakaButton } from "@/components/ShakaButton";
+import { RequestVibeBlock } from "@/components/RequestVibeBlock";
+import { SupportRegionBlock } from "@/components/SupportRegionBlock";
+import { PartnerHereBlock } from "@/components/PartnerHereBlock";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — FRiNGE" },
-      { name: "description", content: "Free Preview, Region Pass from $1.99/day, or Global Pass at $9.99/month." },
-      { property: "og:title", content: "Pricing — FRiNGE" },
-      { property: "og:description", content: "Choose how you want to explore the signal layer of the real world." },
+      { title: "Support FRiNGE — Keep the Living Globe alive." },
+      {
+        name: "description",
+        content:
+          "Tip a viber, request a fresh signal, support a region, or partner as a local business. Four community-driven ways to power FRiNGE.",
+      },
+      { property: "og:title", content: "Support FRiNGE" },
+      {
+        property: "og:description",
+        content: "FRiNGE is powered by the people who capture the world as it is.",
+      },
     ],
   }),
   component: Page,
 });
 
-const tiers = [
-  {
-    name: "Free Preview",
-    price: "$0",
-    blurb: "Good for discovering regions.",
-    features: ["View public vibes", "Preview signal regions", "See limited map activity", "Browse available places"],
-    cta: "Start exploring",
-  },
-  {
-    name: "Region Pass",
-    price: "$1.99",
-    unit: "/day",
-    blurb: "Best for travelers and locals checking one place.",
-    features: ["Unlock one signal region", "Full Now Map access", "Fresh vibes", "Active spots", "Recent replays", "Local updates"],
-    cta: "Choose a region",
-    highlight: true,
-  },
-  {
-    name: "Global Pass",
-    price: "$9.99",
-    unit: "/month",
-    blurb: "Best for nomads and explorers following multiple places.",
-    features: ["Unlock all signal regions", "Access every Now Map", "Save favorite spots", "Follow active places", "Early access to new regions"],
-    cta: "Unlock all regions",
-  },
-];
-
 function Page() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-24">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Pricing</p>
-      <h1 className="mt-3 max-w-3xl text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
-        Choose how you want to explore.
-      </h1>
+    <section className="mx-auto max-w-7xl space-y-16 px-6 py-24">
+      <header className="max-w-3xl">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Support FRiNGE</p>
+        <h1 className="mt-3 text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
+          Four ways to power the Living Globe.
+        </h1>
+        <p className="mt-5 text-pretty text-lg text-foreground/60">
+          FRiNGE is powered by the people who capture the world as it is. No subscriptions to watch
+          fake content — just real ways to support the people, regions, and signals you care about.
+        </p>
+      </header>
 
-      <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
-        {tiers.map((t) => (
-          <div
-            key={t.name}
-            className={`relative flex flex-col rounded-3xl border p-8 ${
-              t.highlight ? "border-primary/40 bg-primary/5" : "border-border bg-surface"
-            }`}
-          >
-            {t.highlight && (
-              <span className="absolute -top-3 right-6 rounded-full bg-primary px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground">
-                Most popular
-              </span>
-            )}
-            <h3 className="text-lg font-bold">{t.name}</h3>
-            <div className="mt-4 flex items-baseline gap-1">
-              <span className="text-5xl font-extrabold tracking-tighter">{t.price}</span>
-              {t.unit && <span className="text-foreground/50">{t.unit}</span>}
-            </div>
-            <p className="mt-3 text-sm text-foreground/60">{t.blurb}</p>
-            <ul className="my-8 space-y-3 text-sm">
-              {t.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-foreground/80">
-                  <span className="text-primary">✓</span>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            {t.name === "Global Pass" ? (
-              <UnlockButton
-                priceId={GLOBAL_MONTH_PRICE_ID}
-                reason="Unlock the Global Pass"
-                className="mt-auto block w-full rounded-xl border border-border bg-background py-3.5 text-center text-sm font-bold hover:bg-surface-2 disabled:opacity-60"
-              >
-                {t.cta}
-              </UnlockButton>
-            ) : (
-              <Link
-                to="/signal-regions"
-                className={`mt-auto block rounded-xl py-3.5 text-center text-sm font-bold transition-colors ${
-                  t.highlight
-                    ? "bg-primary text-primary-foreground hover:brightness-110"
-                    : "border border-border bg-background hover:bg-surface-2"
-                }`}
-              >
-                {t.cta}
-              </Link>
-            )}
-          </div>
-        ))}
+      {/* Send a Shaka */}
+      <div className="rounded-3xl border border-sunset/30 bg-sunset/5 p-8 md:p-10">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">Send a Shaka</p>
+        <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
+          Tip a viber for a real moment. 🤙
+        </h2>
+        <p className="mt-3 max-w-2xl text-foreground/60">
+          A small $3 thank-you goes straight to the person who captured a real-world signal. No
+          algorithm, no edits — just a human you appreciate.
+        </p>
+        <div className="mt-6">
+          <ShakaButton className="inline-flex items-center gap-2 rounded-xl bg-sunset px-6 py-3 text-sm font-bold text-primary-foreground transition-all hover:brightness-110 disabled:opacity-60">
+            🤙 Send a Shaka — $3
+          </ShakaButton>
+        </div>
       </div>
+
+      {/* Request a Vibe */}
+      <RequestVibeBlock
+        regionName="any live region"
+        examples={[
+          "Capture Station 1 sunset",
+          "Check the wind at Bulabog",
+          "Show the swell at Barra",
+          "Check the line at pFriem",
+        ]}
+      />
+
+      {/* Support a Region */}
+      <SupportRegionBlock regionName="your favorite region" />
+
+      {/* Partner Here */}
+      <PartnerHereBlock />
+
+      <p className="border-t border-border pt-12 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/40">
+        Premium memberships for power users are coming later — once the globe feels magical to
+        everyone first.
+      </p>
     </section>
   );
 }
