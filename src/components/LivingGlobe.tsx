@@ -223,7 +223,7 @@ export function LivingGlobe() {
   }, [navigate, pins]);
 
   return (
-    <section className="relative -mt-16 h-screen w-full overflow-hidden bg-background">
+    <section ref={sectionRef} className="relative -mt-16 h-screen w-full overflow-hidden bg-background">
       <div ref={containerRef} className="absolute inset-0" />
 
       {!ready && (
