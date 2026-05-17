@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getRegion, type SignalDrop } from "@/lib/regions";
-import { SignalMapMockup } from "@/components/SignalMapMockup";
+import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
 import { RequestVibeBlock } from "@/components/RequestVibeBlock";
 import { SupportRegionBlock } from "@/components/SupportRegionBlock";
@@ -60,44 +60,46 @@ function Page() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0 radial-glow" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <Link
-              to="/signal-regions"
-              className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40 hover:text-primary"
-            >
-              ← The Living Globe
-            </Link>
-            <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-              {region.country} · Live Region
-            </p>
-            <h1 className="mt-3 text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
+      {/* Map header */}
+      <section className="relative border-b border-border">
+        <RegionMap slug={region.slug} spots={region.spots} label={shortName} />
+        <div className="absolute left-4 bottom-4 z-10">
+          <Link
+            to="/signal-regions"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80 backdrop-blur-md hover:text-primary"
+          >
+            ← The Living Globe
+          </Link>
+        </div>
+      </section>
+
+      {/* Intro */}
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-7xl px-6 py-12">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+            {region.country} · Live Region
+          </p>
+          <div className="mt-3 flex flex-wrap items-end justify-between gap-6">
+            <h1 className="text-balance text-4xl font-extrabold tracking-tighter md:text-5xl">
               {shortName} is live right now.
             </h1>
-            <p className="mt-5 max-w-xl text-lg text-foreground/60">{region.description}</p>
-
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3">
               <UnlockButton
                 priceId={VIBE_REQUEST_PRICE_IDS.basic}
                 reason={`Request a vibe from ${shortName}`}
-                className="rounded-xl bg-primary px-7 py-4 text-base font-bold text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
+                className="rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
               >
                 Request a Vibe
               </UnlockButton>
               <a
                 href="#support"
-                className="rounded-xl border border-border bg-surface px-7 py-4 text-base font-bold hover:bg-surface-2"
+                className="rounded-xl border border-border bg-surface px-6 py-3 text-sm font-bold hover:bg-surface-2"
               >
                 Support {shortName}
               </a>
             </div>
           </div>
-          <div className="lg:col-span-5">
-            <SignalMapMockup />
-          </div>
+          <p className="mt-4 max-w-2xl text-foreground/60">{region.description}</p>
         </div>
       </section>
 
