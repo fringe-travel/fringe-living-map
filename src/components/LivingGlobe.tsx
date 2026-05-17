@@ -1,31 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef } from "react";
 import { regions } from "@/lib/regions";
-import type * as MapboxNS from "mapbox-gl";
 
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoiYmdhbGxhZ3NkIiwiYSI6ImNtYnR5cTc0cTA4Z2gycXBxNDR3dXdkencifQ.gKQH6ihL3rMHiTkdmyjoBg";
-
-// Coordinates for spots that appear in region previewFeeds, plus the
-// region centers themselves. Anything not in this map falls back to the
-// region center with a slight jitter so the globe always looks alive.
 const SPOT_COORDS: Record<string, [number, number]> = {
-  // Boracay
   "Station 1": [121.92, 11.97],
   "Station 2": [121.93, 11.96],
   "D'Mall": [121.93, 11.97],
   Bulabog: [121.94, 11.96],
   "White Beach": [121.92, 11.96],
   "Sunset Beach": [121.91, 11.99],
-  // Rio
   Arpoador: [-43.19, -22.99],
   "Ipanema Posto 9": [-43.2, -22.98],
   Barra: [-43.36, -23.0],
   Copacabana: [-43.18, -22.97],
   Leblon: [-43.22, -22.98],
   Lapa: [-43.18, -22.91],
-  // Hood River
   "The Hook": [-121.51, 45.71],
   "Event Site": [-121.5, 45.71],
   "Swell City": [-121.62, 45.71],
@@ -40,33 +29,25 @@ const REGION_CENTER: Record<string, [number, number]> = {
   "hood-river": [-121.51, 45.71],
 };
 
-// Extra "ambient" vibes around the globe to make it feel busy like a
-// live signal layer.
 const AMBIENT_SPOTS: { coords: [number, number]; label: string }[] = [
-  { coords: [-156.3, 20.8], label: "Maui, Hawaii" },
+  { coords: [-156.3, 20.8], label: "Maui" },
   { coords: [-122.4, 37.8], label: "San Francisco" },
-  { coords: [-106.8, 39.2], label: "Aspen, Colorado" },
+  { coords: [-106.8, 39.2], label: "Aspen" },
   { coords: [-75.6, 35.2], label: "Cape Hatteras" },
-  { coords: [-71.6, 21.7], label: "Turks and Caicos" },
-  { coords: [-70.4, 19.8], label: "Cabarete, DR" },
-  { coords: [-67.2, 18.4], label: "Rincón, Puerto Rico" },
-  { coords: [-68.3, 12.2], label: "Bonaire, Caribbean" },
-  { coords: [-59.5, 13.2], label: "Bathsheba, Barbados" },
-  { coords: [-109.8, 24.0], label: "La Ventana" },
-  { coords: [-86.9, 21.2], label: "Cozumel, Mexico" },
-  { coords: [-81.3, 19.3], label: "Stingray City" },
-  { coords: [-38.6, -3.6], label: "Cumbuco, Brazil" },
-  { coords: [-72.5, -13.2], label: "Machu Picchu" },
-  { coords: [-5.6, 36.0], label: "Tarifa, Spain" },
-  { coords: [-9.07, 39.6], label: "Nazaré, Portugal" },
-  { coords: [-1.4, 43.5], label: "Hossegor, France" },
-  { coords: [2.7, 48.4], label: "Fontainebleau" },
-  { coords: [-5.6, 31.5], label: "Todra Gorge" },
-  { coords: [-15.9, 23.7], label: "Dakhla, Morocco" },
-  { coords: [-23.0, 16.7], label: "Sal, Cape Verde" },
-  { coords: [-4.8, 56.4], label: "West Highland Way" },
-  { coords: [13.6, 68.0], label: "Lofoten Islands" },
-  { coords: [-122.9, 50.1], label: "Whistler, Canada" },
+  { coords: [-70.4, 19.8], label: "Cabarete" },
+  { coords: [-68.3, 12.2], label: "Bonaire" },
+  { coords: [-38.6, -3.6], label: "Cumbuco" },
+  { coords: [-5.6, 36.0], label: "Tarifa" },
+  { coords: [-9.07, 39.6], label: "Nazaré" },
+  { coords: [13.6, 68.0], label: "Lofoten" },
+  { coords: [115.9, -32.0], label: "Perth" },
+  { coords: [151.2, -33.8], label: "Sydney" },
+  { coords: [174.8, -41.3], label: "Wellington" },
+  { coords: [55.5, -21.1], label: "Réunion" },
+  { coords: [18.4, -34.0], label: "Cape Town" },
+  { coords: [139.7, 35.6], label: "Tokyo" },
+  { coords: [100.5, 13.7], label: "Bangkok" },
+  { coords: [77.6, 12.9], label: "Bangalore" },
 ];
 
 type GlobePoint = {
@@ -74,9 +55,8 @@ type GlobePoint = {
   coords: [number, number];
   label: string;
   vibe?: string;
-  by?: string;
-  minutesAgo?: number;
   slug?: string;
+  isRegion?: boolean;
 };
 
 function buildPoints(): GlobePoint[] {
@@ -89,173 +69,286 @@ function buildPoints(): GlobePoint[] {
       coords: center,
       label: r.name.replace(" Signal", ""),
       slug: r.slug,
+      isRegion: true,
     });
 
     for (const d of r.previewFeed.slice(0, 4)) {
-      const c = SPOT_COORDS[d.spot] ?? [
-        center[0] + (Math.random() - 0.5) * 0.05,
-        center[1] + (Math.random() - 0.5) * 0.05,
-      ];
       pts.push({
         id: `${r.slug}-${d.spot}-${d.by}`,
-        coords: c,
-        label: `${d.spot}, ${r.country.split(",")[0]}`,
+        coords: SPOT_COORDS[d.spot] ?? center,
+        label: d.spot,
         vibe: d.vibe,
-        by: d.by,
-        minutesAgo: d.minutesAgo,
         slug: r.slug,
       });
     }
   }
 
   for (const a of AMBIENT_SPOTS) {
-    pts.push({
-      id: `ambient-${a.label}`,
-      coords: a.coords,
-      label: a.label,
-    });
+    pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label });
   }
 
   return pts;
 }
 
+function latLngToVector3(lng: number, lat: number, radius: number) {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lng + 180) * (Math.PI / 180);
+  return {
+    x: -radius * Math.sin(phi) * Math.cos(theta),
+    y: radius * Math.cos(phi),
+    z: radius * Math.sin(phi) * Math.sin(theta),
+  };
+}
+
+function makeEarthTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 2048;
+  canvas.height = 1024;
+  const ctx = canvas.getContext("2d")!;
+  const ocean = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  ocean.addColorStop(0, "#07172f");
+  ocean.addColorStop(0.48, "#0b3f55");
+  ocean.addColorStop(1, "#031423");
+  ctx.fillStyle = ocean;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.globalAlpha = 0.72;
+  ctx.fillStyle = "#123c32";
+  const land = [
+    [260, 190, 330, 150, 0.1],
+    [390, 430, 210, 300, -0.35],
+    [820, 245, 260, 210, -0.1],
+    [1040, 385, 360, 250, 0.15],
+    [1230, 230, 230, 170, -0.2],
+    [1510, 390, 300, 190, 0.25],
+    [1640, 690, 210, 150, -0.2],
+    [1760, 270, 160, 130, 0.5],
+  ];
+
+  for (const [x, y, w, h, rot] of land) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, w, h, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  ctx.globalAlpha = 0.45;
+  ctx.strokeStyle = "rgba(103, 232, 249, 0.32)";
+  ctx.lineWidth = 1;
+  for (let y = 96; y < canvas.height; y += 96) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+  for (let x = 128; x < canvas.width; x += 128) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+
+  return canvas;
+}
+
 export function LivingGlobe() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<MapboxNS.Map | null>(null);
+  const mountRef = useRef<HTMLDivElement | null>(null);
+  const labelLayerRef = useRef<HTMLDivElement | null>(null);
   const points = useMemo(buildPoints, []);
-  const [ready, setReady] = useState(false);
   const totalVibes = points.filter((p) => p.vibe).length + 33;
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
-    let cancelled = false;
-    let cleanup: (() => void) | null = null;
+    if (!mountRef.current || !labelLayerRef.current) return;
+
+    let disposed = false;
+    let frame = 0;
+    const labels: HTMLDivElement[] = [];
 
     (async () => {
-      const mod = await import("mapbox-gl");
-      const mapboxgl = mod.default;
-      if (cancelled || !containerRef.current) return;
-      mapboxgl.accessToken = MAPBOX_TOKEN;
+      const THREE = await import("three");
+      if (disposed || !mountRef.current || !labelLayerRef.current) return;
 
-      const map = new mapboxgl.Map({
-        container: containerRef.current,
-        style: "mapbox://styles/mapbox/satellite-v9",
-        projection: { name: "globe" } as any,
-        zoom: 1.6,
-        center: [-40, 18],
-        pitch: 0,
-        bearing: 0,
-        interactive: true,
-        attributionControl: false,
-      });
+      const mount = mountRef.current;
+      const labelLayer = labelLayerRef.current;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setClearColor(0x000000, 0);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      mount.appendChild(renderer.domElement);
 
-      mapRef.current = map;
+      const globeGroup = new THREE.Group();
+      scene.add(globeGroup);
+      camera.position.set(0, 0, 7.4);
 
-      // Ensure canvas matches container size after layout settles.
-      const ro = new ResizeObserver(() => map.resize());
-      ro.observe(containerRef.current!);
-      setTimeout(() => map.resize(), 50);
-      setTimeout(() => map.resize(), 400);
+      const texture = new THREE.CanvasTexture(makeEarthTexture());
+      texture.colorSpace = THREE.SRGBColorSpace;
 
-      map.on("style.load", () => {
-        map.setFog({
-          color: "rgb(8, 10, 16)",
-          "high-color": "rgb(36, 60, 110)",
-          "horizon-blend": 0.08,
-          "space-color": "rgb(2, 4, 10)",
-          "star-intensity": 0.9,
-        } as any);
-        setReady(true);
-      });
+      const earth = new THREE.Mesh(
+        new THREE.SphereGeometry(2.65, 96, 96),
+        new THREE.MeshStandardMaterial({
+          map: texture,
+          roughness: 0.74,
+          metalness: 0.08,
+          emissive: new THREE.Color(0x062235),
+          emissiveIntensity: 0.22,
+        }),
+      );
+      globeGroup.add(earth);
 
-    // Add markers
-    for (const p of points) {
-      const el = document.createElement("div");
-      el.className = "vibe-marker";
-      const isRegion = p.id.startsWith("region-");
-      const hasVibe = !!p.vibe;
-      el.innerHTML = `
-        <div class="vibe-marker-inner ${isRegion ? "is-region" : hasVibe ? "is-vibe" : "is-ambient"}">
-          <span class="vibe-marker-dot"></span>
-          <span class="vibe-marker-label">${p.label}</span>
-        </div>
-      `;
+      const atmosphere = new THREE.Mesh(
+        new THREE.SphereGeometry(2.72, 96, 96),
+        new THREE.MeshBasicMaterial({
+          color: 0x28f0d9,
+          transparent: true,
+          opacity: 0.13,
+          blending: THREE.AdditiveBlending,
+          side: THREE.BackSide,
+        }),
+      );
+      globeGroup.add(atmosphere);
 
-      const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
-        .setLngLat(p.coords)
-        .addTo(map);
+      const grid = new THREE.Mesh(
+        new THREE.SphereGeometry(2.675, 48, 24),
+        new THREE.MeshBasicMaterial({
+          color: 0x67e8f9,
+          transparent: true,
+          opacity: 0.08,
+          wireframe: true,
+        }),
+      );
+      globeGroup.add(grid);
 
-      if (p.slug) {
-        el.style.cursor = "pointer";
-        el.addEventListener("click", () => {
-          window.location.href = `/regions/${p.slug}`;
-        });
+      scene.add(new THREE.AmbientLight(0x99ccff, 1.6));
+      const key = new THREE.DirectionalLight(0xffffff, 2.6);
+      key.position.set(3, 2.5, 4);
+      scene.add(key);
+      const rim = new THREE.DirectionalLight(0x2dd4bf, 2.2);
+      rim.position.set(-4, 1, -3);
+      scene.add(rim);
+
+      const starGeometry = new THREE.BufferGeometry();
+      const starPositions = new Float32Array(900);
+      for (let i = 0; i < starPositions.length; i += 3) {
+        starPositions[i] = (Math.random() - 0.5) * 34;
+        starPositions[i + 1] = (Math.random() - 0.5) * 20;
+        starPositions[i + 2] = -4 - Math.random() * 16;
       }
-      void marker;
-    }
+      starGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+      scene.add(
+        new THREE.Points(
+          starGeometry,
+          new THREE.PointsMaterial({ color: 0xffffff, size: 0.018, transparent: true, opacity: 0.75 }),
+        ),
+      );
 
-    // Auto-rotation
-    const secondsPerRevolution = 180;
-    let userInteracting = false;
-    let timer: ReturnType<typeof setTimeout> | null = null;
-
-    const spin = () => {
-      if (!mapRef.current || userInteracting) return;
-      const center = mapRef.current.getCenter();
-      center.lng -= 360 / secondsPerRevolution;
-      mapRef.current.easeTo({
-        center,
-        duration: 1000,
-        easing: (n) => n,
+      const markerMaterial = new THREE.SpriteMaterial({
+        color: 0x2df6c8,
+        transparent: true,
+        opacity: 0.92,
+        depthTest: false,
       });
-    };
+      const regionMaterial = new THREE.SpriteMaterial({
+        color: 0xffd166,
+        transparent: true,
+        opacity: 1,
+        depthTest: false,
+      });
 
-    const loop = () => {
-      spin();
-      timer = setTimeout(loop, 1000);
-    };
+      const markerData = points.map((point) => {
+        const pos = latLngToVector3(point.coords[0], point.coords[1], 2.78);
+        const sprite = new THREE.Sprite(point.isRegion ? regionMaterial.clone() : markerMaterial.clone());
+        sprite.position.set(pos.x, pos.y, pos.z);
+        sprite.scale.setScalar(point.isRegion ? 0.18 : point.vibe ? 0.12 : 0.075);
+        globeGroup.add(sprite);
 
-    map.on("mousedown", () => {
-      userInteracting = true;
-    });
-    map.on("dragstart", () => {
-      userInteracting = true;
-    });
-    map.on("moveend", () => {
-      // resume after a beat of inactivity
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        userInteracting = false;
-        loop();
-      }, 2000);
-    });
+        const label = document.createElement("div");
+        label.className = `globe-label ${point.isRegion ? "is-region" : point.vibe ? "is-vibe" : "is-ambient"}`;
+        label.textContent = point.label;
+        if (point.slug) {
+          label.addEventListener("click", () => {
+            window.location.href = `/regions/${point.slug}`;
+          });
+        }
+        labelLayer.appendChild(label);
+        labels.push(label);
+        return { point, sprite, label, base: sprite.scale.x };
+      });
 
-      timer = setTimeout(loop, 1500);
-
-      cleanup = () => {
-        if (timer) clearTimeout(timer);
-        map.remove();
-        mapRef.current = null;
+      const resize = () => {
+        if (!mountRef.current) return;
+        const rect = mountRef.current.getBoundingClientRect();
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / Math.max(rect.height, 1);
+        camera.updateProjectionMatrix();
       };
-    })();
+
+      const ro = new ResizeObserver(resize);
+      ro.observe(mount);
+      resize();
+
+      const animate = () => {
+        if (disposed || !mountRef.current || !labelLayerRef.current) return;
+        frame = requestAnimationFrame(animate);
+        globeGroup.rotation.y += 0.0019;
+        globeGroup.rotation.x = -0.12;
+
+        const rect = mount.getBoundingClientRect();
+        const time = performance.now() * 0.002;
+        for (const item of markerData) {
+          const pulse = 1 + Math.sin(time + item.sprite.position.x * 2.1) * 0.22;
+          item.sprite.scale.setScalar(item.base * pulse);
+          const world = new THREE.Vector3();
+          item.sprite.getWorldPosition(world);
+          const normal = world.clone().normalize();
+          const cameraDirection = camera.position.clone().sub(world).normalize();
+          const visible = normal.dot(cameraDirection) > 0.16;
+          const projected = world.project(camera);
+          const x = (projected.x * 0.5 + 0.5) * rect.width;
+          const y = (-projected.y * 0.5 + 0.5) * rect.height;
+          item.label.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          item.label.style.opacity = visible && x > -60 && x < rect.width + 60 && y > -30 && y < rect.height + 30 ? "1" : "0";
+        }
+
+        renderer.render(scene, camera);
+      };
+      animate();
+
+      return () => {
+        ro.disconnect();
+        cancelAnimationFrame(frame);
+        for (const label of labels) label.remove();
+        renderer.dispose();
+        texture.dispose();
+        earth.geometry.dispose();
+        grid.geometry.dispose();
+        atmosphere.geometry.dispose();
+      };
+    })().then((cleanup) => {
+      if (cleanup && disposed) cleanup();
+    });
 
     return () => {
-      cancelled = true;
-      cleanup?.();
+      disposed = true;
+      cancelAnimationFrame(frame);
+      for (const label of labels) label.remove();
+      if (mountRef.current) mountRef.current.innerHTML = "";
     };
   }, [points]);
 
   return (
-    <div className="relative h-[100svh] w-full overflow-hidden bg-black">
-      <div ref={containerRef} className="absolute inset-0" />
+    <div className="relative h-[calc(100svh-64px)] min-h-[640px] w-full overflow-hidden bg-black">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(45,246,200,0.24),transparent_34%),radial-gradient(circle_at_50%_50%,rgba(14,165,233,0.18),transparent_48%),linear-gradient(180deg,#02060a,#000)]" />
+      <div ref={mountRef} className="absolute inset-0" />
+      <div ref={labelLayerRef} className="pointer-events-none absolute inset-0 z-[2]" />
 
-      {/* Top-left brand / status */}
-      <div className="pointer-events-none absolute left-6 top-6 z-10 flex items-start gap-3">
+      <div className="pointer-events-none absolute left-6 top-6 z-10 flex items-start gap-3 md:left-8 md:top-8">
         <div className="pointer-events-auto">
-          <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl">
-            The Living Globe
-          </h1>
-          <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-white/60">
+          <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-5xl">The Living Globe</h1>
+          <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">
             {totalVibes} fresh vibes · {regions.length} live regions
           </p>
         </div>
@@ -268,85 +361,84 @@ export function LivingGlobe() {
         </span>
       </div>
 
-      {/* Top-right CTAs */}
-      <div className="absolute right-6 top-6 z-10 flex gap-2">
-        <Link
-          to="/signal-regions"
-          className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-white backdrop-blur transition-colors hover:bg-white/20"
-        >
+      <div className="absolute right-6 top-6 z-10 flex gap-2 md:right-8 md:top-8">
+        <Link to="/signal-regions" className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-white backdrop-blur transition-colors hover:bg-white/20">
           Regions
         </Link>
-        <Link
-          to="/vibers"
-          className="rounded-full bg-white px-4 py-2 text-sm font-bold text-black transition-colors hover:bg-emerald-300"
-        >
+        <Link to="/vibers" className="rounded-full bg-white px-4 py-2 text-sm font-bold text-black transition-colors hover:bg-emerald-300">
           Capture a Vibe
         </Link>
       </div>
 
-      {/* Bottom headline */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/80 via-black/30 to-transparent pt-24">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/80 via-black/25 to-transparent pt-24">
         <div className="pointer-events-auto mx-auto flex max-w-7xl flex-col items-start gap-3 px-6 pb-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-300">
-              Real people · real places · fresh signals
-            </p>
-            <h2 className="mt-2 max-w-2xl text-balance text-3xl font-extrabold leading-[1] tracking-tighter text-white md:text-5xl">
-              Discover adventure through{" "}
-              <span className="italic text-emerald-300">real people</span> around the world.
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-300">Real people · real places · fresh signals</p>
+            <h2 className="mt-2 max-w-2xl text-balance text-4xl font-extrabold leading-[1] tracking-tighter text-white md:text-6xl">
+              Discover adventure through <span className="italic text-emerald-300">real people</span> around the world.
             </h2>
           </div>
-          <p className="max-w-sm text-sm text-white/60">
-            Tap any glow to drop into the region. No uploads. No edits. No filters. Only delete.
-          </p>
+          <p className="max-w-sm text-sm text-white/60">Tap any glow to drop into the region. No uploads. No edits. No filters. Only delete.</p>
         </div>
       </div>
 
-
       <style>{`
-        .vibe-marker { pointer-events: auto; }
-        .vibe-marker-inner {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          transform: translate(-50%, -50%);
-          position: relative;
-        }
-        .vibe-marker-dot {
-          width: 10px; height: 10px;
-          border-radius: 9999px;
-          background: #34d399;
-          box-shadow: 0 0 0 3px rgba(52,211,153,0.25), 0 0 18px rgba(52,211,153,0.7);
-          animation: vibePulse 2.6s ease-in-out infinite;
-        }
-        .vibe-marker-inner.is-region .vibe-marker-dot {
-          width: 14px; height: 14px;
-          background: #fbbf24;
-          box-shadow: 0 0 0 4px rgba(251,191,36,0.25), 0 0 22px rgba(251,191,36,0.8);
-        }
-        .vibe-marker-inner.is-ambient .vibe-marker-dot {
-          width: 7px; height: 7px;
-          background: #f97316;
-          box-shadow: 0 0 0 2px rgba(249,115,22,0.2), 0 0 12px rgba(249,115,22,0.6);
-        }
-        .vibe-marker-label {
-          white-space: nowrap;
+        .globe-label {
+          position: absolute;
+          left: 0;
+          top: 0;
+          pointer-events: auto;
+          transform-origin: 0 0;
+          margin-left: 11px;
+          margin-top: -7px;
+          color: rgba(255,255,255,0.82);
           font-size: 10px;
           font-weight: 700;
-          color: white;
-          text-shadow: 0 1px 4px rgba(0,0,0,0.9);
-          letter-spacing: 0.02em;
+          line-height: 1;
+          text-shadow: 0 0 12px rgba(0,0,0,0.95);
+          white-space: nowrap;
+          transition: opacity 180ms ease;
         }
-        .vibe-marker-inner.is-region .vibe-marker-label { font-size: 12px; }
-        .vibe-marker-inner.is-ambient .vibe-marker-label {
-          color: rgba(255,255,255,0.7);
+        .globe-label::before {
+          content: "";
+          position: absolute;
+          left: -14px;
+          top: 1px;
+          width: 8px;
+          height: 8px;
+          border-radius: 9999px;
+          background: #2df6c8;
+          box-shadow: 0 0 0 4px rgba(45,246,200,0.18), 0 0 18px rgba(45,246,200,0.85);
+          animation: vibePulse 2.4s ease-in-out infinite;
+        }
+        .globe-label.is-region {
+          color: #ffe08a;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+        .globe-label.is-region::before {
+          width: 12px;
+          height: 12px;
+          left: -18px;
+          top: -1px;
+          background: #ffd166;
+          box-shadow: 0 0 0 5px rgba(255,209,102,0.18), 0 0 24px rgba(255,209,102,0.95);
+        }
+        .globe-label.is-ambient {
+          color: rgba(255,255,255,0.52);
           font-weight: 500;
+        }
+        .globe-label.is-ambient::before {
+          width: 6px;
+          height: 6px;
+          background: #fb923c;
+          box-shadow: 0 0 0 3px rgba(251,146,60,0.16), 0 0 14px rgba(251,146,60,0.65);
         }
         @keyframes vibePulse {
           0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.25); opacity: 0.85; }
+          50% { transform: scale(1.35); opacity: 0.82; }
         }
-        .mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib { display: none !important; }
       `}</style>
     </div>
   );
