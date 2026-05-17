@@ -51,10 +51,7 @@ function Page() {
         <Link to="/" className="rounded-xl bg-primary px-7 py-4 font-bold text-primary-foreground transition-transform hover:scale-105">
           Apply to be a Viber
         </Link>
-        <Link to="/now-map" className="rounded-xl border border-border bg-surface px-7 py-4 font-bold hover:bg-surface-2">
-          See the Now Map
-        </Link>
-      </div>
+</div>
     </section>
   );
 }
