@@ -1,0 +1,44 @@
+import { Link } from "@tanstack/react-router";
+
+const links = [
+  { to: "/live-regions", label: "Live Regions" },
+  { to: "/now-map", label: "Now Map" },
+  { to: "/vibers", label: "For Vibers" },
+  { to: "/businesses", label: "For Businesses" },
+  { to: "/pricing", label: "Pricing" },
+] as const;
+
+export function SiteNav() {
+  return (
+    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+        <Link to="/" className="flex flex-col leading-none">
+          <span className="text-xl font-extrabold tracking-tighter text-foreground">FRiNGE</span>
+          <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary">
+            Live Regions
+          </span>
+        </Link>
+
+        <div className="hidden items-center gap-8 md:flex">
+          {links.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="text-sm font-medium text-foreground/60 transition-colors hover:text-foreground"
+              activeProps={{ className: "text-foreground" }}
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
+
+        <Link
+          to="/live-regions"
+          className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105"
+        >
+          Explore Regions
+        </Link>
+      </div>
+    </nav>
+  );
+}
