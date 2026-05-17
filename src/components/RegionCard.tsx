@@ -11,8 +11,15 @@ const statusBadge: Record<Region["status"], { label: string; cls: string }> = {
 
 export function RegionCard({ region }: { region: Region }) {
   const badge = statusBadge[region.status];
+  const priceIds = getRegionPriceIds(region.slug);
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-surface transition-all duration-500 hover:border-primary/40">
+      <Link
+        to="/regions/$slug"
+        params={{ slug: region.slug }}
+        aria-label={`Open ${region.name}`}
+        className="absolute inset-0 z-10"
+      />
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={region.image}
@@ -65,13 +72,12 @@ export function RegionCard({ region }: { region: Region }) {
           ))}
         </div>
 
-        {(() => {
-          const priceIds = getRegionPriceIds(region.slug);
-          return priceIds ? (
+        <div className="relative z-20 mt-auto">
+          {priceIds ? (
             <UnlockButton
               priceId={priceIds.day}
               reason={`Unlock ${region.name}`}
-              className="mt-auto block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary disabled:opacity-60"
+              className="block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary disabled:opacity-60"
             >
               Unlock {region.name} — ${region.pricePerDay} today
             </UnlockButton>
@@ -79,12 +85,12 @@ export function RegionCard({ region }: { region: Region }) {
             <Link
               to="/regions/$slug"
               params={{ slug: region.slug }}
-              className="mt-auto block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary"
+              className="block w-full rounded-xl bg-foreground py-3.5 text-center text-sm font-bold text-background transition-colors hover:bg-primary"
             >
               Unlock {region.name}
             </Link>
-          );
-        })()}
+          )}
+        </div>
       </div>
     </div>
   );
