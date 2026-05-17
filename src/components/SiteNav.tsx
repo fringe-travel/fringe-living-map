@@ -6,20 +6,21 @@ import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/signal-regions", label: "Regions" },
-  
   { to: "/vibers", label: "Become a Viber" },
-  
   { to: "/pricing", label: "Support" },
 ] as const;
 
 export function SiteNav() {
   const { user } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex flex-col leading-none">
+        <Link to="/" onClick={closeMenu} className="flex flex-col leading-none">
           <span className="text-xl font-extrabold tracking-tighter text-foreground">FRiNGE</span>
           <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary">
             Discover Your Adventure
@@ -58,12 +59,84 @@ export function SiteNav() {
           <Link
             to="/"
             search={{ fullscreen: 1 } as any}
-            className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105"
+            onClick={closeMenu}
+            className="hidden rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:inline-flex"
           >
             Explore the Globe
           </Link>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground md:hidden"
+          >
+            <span className="relative block h-3 w-5">
+              <span
+                className={`absolute left-0 top-0 h-0.5 w-5 bg-foreground transition-transform ${
+                  menuOpen ? "translate-y-[6px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`absolute left-0 bottom-0 h-0.5 w-5 bg-foreground transition-transform ${
+                  menuOpen ? "-translate-y-[6px] -rotate-45" : ""
+                }`}
+              />
+            </span>
+          </button>
         </div>
       </div>
+
+      {menuOpen && (
+        <div className="border-t border-border bg-background md:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
+            {links.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                onClick={closeMenu}
+                className="rounded-xl px-3 py-3 text-base font-semibold text-foreground/80 hover:bg-surface hover:text-foreground"
+                activeProps={{ className: "text-foreground bg-surface" }}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <Link
+              to="/"
+              search={{ fullscreen: 1 } as any}
+              onClick={closeMenu}
+              className="mt-2 rounded-full bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground sm:hidden"
+            >
+              Explore the Globe
+            </Link>
+            <div className="mt-2 border-t border-border pt-3">
+              {user ? (
+                <button
+                  onClick={() => {
+                    supabase.auth.signOut();
+                    closeMenu();
+                  }}
+                  className="w-full rounded-xl px-3 py-3 text-left text-sm font-mono uppercase tracking-[0.18em] text-foreground/60 hover:bg-surface hover:text-foreground"
+                >
+                  Sign out
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setAuthOpen(true);
+                    closeMenu();
+                  }}
+                  className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground"
+                >
+                  Sign in
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <AuthDialog open={authOpen} onClose={() => setAuthOpen(false)} />
     </nav>
   );
