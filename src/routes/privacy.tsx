@@ -79,10 +79,16 @@ function PrivacyPage() {
       </Section>
 
       <Section title="7. Retention">
-        We keep personal data only as long as needed for the purposes described above
-        — typically for the life of your account plus a reasonable period to comply
-        with legal, tax, and accounting obligations and to resolve disputes. We then
-        delete or anonymize it.
+        We keep personal data only as long as we need it:
+        <ul>
+          <li><strong>Account data</strong> (profile, preferences, sign-in records, user-contributed signals tied to your account) — retained while your account is active and deleted within <strong>30 days</strong> after you delete your account or it becomes permanently inactive.</li>
+          <li><strong>Billing and tax records</strong> (order confirmations, invoices, transaction history) — retained for <strong>7 years</strong> to satisfy US IRS and other tax/accounting obligations, even after account deletion.</li>
+          <li><strong>Support communications</strong> — retained for up to <strong>2 years</strong> after the ticket is closed.</li>
+          <li><strong>Security logs</strong> (authentication, fraud, abuse signals) — retained for up to <strong>12 months</strong>.</li>
+        </ul>
+        After these periods we delete or irreversibly anonymize the data. Backups
+        containing residual copies are overwritten on our standard backup rotation
+        (typically within 35 days).
       </Section>
 
       <Section title="8. Your rights">
@@ -91,7 +97,7 @@ function PrivacyPage() {
         and to withdraw consent. UK/EEA users also have the right to lodge a complaint
         with their local supervisory authority. We aim to respond to requests within
         one month. To exercise a right, email{" "}
-        <a href="mailto:privacy@fringe.example">privacy@fringe.example</a>.
+        <a href="mailto:admin@fringe.travel">admin@fringe.travel</a>.
       </Section>
 
       <Section title="9. Security">
@@ -120,7 +126,7 @@ function PrivacyPage() {
 
       <Section title="13. Contact">
         Questions or requests? Email{" "}
-        <a href="mailto:privacy@fringe.example">privacy@fringe.example</a>.
+        <a href="mailto:admin@fringe.travel">admin@fringe.travel</a>.
       </Section>
     </article>
   );
