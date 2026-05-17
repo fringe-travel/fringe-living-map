@@ -133,26 +133,47 @@ function Page() {
               .map((d: SignalDrop, i: number) => (
                 <li
                   key={i}
-                  className="flex flex-col rounded-3xl border border-border bg-background p-6"
+                  className="flex flex-col overflow-hidden rounded-3xl border border-border bg-background"
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
-                      {d.spot} · @{d.by}
-                    </p>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                      {d.minutesAgo}m ago
-                    </span>
+                  <div className="relative aspect-video w-full overflow-hidden bg-surface-2">
+                    <video
+                      src="/fringe-app-preview.mp4"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                    <div className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-signal/40 bg-background/70 px-2.5 py-1 backdrop-blur-md">
+                      <span className="relative inline-flex size-1.5">
+                        <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
+                        <span className="relative size-1.5 rounded-full bg-signal" />
+                      </span>
+                      <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-signal">
+                        Live drop
+                      </span>
+                    </div>
                   </div>
-                  <p className="mt-3 text-base font-medium text-foreground/90">{d.vibe}</p>
-                  <div className="mt-5 flex flex-wrap items-center gap-2">
-                    <ShakaButton viberName={d.by} />
-                    <UnlockButton
-                      priceId={VIBE_REQUEST_PRICE_IDS.basic}
-                      reason={`Request a vibe similar to @${d.by}'s drop`}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-bold text-foreground/70 transition-colors hover:bg-surface-2 disabled:opacity-60"
-                    >
-                      Request similar
-                    </UnlockButton>
+                  <div className="flex flex-col p-6">
+                    <div className="flex items-center justify-between">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+                        {d.spot} · @{d.by}
+                      </p>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                        {d.minutesAgo}m ago
+                      </span>
+                    </div>
+                    <p className="mt-3 text-base font-medium text-foreground/90">{d.vibe}</p>
+                    <div className="mt-5 flex flex-wrap items-center gap-2">
+                      <ShakaButton viberName={d.by} />
+                      <UnlockButton
+                        priceId={VIBE_REQUEST_PRICE_IDS.basic}
+                        reason={`Request a vibe similar to @${d.by}'s drop`}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-bold text-foreground/70 transition-colors hover:bg-surface-2 disabled:opacity-60"
+                      >
+                        Request similar
+                      </UnlockButton>
+                    </div>
                   </div>
                 </li>
               ))}
