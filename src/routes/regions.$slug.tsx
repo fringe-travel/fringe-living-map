@@ -4,7 +4,7 @@ import { SignalMapMockup } from "@/components/SignalMapMockup";
 import { ShakaButton } from "@/components/ShakaButton";
 import { RequestVibeBlock } from "@/components/RequestVibeBlock";
 import { SupportRegionBlock } from "@/components/SupportRegionBlock";
-import { PartnerHereBlock } from "@/components/PartnerHereBlock";
+
 import { UnlockButton } from "@/components/UnlockButton";
 import { VIBE_REQUEST_PRICE_IDS } from "@/lib/pricing-ids";
 
@@ -210,13 +210,6 @@ function Page() {
       <section id="support" className="border-b border-border bg-surface/30 py-20">
         <div className="mx-auto max-w-7xl px-6">
           <SupportRegionBlock regionName={shortName} />
-        </div>
-      </section>
-
-      {/* Partner */}
-      <section className="border-b border-border py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <PartnerHereBlock regionName={shortName} />
         </div>
       </section>
 

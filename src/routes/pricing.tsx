@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ShakaButton } from "@/components/ShakaButton";
 import { RequestVibeBlock } from "@/components/RequestVibeBlock";
 import { SupportRegionBlock } from "@/components/SupportRegionBlock";
-import { PartnerHereBlock } from "@/components/PartnerHereBlock";
+
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -67,9 +67,6 @@ function Page() {
 
       {/* Support a Region */}
       <SupportRegionBlock regionName="your favorite region" />
-
-      {/* Partner Here */}
-      <PartnerHereBlock />
 
       <p className="border-t border-border pt-12 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/40">
         Premium memberships for power users are coming later — once the globe feels magical to
