@@ -36,6 +36,15 @@ export function SiteFooter() {
             <li><Link to="/vibers" className="text-foreground/70 hover:text-foreground">For Vibers</Link></li>
             <li><Link to="/businesses" className="text-foreground/70 hover:text-foreground">For Businesses</Link></li>
           </ul>
+
+          <h4 className="mt-8 mb-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">
+            Legal
+          </h4>
+          <ul className="space-y-3 text-sm">
+            <li><Link to="/terms" className="text-foreground/70 hover:text-foreground">Terms of Service</Link></li>
+            <li><Link to="/refunds" className="text-foreground/70 hover:text-foreground">Refund Policy</Link></li>
+            <li><Link to="/privacy" className="text-foreground/70 hover:text-foreground">Privacy Notice</Link></li>
+          </ul>
         </div>
       </div>
 

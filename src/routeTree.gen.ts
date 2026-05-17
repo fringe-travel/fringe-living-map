@@ -10,8 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VibersRouteImport } from './routes/vibers'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignalRegionsRouteImport } from './routes/signal-regions'
+import { Route as RefundsRouteImport } from './routes/refunds'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as NowMapRouteImport } from './routes/now-map'
 import { Route as BusinessesRouteImport } from './routes/businesses'
@@ -24,6 +27,11 @@ const VibersRoute = VibersRouteImport.update({
   path: '/vibers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -32,6 +40,16 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SignalRegionsRoute = SignalRegionsRouteImport.update({
   id: '/signal-regions',
   path: '/signal-regions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundsRoute = RefundsRouteImport.update({
+  id: '/refunds',
+  path: '/refunds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -71,8 +89,11 @@ export interface FileRoutesByFullPath {
   '/businesses': typeof BusinessesRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/refunds': typeof RefundsRoute
   '/signal-regions': typeof SignalRegionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -82,8 +103,11 @@ export interface FileRoutesByTo {
   '/businesses': typeof BusinessesRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/refunds': typeof RefundsRoute
   '/signal-regions': typeof SignalRegionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -94,8 +118,11 @@ export interface FileRoutesById {
   '/businesses': typeof BusinessesRoute
   '/now-map': typeof NowMapRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/refunds': typeof RefundsRoute
   '/signal-regions': typeof SignalRegionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -107,8 +134,11 @@ export interface FileRouteTypes {
     | '/businesses'
     | '/now-map'
     | '/pricing'
+    | '/privacy'
+    | '/refunds'
     | '/signal-regions'
     | '/sitemap.xml'
+    | '/terms'
     | '/vibers'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
@@ -118,8 +148,11 @@ export interface FileRouteTypes {
     | '/businesses'
     | '/now-map'
     | '/pricing'
+    | '/privacy'
+    | '/refunds'
     | '/signal-regions'
     | '/sitemap.xml'
+    | '/terms'
     | '/vibers'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
@@ -129,8 +162,11 @@ export interface FileRouteTypes {
     | '/businesses'
     | '/now-map'
     | '/pricing'
+    | '/privacy'
+    | '/refunds'
     | '/signal-regions'
     | '/sitemap.xml'
+    | '/terms'
     | '/vibers'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
@@ -141,8 +177,11 @@ export interface RootRouteChildren {
   BusinessesRoute: typeof BusinessesRoute
   NowMapRoute: typeof NowMapRoute
   PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
+  RefundsRoute: typeof RefundsRoute
   SignalRegionsRoute: typeof SignalRegionsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
   VibersRoute: typeof VibersRoute
   RegionsSlugRoute: typeof RegionsSlugRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -157,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VibersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -169,6 +215,20 @@ declare module '@tanstack/react-router' {
       path: '/signal-regions'
       fullPath: '/signal-regions'
       preLoaderRoute: typeof SignalRegionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refunds': {
+      id: '/refunds'
+      path: '/refunds'
+      fullPath: '/refunds'
+      preLoaderRoute: typeof RefundsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -221,8 +281,11 @@ const rootRouteChildren: RootRouteChildren = {
   BusinessesRoute: BusinessesRoute,
   NowMapRoute: NowMapRoute,
   PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
+  RefundsRoute: RefundsRoute,
   SignalRegionsRoute: SignalRegionsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
   VibersRoute: VibersRoute,
   RegionsSlugRoute: RegionsSlugRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
