@@ -8,7 +8,7 @@ const links = [
   { to: "/signal-regions", label: "Living Globe" },
   
   { to: "/vibers", label: "Become a Viber" },
-  { to: "/businesses", label: "Partner Here" },
+  
   { to: "/pricing", label: "Support" },
 ] as const;
 
