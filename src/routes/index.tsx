@@ -382,11 +382,20 @@ function Pricing() {
 }
 
 function PriceCard({
-  name, price, unit, blurb, features, cta, ctaTo, highlight,
+  name, price, unit, blurb, features, cta, ctaTo, ctaPriceId, ctaReason, highlight,
 }: {
   name: string; price: string; unit?: string; blurb: string;
-  features: string[]; cta: string; ctaTo: "/signal-regions"; highlight?: boolean;
+  features: string[]; cta: string;
+  ctaTo?: "/signal-regions";
+  ctaPriceId?: string;
+  ctaReason?: string;
+  highlight?: boolean;
 }) {
+  const ctaClass = `mt-auto block w-full rounded-xl py-3.5 text-center text-sm font-bold transition-colors ${
+    highlight
+      ? "bg-primary text-primary-foreground hover:brightness-110"
+      : "border border-border bg-surface hover:bg-surface-2"
+  }`;
   return (
     <div
       className={`relative flex flex-col rounded-3xl border p-8 ${
@@ -412,16 +421,15 @@ function PriceCard({
           </li>
         ))}
       </ul>
-      <Link
-        to={ctaTo}
-        className={`mt-auto block rounded-xl py-3.5 text-center text-sm font-bold transition-colors ${
-          highlight
-            ? "bg-primary text-primary-foreground hover:brightness-110"
-            : "border border-border bg-surface hover:bg-surface-2"
-        }`}
-      >
-        {cta}
-      </Link>
+      {ctaPriceId ? (
+        <UnlockButton priceId={ctaPriceId} reason={ctaReason} className={`${ctaClass} disabled:opacity-60`}>
+          {cta}
+        </UnlockButton>
+      ) : (
+        <Link to={ctaTo!} className={ctaClass}>
+          {cta}
+        </Link>
+      )}
     </div>
   );
 }
