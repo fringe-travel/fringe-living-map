@@ -32,17 +32,17 @@ function Page() {
       </div>
 
       <div className="mt-16 rounded-3xl border border-dashed border-foreground/20 bg-surface/40 p-8 md:p-12">
-        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div className="max-w-xl">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">
-              More regions coming online
+              Coming online soon
             </p>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
-              Don't see your spot yet?
+              Next signal regions
             </h2>
             <p className="mt-4 text-foreground/60">
-              New signal regions go live as vibers on the ground join the network. Request a region
-              and we'll prioritize it as soon as we have a local capturing real signal there.
+              New regions go live as vibers on the ground join the network. These are next up — request
+              one to push it to the top of the queue.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -60,6 +60,36 @@ function Page() {
             </a>
           </div>
         </div>
+
+        <ul className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { name: "Shonan-Enoshima", country: "Japan" },
+            { name: "Tarifa", country: "Spain" },
+            { name: "Nazaré", country: "Portugal" },
+            { name: "Cabarete", country: "Dominican Republic" },
+            { name: "Cape Town", country: "South Africa" },
+            { name: "Byron Bay", country: "Australia" },
+            { name: "Maui", country: "Hawaii" },
+            { name: "Lofoten", country: "Norway" },
+            { name: "Cumbuco", country: "Brazil" },
+          ].map((r) => (
+            <li
+              key={r.name}
+              className="flex items-center justify-between rounded-2xl border border-border bg-background/60 px-4 py-3"
+            >
+              <div>
+                <p className="text-sm font-bold text-foreground">{r.name}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+                  {r.country}
+                </p>
+              </div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-signal/40 bg-signal/10 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-signal">
+                <span className="size-1.5 rounded-full bg-signal" />
+                Soon
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
