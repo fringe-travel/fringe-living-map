@@ -5,7 +5,7 @@ import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/integrations/supabase/client";
 
 const links = [
-  { to: "/signal-regions", label: "Living Globe" },
+  { to: "/signal-regions", label: "Regions" },
   
   { to: "/vibers", label: "Become a Viber" },
   
