@@ -296,13 +296,6 @@ export function LivingGlobe() {
         </div>
       </div>
 
-      {!ready && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-white/60">
-            Spinning up the Living Globe…
-          </p>
-        </div>
-      )}
 
       <style>{`
         .vibe-marker { pointer-events: auto; }
