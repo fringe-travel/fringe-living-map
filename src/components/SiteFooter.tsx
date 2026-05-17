@@ -34,7 +34,7 @@ export function SiteFooter() {
           </h4>
           <ul className="space-y-3 text-sm">
             <li><Link to="/vibers" className="text-foreground/70 hover:text-foreground">Become a Viber</Link></li>
-            <li><Link to="/businesses" className="text-foreground/70 hover:text-foreground">Partner Here</Link></li>
+            
           </ul>
 
           <h4 className="mt-8 mb-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">
