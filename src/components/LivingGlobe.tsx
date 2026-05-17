@@ -121,6 +121,7 @@ export function LivingGlobe() {
         pitch: 0,
         attributionControl: false,
         interactive: true,
+        scrollZoom: false,
       });
       mapRef.current = map;
 
@@ -204,7 +205,7 @@ export function LivingGlobe() {
   }, [navigate, pins]);
 
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden bg-background">
+    <section className="relative -mt-16 h-screen w-full overflow-hidden bg-background">
       <div ref={containerRef} className="absolute inset-0" />
 
       {!ready && (
@@ -216,7 +217,7 @@ export function LivingGlobe() {
       )}
 
       {/* Top overlay: live badge + 2D/3D toggle */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 px-6 pt-6 md:pt-8">
+      <div className="pointer-events-none absolute inset-x-0 top-16 z-10 flex items-center justify-between gap-3 px-6 pt-4 md:pt-6">
         <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/60 px-3 py-1.5 backdrop-blur-md">
           <span className="relative inline-flex size-1.5">
             <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
