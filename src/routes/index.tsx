@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SignalMapMockup } from "@/components/SignalMapMockup";
 import { RegionCard } from "@/components/RegionCard";
+import { UnlockButton } from "@/components/UnlockButton";
 import { regions } from "@/lib/regions";
+import { getRegionPriceIds, GLOBAL_MONTH_PRICE_ID } from "@/lib/pricing-ids";
 import lockedBg from "@/assets/locked-bg.jpg";
 
 export const Route = createFileRoute("/")({
@@ -297,19 +299,20 @@ function LockedConversion() {
             </ul>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
-                to="/regions/$slug"
-                params={{ slug: "boracay" }}
-                className="rounded-xl bg-primary px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-primary-foreground transition-transform hover:scale-105"
+              <UnlockButton
+                priceId={getRegionPriceIds("boracay")!.day}
+                reason="Unlock Boracay Signal"
+                className="rounded-xl bg-primary px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-primary-foreground transition-transform hover:scale-105 disabled:opacity-60"
               >
                 Unlock for $1.99 today
-              </Link>
-              <Link
-                to="/pricing"
-                className="font-mono text-xs uppercase tracking-[0.2em] text-foreground/50 transition-colors hover:text-foreground"
+              </UnlockButton>
+              <UnlockButton
+                priceId={getRegionPriceIds("boracay")!.month}
+                reason="Monthly access to Boracay Signal"
+                className="font-mono text-xs uppercase tracking-[0.2em] text-foreground/50 transition-colors hover:text-foreground disabled:opacity-60"
               >
                 Monthly access — $4.99/mo →
-              </Link>
+              </UnlockButton>
             </div>
           </div>
         </div>
@@ -369,7 +372,8 @@ function Pricing() {
               "Early access to new regions",
             ]}
             cta="Unlock all regions"
-            ctaTo="/signal-regions"
+            ctaPriceId={GLOBAL_MONTH_PRICE_ID}
+            ctaReason="Unlock the Global Pass"
           />
         </div>
       </div>
