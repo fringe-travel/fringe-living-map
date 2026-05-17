@@ -306,7 +306,7 @@ export function LivingGlobe() {
       {/* Bottom hint */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center px-6 pb-6">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-foreground/60 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
-          Tap a region pin to open it · drag to spin
+          Tap a region pin · drag to spin · pinch or +/− to zoom
         </p>
       </div>
 
