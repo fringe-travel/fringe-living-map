@@ -213,13 +213,6 @@ function Page() {
         </div>
       </section>
 
-      {/* Partner */}
-      <section className="border-b border-border py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <PartnerHereBlock regionName={shortName} />
-        </div>
-      </section>
-
       {/* Footer line */}
       <section className="py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
