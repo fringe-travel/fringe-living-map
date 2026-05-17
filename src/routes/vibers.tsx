@@ -56,14 +56,21 @@ function Page() {
 
       {/* iOS app download */}
       <div className="mt-24 grid items-center gap-12 rounded-3xl border border-border bg-surface/40 p-8 md:grid-cols-2 md:p-12">
-        <div className="relative">
-          <div className="absolute -inset-6 -z-10 rounded-3xl bg-primary/20 blur-3xl" />
-          <img
-            src={appPreview}
-            alt="FRiNGE iOS app — Now Available on the App Store"
-            className="w-full rounded-2xl"
-            loading="lazy"
-          />
+        <div className="relative mx-auto w-full max-w-[300px]">
+          <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-primary/20 blur-3xl" />
+          {/* iPhone-style frame */}
+          <div className="relative aspect-[9/19.5] rounded-[3rem] border-[10px] border-foreground/90 bg-foreground/90 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
+            <div className="absolute left-1/2 top-2 z-10 h-6 w-28 -translate-x-1/2 rounded-full bg-foreground/90" />
+            <video
+              src="/fringe-app-preview.mp4"
+              className="h-full w-full rounded-[2.25rem] object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={appPreview}
+            />
+          </div>
         </div>
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-signal">
@@ -79,7 +86,7 @@ function Page() {
           </p>
           <div className="mt-8">
             <a
-              href="https://apps.apple.com/app/fringe-travel/id0"
+              href="https://apps.apple.com/us/app/fringe-travel/id6756793528"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 rounded-2xl bg-foreground px-6 py-3.5 text-background transition-transform hover:scale-105"
