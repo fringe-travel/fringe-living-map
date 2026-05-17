@@ -121,6 +121,7 @@ export function LivingGlobe() {
         pitch: 0,
         attributionControl: false,
         interactive: true,
+        scrollZoom: false,
       });
       mapRef.current = map;
 
