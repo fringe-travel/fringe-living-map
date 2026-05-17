@@ -118,15 +118,6 @@ function Page() {
                       playsInline
                       className="absolute inset-0 h-full w-full object-cover"
                     />
-                    <div className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-signal/40 bg-background/70 px-2.5 py-1 backdrop-blur-md">
-                      <span className="relative inline-flex size-1.5">
-                        <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
-                        <span className="relative size-1.5 rounded-full bg-signal" />
-                      </span>
-                      <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-signal">
-                        Live drop
-                      </span>
-                    </div>
                   </div>
                   <div className="flex flex-col p-6">
                     <div className="flex items-center justify-between">
