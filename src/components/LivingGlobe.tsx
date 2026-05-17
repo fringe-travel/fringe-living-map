@@ -217,7 +217,7 @@ export function LivingGlobe() {
       )}
 
       {/* Top overlay: live badge + 2D/3D toggle */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 px-6 pt-6 md:pt-8">
+      <div className="pointer-events-none absolute inset-x-0 top-16 z-10 flex items-center justify-between gap-3 px-6 pt-4 md:pt-6">
         <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/60 px-3 py-1.5 backdrop-blur-md">
           <span className="relative inline-flex size-1.5">
             <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
