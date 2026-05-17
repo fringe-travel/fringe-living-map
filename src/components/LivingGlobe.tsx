@@ -85,11 +85,29 @@ function buildPins(): Pin[] {
 
 export function LivingGlobe() {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
   const mapRef = useRef<any>(null);
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const pins = useMemo(buildPins, []);
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    const el = sectionRef.current;
+    if (!el) return;
+    if (!document.fullscreenElement) {
+      el.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.().catch(() => {});
+    }
+  };
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -205,7 +223,7 @@ export function LivingGlobe() {
   }, [navigate, pins]);
 
   return (
-    <section className="relative -mt-16 h-screen w-full overflow-hidden bg-background">
+    <section ref={sectionRef} className="relative -mt-16 h-screen w-full overflow-hidden bg-background">
       <div ref={containerRef} className="absolute inset-0" />
 
       {!ready && (
@@ -243,6 +261,14 @@ export function LivingGlobe() {
             2D
           </button>
         </div>
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/60 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-foreground/80 backdrop-blur-md transition-colors hover:text-foreground"
+          aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
+        >
+          {isFullscreen ? "Exit Full" : "Full Screen"}
+        </button>
       </div>
 
       {/* Bottom hint */}

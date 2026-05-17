@@ -8,7 +8,7 @@ export function SiteFooter() {
           <div className="flex flex-col leading-none">
             <span className="text-2xl font-extrabold tracking-tighter">FRiNGE</span>
             <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-              The Living Globe
+              Discover Your Adventure
             </span>
           </div>
           <p className="mt-4 max-w-sm text-sm text-foreground/50">
