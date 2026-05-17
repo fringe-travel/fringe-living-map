@@ -1,6 +1,6 @@
 import boracayImg from "@/assets/region-boracay.jpg";
 import rioImg from "@/assets/region-rio.jpg";
-import mauiImg from "@/assets/region-maui.jpg";
+import hoodRiverImg from "@/assets/region-hood-river.jpg";
 
 export type Region = {
   slug: string;
@@ -50,19 +50,19 @@ export const regions: Region[] = [
     description: "Track beach energy, kite conditions, nightlife heat, and the real local movement across Rio in real time.",
   },
   {
-    slug: "maui",
-    name: "Maui Signal",
-    country: "Hawaii",
-    tags: "Wind · Waves · Beaches · Island conditions",
-    image: mauiImg,
+    slug: "hood-river",
+    name: "Hood River Signal",
+    country: "Oregon, USA",
+    tags: "Wind · Kite · River · Gorge conditions",
+    image: hoodRiverImg,
     freshVibes: 12,
     activeSpots: 5,
     lastUpdatedMin: 15,
-    spots: ["Kihei", "Kanaha", "Paia", "Lahaina"],
+    spots: ["The Hook", "Event Site", "Spit", "Swell City", "Rowena"],
     pricePerDay: 2.99,
     pricePerMonth: 6.99,
     status: "quiet",
-    description: "Wind, waves, beaches, golden hour, and island conditions — straight from the people already out there.",
+    description: "Gorge wind, kite and windsurf conditions, river sessions, and golden hour — straight from the people already out there.",
   },
 ];
 
