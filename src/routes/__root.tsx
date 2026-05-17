@@ -9,6 +9,9 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import ogGlobe from "@/assets/og-globe.jpg";
+
+const OG_IMAGE_URL = `https://real-time-vibe-map.lovable.app${ogGlobe}`;
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -78,8 +81,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "FRiNGE — See what's happening there right now." },
       { name: "description", content: "Unlock real-time access to live places and see what's happening now." },
       { name: "twitter:description", content: "Unlock real-time access to live places and see what's happening now." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1a8915c7-c1b3-470e-8f37-e96a006093bc/id-preview-1611a8b4--b7e0e219-6368-4829-97dc-f381a04bf701.lovable.app-1779002735700.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1a8915c7-c1b3-470e-8f37-e96a006093bc/id-preview-1611a8b4--b7e0e219-6368-4829-97dc-f381a04bf701.lovable.app-1779002735700.png" },
+      { property: "og:image", content: OG_IMAGE_URL },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "640" },
+      { property: "og:image:alt", content: "The FRiNGE Living Globe — live signals from real places around the world." },
+      { name: "twitter:image", content: OG_IMAGE_URL },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
