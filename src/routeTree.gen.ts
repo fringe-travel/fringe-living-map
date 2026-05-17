@@ -9,38 +9,175 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VibersRouteImport } from './routes/vibers'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as NowMapRouteImport } from './routes/now-map'
+import { Route as LiveRegionsRouteImport } from './routes/live-regions'
+import { Route as BusinessesRouteImport } from './routes/businesses'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RegionsSlugRouteImport } from './routes/regions.$slug'
 
+const VibersRoute = VibersRouteImport.update({
+  id: '/vibers',
+  path: '/vibers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NowMapRoute = NowMapRouteImport.update({
+  id: '/now-map',
+  path: '/now-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiveRegionsRoute = LiveRegionsRouteImport.update({
+  id: '/live-regions',
+  path: '/live-regions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessesRoute = BusinessesRouteImport.update({
+  id: '/businesses',
+  path: '/businesses',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegionsSlugRoute = RegionsSlugRouteImport.update({
+  id: '/regions/$slug',
+  path: '/regions/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/businesses': typeof BusinessesRoute
+  '/live-regions': typeof LiveRegionsRoute
+  '/now-map': typeof NowMapRoute
+  '/pricing': typeof PricingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/vibers': typeof VibersRoute
+  '/regions/$slug': typeof RegionsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/businesses': typeof BusinessesRoute
+  '/live-regions': typeof LiveRegionsRoute
+  '/now-map': typeof NowMapRoute
+  '/pricing': typeof PricingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/vibers': typeof VibersRoute
+  '/regions/$slug': typeof RegionsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/businesses': typeof BusinessesRoute
+  '/live-regions': typeof LiveRegionsRoute
+  '/now-map': typeof NowMapRoute
+  '/pricing': typeof PricingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/vibers': typeof VibersRoute
+  '/regions/$slug': typeof RegionsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/businesses'
+    | '/live-regions'
+    | '/now-map'
+    | '/pricing'
+    | '/sitemap.xml'
+    | '/vibers'
+    | '/regions/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/businesses'
+    | '/live-regions'
+    | '/now-map'
+    | '/pricing'
+    | '/sitemap.xml'
+    | '/vibers'
+    | '/regions/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/businesses'
+    | '/live-regions'
+    | '/now-map'
+    | '/pricing'
+    | '/sitemap.xml'
+    | '/vibers'
+    | '/regions/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BusinessesRoute: typeof BusinessesRoute
+  LiveRegionsRoute: typeof LiveRegionsRoute
+  NowMapRoute: typeof NowMapRoute
+  PricingRoute: typeof PricingRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  VibersRoute: typeof VibersRoute
+  RegionsSlugRoute: typeof RegionsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vibers': {
+      id: '/vibers'
+      path: '/vibers'
+      fullPath: '/vibers'
+      preLoaderRoute: typeof VibersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/now-map': {
+      id: '/now-map'
+      path: '/now-map'
+      fullPath: '/now-map'
+      preLoaderRoute: typeof NowMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/live-regions': {
+      id: '/live-regions'
+      path: '/live-regions'
+      fullPath: '/live-regions'
+      preLoaderRoute: typeof LiveRegionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/businesses': {
+      id: '/businesses'
+      path: '/businesses'
+      fullPath: '/businesses'
+      preLoaderRoute: typeof BusinessesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +185,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/regions/$slug': {
+      id: '/regions/$slug'
+      path: '/regions/$slug'
+      fullPath: '/regions/$slug'
+      preLoaderRoute: typeof RegionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BusinessesRoute: BusinessesRoute,
+  LiveRegionsRoute: LiveRegionsRoute,
+  NowMapRoute: NowMapRoute,
+  PricingRoute: PricingRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  VibersRoute: VibersRoute,
+  RegionsSlugRoute: RegionsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
