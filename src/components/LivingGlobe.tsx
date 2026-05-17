@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Link } from "@tanstack/react-router";
 import { regions } from "@/lib/regions";
+import type * as MapboxNS from "mapbox-gl";
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmdhbGxhZ3NkIiwiYSI6ImNtYnR5cTc0cTA4Z2gycXBxNDR3dXdkencifQ.gKQH6ihL3rMHiTkdmyjoBg";
