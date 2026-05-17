@@ -261,6 +261,14 @@ export function LivingGlobe() {
             2D
           </button>
         </div>
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/60 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-foreground/80 backdrop-blur-md transition-colors hover:text-foreground"
+          aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
+        >
+          {isFullscreen ? "Exit Full" : "Full Screen"}
+        </button>
       </div>
 
       {/* Bottom hint */}
