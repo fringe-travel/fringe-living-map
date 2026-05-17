@@ -59,18 +59,14 @@ type GlobePoint = {
   isRegion?: boolean;
 };
 
+type Projected = GlobePoint & { x: number; y: number; z: number; visible: boolean };
+
 function buildPoints(): GlobePoint[] {
   const pts: GlobePoint[] = [];
 
   for (const r of regions) {
     const center = REGION_CENTER[r.slug] ?? [0, 0];
-    pts.push({
-      id: `region-${r.slug}`,
-      coords: center,
-      label: r.name.replace(" Signal", ""),
-      slug: r.slug,
-      isRegion: true,
-    });
+    pts.push({ id: `region-${r.slug}`, coords: center, label: r.name.replace(" Signal", ""), slug: r.slug, isRegion: true });
 
     for (const d of r.previewFeed.slice(0, 4)) {
       pts.push({
@@ -83,267 +79,211 @@ function buildPoints(): GlobePoint[] {
     }
   }
 
-  for (const a of AMBIENT_SPOTS) {
-    pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label });
-  }
-
+  for (const a of AMBIENT_SPOTS) pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label });
   return pts;
 }
 
-function latLngToVector3(lng: number, lat: number, radius: number) {
-  const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lng + 180) * (Math.PI / 180);
-  return {
-    x: -radius * Math.sin(phi) * Math.cos(theta),
-    y: radius * Math.cos(phi),
-    z: radius * Math.sin(phi) * Math.sin(theta),
-  };
+function project(lng: number, lat: number, rotation: number, cx: number, cy: number, r: number): Projected["visible"] extends boolean ? { x: number; y: number; z: number; visible: boolean } : never {
+  const lambda = ((lng + rotation) * Math.PI) / 180;
+  const phi = (lat * Math.PI) / 180;
+  const cosPhi = Math.cos(phi);
+  const x3 = cosPhi * Math.sin(lambda);
+  const y3 = Math.sin(phi);
+  const z3 = cosPhi * Math.cos(lambda);
+  return { x: cx + r * x3, y: cy - r * y3, z: z3, visible: z3 > -0.08 } as never;
 }
 
-function makeEarthTexture() {
-  const canvas = document.createElement("canvas");
-  canvas.width = 2048;
-  canvas.height = 1024;
-  const ctx = canvas.getContext("2d")!;
-  const ocean = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  ocean.addColorStop(0, "#07172f");
-  ocean.addColorStop(0.48, "#0b3f55");
-  ocean.addColorStop(1, "#031423");
+function drawSphere(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.clip();
+
+  const ocean = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.38, r * 0.1, cx, cy, r * 1.08);
+  ocean.addColorStop(0, "#1a797f");
+  ocean.addColorStop(0.34, "#0b4057");
+  ocean.addColorStop(0.72, "#061d35");
+  ocean.addColorStop(1, "#020811");
   ctx.fillStyle = ocean;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
 
-  ctx.globalAlpha = 0.72;
-  ctx.fillStyle = "#123c32";
-  const land = [
-    [260, 190, 330, 150, 0.1],
-    [390, 430, 210, 300, -0.35],
-    [820, 245, 260, 210, -0.1],
-    [1040, 385, 360, 250, 0.15],
-    [1230, 230, 230, 170, -0.2],
-    [1510, 390, 300, 190, 0.25],
-    [1640, 690, 210, 150, -0.2],
-    [1760, 270, 160, 130, 0.5],
-  ];
-
-  for (const [x, y, w, h, rot] of land) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
+  ctx.strokeStyle = "rgba(103,232,249,0.16)";
+  ctx.lineWidth = 1;
+  for (let lat = -60; lat <= 60; lat += 15) {
+    const y = cy - r * Math.sin((lat * Math.PI) / 180);
+    const width = r * Math.cos((lat * Math.PI) / 180);
     ctx.beginPath();
-    ctx.ellipse(0, 0, w, h, 0, 0, Math.PI * 2);
+    ctx.ellipse(cx, y, width, r * 0.022, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  for (let i = -75; i <= 75; i += 15) {
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, r * Math.cos((i * Math.PI) / 180), r, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  const land = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+  land.addColorStop(0, "rgba(35,115,72,0.72)");
+  land.addColorStop(1, "rgba(94,140,78,0.7)");
+  ctx.fillStyle = land;
+  const blobs = [
+    [-103, 48, 0.28, 0.18, -0.35],
+    [-70, -17, 0.15, 0.28, 0.2],
+    [18, 6, 0.31, 0.21, -0.1],
+    [72, 35, 0.38, 0.2, 0.15],
+    [103, 4, 0.24, 0.16, -0.18],
+    [135, -25, 0.18, 0.12, 0.2],
+    [44, -20, 0.1, 0.14, -0.1],
+    [-42, 72, 0.14, 0.08, 0.1],
+  ];
+  for (const [lng, lat, wr, hr, rot] of blobs) {
+    const p = project(lng, lat, 0, cx, cy, r);
+    if (!p.visible) continue;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(rot);
+    ctx.globalAlpha = Math.max(0.12, p.z * 0.7);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, r * wr, r * hr, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
 
-  ctx.globalAlpha = 0.45;
-  ctx.strokeStyle = "rgba(103, 232, 249, 0.32)";
-  ctx.lineWidth = 1;
-  for (let y = 96; y < canvas.height; y += 96) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(canvas.width, y);
-    ctx.stroke();
-  }
-  for (let x = 128; x < canvas.width; x += 128) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
-    ctx.stroke();
-  }
+  const shade = ctx.createRadialGradient(cx - r * 0.28, cy - r * 0.25, r * 0.18, cx + r * 0.26, cy + r * 0.06, r * 1.1);
+  shade.addColorStop(0, "rgba(255,255,255,0.2)");
+  shade.addColorStop(0.42, "rgba(255,255,255,0)");
+  shade.addColorStop(0.78, "rgba(0,0,0,0.28)");
+  shade.addColorStop(1, "rgba(0,0,0,0.78)");
+  ctx.fillStyle = shade;
+  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+  ctx.restore();
 
-  return canvas;
+  ctx.save();
+  ctx.strokeStyle = "rgba(45,246,200,0.5)";
+  ctx.lineWidth = 2;
+  ctx.shadowColor = "rgba(45,246,200,0.9)";
+  ctx.shadowBlur = 28;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r + 1, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
 }
 
 export function LivingGlobe() {
-  const mountRef = useRef<HTMLDivElement | null>(null);
-  const labelLayerRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const points = useMemo(buildPoints, []);
   const totalVibes = points.filter((p) => p.vibe).length + 33;
 
   useEffect(() => {
-    if (!mountRef.current || !labelLayerRef.current) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    let disposed = false;
+    let width = 0;
+    let height = 0;
     let frame = 0;
-    const labels: HTMLDivElement[] = [];
+    let projectedPoints: Projected[] = [];
 
-    (async () => {
-      const THREE = await import("three");
-      if (disposed || !mountRef.current || !labelLayerRef.current) return;
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
 
-      const mount = mountRef.current;
-      const labelLayer = labelLayerRef.current;
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setClearColor(0x000000, 0);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      mount.appendChild(renderer.domElement);
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+    resize();
 
-      const globeGroup = new THREE.Group();
-      scene.add(globeGroup);
-      camera.position.set(0, 0, 7.4);
+    const draw = (time: number) => {
+      const cx = width / 2;
+      const cy = height * 0.52;
+      const r = Math.min(width * 0.43, height * 0.46, 390);
+      const rotation = 210 - time * 0.006;
 
-      const texture = new THREE.CanvasTexture(makeEarthTexture());
-      texture.colorSpace = THREE.SRGBColorSpace;
+      ctx.clearRect(0, 0, width, height);
+      const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(width, height) * 0.65);
+      bg.addColorStop(0, "rgba(45,246,200,0.2)");
+      bg.addColorStop(0.42, "rgba(14,165,233,0.08)");
+      bg.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, width, height);
 
-      const earth = new THREE.Mesh(
-        new THREE.SphereGeometry(2.65, 96, 96),
-        new THREE.MeshStandardMaterial({
-          map: texture,
-          roughness: 0.74,
-          metalness: 0.08,
-          emissive: new THREE.Color(0x062235),
-          emissiveIntensity: 0.22,
-        }),
-      );
-      globeGroup.add(earth);
-
-      const atmosphere = new THREE.Mesh(
-        new THREE.SphereGeometry(2.72, 96, 96),
-        new THREE.MeshBasicMaterial({
-          color: 0x28f0d9,
-          transparent: true,
-          opacity: 0.13,
-          blending: THREE.AdditiveBlending,
-          side: THREE.BackSide,
-        }),
-      );
-      globeGroup.add(atmosphere);
-
-      const grid = new THREE.Mesh(
-        new THREE.SphereGeometry(2.675, 48, 24),
-        new THREE.MeshBasicMaterial({
-          color: 0x67e8f9,
-          transparent: true,
-          opacity: 0.08,
-          wireframe: true,
-        }),
-      );
-      globeGroup.add(grid);
-
-      scene.add(new THREE.AmbientLight(0x99ccff, 1.6));
-      const key = new THREE.DirectionalLight(0xffffff, 2.6);
-      key.position.set(3, 2.5, 4);
-      scene.add(key);
-      const rim = new THREE.DirectionalLight(0x2dd4bf, 2.2);
-      rim.position.set(-4, 1, -3);
-      scene.add(rim);
-
-      const starGeometry = new THREE.BufferGeometry();
-      const starPositions = new Float32Array(900);
-      for (let i = 0; i < starPositions.length; i += 3) {
-        starPositions[i] = (Math.random() - 0.5) * 34;
-        starPositions[i + 1] = (Math.random() - 0.5) * 20;
-        starPositions[i + 2] = -4 - Math.random() * 16;
+      ctx.save();
+      ctx.fillStyle = "rgba(255,255,255,0.72)";
+      for (let i = 0; i < 130; i++) {
+        const x = (Math.sin(i * 91.7) * 0.5 + 0.5) * width;
+        const y = (Math.cos(i * 47.3) * 0.5 + 0.5) * height;
+        const alpha = 0.22 + ((i % 7) / 7) * 0.45;
+        ctx.globalAlpha = alpha;
+        ctx.fillRect(x, y, i % 11 === 0 ? 2 : 1, i % 11 === 0 ? 2 : 1);
       }
-      starGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
-      scene.add(
-        new THREE.Points(
-          starGeometry,
-          new THREE.PointsMaterial({ color: 0xffffff, size: 0.018, transparent: true, opacity: 0.75 }),
-        ),
-      );
+      ctx.restore();
 
-      const markerMaterial = new THREE.SpriteMaterial({
-        color: 0x2df6c8,
-        transparent: true,
-        opacity: 0.92,
-        depthTest: false,
-      });
-      const regionMaterial = new THREE.SpriteMaterial({
-        color: 0xffd166,
-        transparent: true,
-        opacity: 1,
-        depthTest: false,
-      });
+      drawSphere(ctx, cx, cy, r);
 
-      const markerData = points.map((point) => {
-        const pos = latLngToVector3(point.coords[0], point.coords[1], 2.78);
-        const sprite = new THREE.Sprite(point.isRegion ? regionMaterial.clone() : markerMaterial.clone());
-        sprite.position.set(pos.x, pos.y, pos.z);
-        sprite.scale.setScalar(point.isRegion ? 0.18 : point.vibe ? 0.12 : 0.075);
-        globeGroup.add(sprite);
+      projectedPoints = points
+        .map((point) => ({ ...point, ...project(point.coords[0], point.coords[1], rotation, cx, cy, r * 1.035) }))
+        .filter((point) => point.visible)
+        .sort((a, b) => a.z - b.z);
 
-        const label = document.createElement("div");
-        label.className = `globe-label ${point.isRegion ? "is-region" : point.vibe ? "is-vibe" : "is-ambient"}`;
-        label.textContent = point.label;
-        if (point.slug) {
-          label.addEventListener("click", () => {
-            window.location.href = `/regions/${point.slug}`;
-          });
-        }
-        labelLayer.appendChild(label);
-        labels.push(label);
-        return { point, sprite, label, base: sprite.scale.x };
-      });
+      for (const p of projectedPoints) {
+        const pulse = 1 + Math.sin(time * 0.006 + p.x * 0.03) * 0.26;
+        const isRegion = !!p.isRegion;
+        const isVibe = !!p.vibe;
+        const dot = (isRegion ? 7 : isVibe ? 5 : 3.5) * pulse;
+        const color = isRegion ? "#ffd166" : isVibe ? "#2df6c8" : "#fb923c";
+        const opacity = Math.max(0.2, Math.min(1, p.z));
 
-      const resize = () => {
-        if (!mountRef.current) return;
-        const rect = mountRef.current.getBoundingClientRect();
-        renderer.setSize(rect.width, rect.height, false);
-        camera.aspect = rect.width / Math.max(rect.height, 1);
-        camera.updateProjectionMatrix();
-      };
+        ctx.save();
+        ctx.globalAlpha = opacity;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = isRegion ? 24 : 16;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, dot, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = opacity * 0.28;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, dot * 3.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = opacity;
+        ctx.font = isRegion ? "700 12px Inter, sans-serif" : "700 10px Inter, sans-serif";
+        ctx.fillStyle = isRegion ? "#ffe08a" : isVibe ? "rgba(255,255,255,0.86)" : "rgba(255,255,255,0.55)";
+        ctx.fillText(p.label, p.x + dot + 6, p.y + 4);
+        ctx.restore();
+      }
 
-      const ro = new ResizeObserver(resize);
-      ro.observe(mount);
-      resize();
+      frame = requestAnimationFrame(draw);
+    };
 
-      const animate = () => {
-        if (disposed || !mountRef.current || !labelLayerRef.current) return;
-        frame = requestAnimationFrame(animate);
-        globeGroup.rotation.y += 0.0019;
-        globeGroup.rotation.x = -0.12;
+    frame = requestAnimationFrame(draw);
 
-        const rect = mount.getBoundingClientRect();
-        const time = performance.now() * 0.002;
-        for (const item of markerData) {
-          const pulse = 1 + Math.sin(time + item.sprite.position.x * 2.1) * 0.22;
-          item.sprite.scale.setScalar(item.base * pulse);
-          const world = new THREE.Vector3();
-          item.sprite.getWorldPosition(world);
-          const normal = world.clone().normalize();
-          const cameraDirection = camera.position.clone().sub(world).normalize();
-          const visible = normal.dot(cameraDirection) > 0.16;
-          const projected = world.project(camera);
-          const x = (projected.x * 0.5 + 0.5) * rect.width;
-          const y = (-projected.y * 0.5 + 0.5) * rect.height;
-          item.label.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-          item.label.style.opacity = visible && x > -60 && x < rect.width + 60 && y > -30 && y < rect.height + 30 ? "1" : "0";
-        }
-
-        renderer.render(scene, camera);
-      };
-      animate();
-
-      return () => {
-        ro.disconnect();
-        cancelAnimationFrame(frame);
-        for (const label of labels) label.remove();
-        renderer.dispose();
-        texture.dispose();
-        earth.geometry.dispose();
-        grid.geometry.dispose();
-        atmosphere.geometry.dispose();
-      };
-    })().then((cleanup) => {
-      if (cleanup && disposed) cleanup();
-    });
+    const handleClick = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const hit = projectedPoints.find((p) => p.slug && Math.hypot(p.x - x, p.y - y) < 32);
+      if (hit?.slug) window.location.href = `/regions/${hit.slug}`;
+    };
+    canvas.addEventListener("click", handleClick);
 
     return () => {
-      disposed = true;
       cancelAnimationFrame(frame);
-      for (const label of labels) label.remove();
-      if (mountRef.current) mountRef.current.innerHTML = "";
+      canvas.removeEventListener("click", handleClick);
+      ro.disconnect();
     };
   }, [points]);
 
   return (
     <div className="relative h-[calc(100svh-64px)] min-h-[640px] w-full overflow-hidden bg-black">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(45,246,200,0.24),transparent_34%),radial-gradient(circle_at_50%_50%,rgba(14,165,233,0.18),transparent_48%),linear-gradient(180deg,#02060a,#000)]" />
-      <div ref={mountRef} className="absolute inset-0" />
-      <div ref={labelLayerRef} className="pointer-events-none absolute inset-0 z-[2]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,#02060a,#000)]" />
+      <canvas ref={canvasRef} className="absolute inset-0 size-full cursor-pointer" aria-label="Rotating Living Globe with live vibes" />
 
       <div className="pointer-events-none absolute left-6 top-6 z-10 flex items-start gap-3 md:left-8 md:top-8">
         <div className="pointer-events-auto">
@@ -381,65 +321,6 @@ export function LivingGlobe() {
           <p className="max-w-sm text-sm text-white/60">Tap any glow to drop into the region. No uploads. No edits. No filters. Only delete.</p>
         </div>
       </div>
-
-      <style>{`
-        .globe-label {
-          position: absolute;
-          left: 0;
-          top: 0;
-          pointer-events: auto;
-          transform-origin: 0 0;
-          margin-left: 11px;
-          margin-top: -7px;
-          color: rgba(255,255,255,0.82);
-          font-size: 10px;
-          font-weight: 700;
-          line-height: 1;
-          text-shadow: 0 0 12px rgba(0,0,0,0.95);
-          white-space: nowrap;
-          transition: opacity 180ms ease;
-        }
-        .globe-label::before {
-          content: "";
-          position: absolute;
-          left: -14px;
-          top: 1px;
-          width: 8px;
-          height: 8px;
-          border-radius: 9999px;
-          background: #2df6c8;
-          box-shadow: 0 0 0 4px rgba(45,246,200,0.18), 0 0 18px rgba(45,246,200,0.85);
-          animation: vibePulse 2.4s ease-in-out infinite;
-        }
-        .globe-label.is-region {
-          color: #ffe08a;
-          font-size: 12px;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-        }
-        .globe-label.is-region::before {
-          width: 12px;
-          height: 12px;
-          left: -18px;
-          top: -1px;
-          background: #ffd166;
-          box-shadow: 0 0 0 5px rgba(255,209,102,0.18), 0 0 24px rgba(255,209,102,0.95);
-        }
-        .globe-label.is-ambient {
-          color: rgba(255,255,255,0.52);
-          font-weight: 500;
-        }
-        .globe-label.is-ambient::before {
-          width: 6px;
-          height: 6px;
-          background: #fb923c;
-          box-shadow: 0 0 0 3px rgba(251,146,60,0.16), 0 0 14px rgba(251,146,60,0.65);
-        }
-        @keyframes vibePulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.35); opacity: 0.82; }
-        }
-      `}</style>
     </div>
   );
 }
