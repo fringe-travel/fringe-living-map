@@ -76,6 +76,7 @@ export function RegionMap({
 
       map.on("load", () => {
         setReady(true);
+        map.resize();
         for (const s of spots) {
           const coords = SPOT_COORDS[s];
           if (!coords) continue;
@@ -88,6 +89,7 @@ export function RegionMap({
           markers.push(m);
         }
       });
+      map.once("idle", () => map.resize());
 
       const ro = new ResizeObserver(() => map.resize());
       ro.observe(containerRef.current);
@@ -110,8 +112,8 @@ export function RegionMap({
   }, [slug, spots]);
 
   return (
-    <div className="relative h-[75vh] min-h-[520px] w-full overflow-hidden bg-surface">
-      <div ref={containerRef} className="absolute inset-0" />
+    <div className="region-map-shell relative h-[calc(100vh-65px)] min-h-[620px] w-full overflow-hidden bg-surface">
+      <div ref={containerRef} className="region-map-canvas absolute inset-0 h-full w-full" />
       <div className="pointer-events-none absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/70 px-3 py-1.5 backdrop-blur-md">
         <span className="relative inline-flex size-1.5">
           <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
@@ -154,7 +156,15 @@ export function RegionMap({
           white-space: nowrap;
           backdrop-filter: blur(4px);
         }
-        .mapboxgl-canvas { outline: none; }
+        .region-map-shell .mapboxgl-map,
+        .region-map-shell .mapboxgl-canvas-container,
+        .region-map-shell .mapboxgl-canvas {
+          width: 100% !important;
+          height: 100% !important;
+        }
+        .region-map-shell .mapboxgl-canvas {
+          outline: none;
+        }
       `}</style>
     </div>
   );
