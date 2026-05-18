@@ -161,14 +161,17 @@ export function LivingGlobe() {
       if (cancelled || !containerRef.current) return;
 
       mapboxgl.accessToken = MAPBOX_TOKEN;
+      const mapHeight = containerRef.current.getBoundingClientRect().height || window.innerHeight;
+      const bottomGlobePadding = Math.round(Math.min(340, Math.max(220, mapHeight * 0.34)));
 
       const map = new mapboxgl.Map({
         container: containerRef.current,
         style: "mapbox://styles/mapbox/satellite-v9",
         projection: "globe" as any,
-        zoom: 1.2,
-        center: [10, 20],
+        zoom: 0.95,
+        center: [10, 0],
         pitch: 0,
+        padding: { bottom: bottomGlobePadding },
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
@@ -266,7 +269,11 @@ export function LivingGlobe() {
 
       spinTimer = window.setTimeout(spin, 1500);
 
-      const onResize = () => map.resize();
+      const onResize = () => {
+        map.resize();
+        const height = containerRef.current?.getBoundingClientRect().height || window.innerHeight;
+        map.setPadding({ bottom: Math.round(Math.min(340, Math.max(220, height * 0.34))) });
+      };
       window.addEventListener("resize", onResize);
       const ro = new ResizeObserver(() => map.resize());
       ro.observe(containerRef.current);
