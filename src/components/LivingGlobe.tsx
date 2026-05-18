@@ -133,6 +133,10 @@ function buildPins(): Pin[] {
       tag: latest?.tag,
       slug: r.slug,
       isRegion: true,
+      freshVibes: r.freshVibes,
+      activeSpots: r.activeSpots,
+      lastUpdatedMin: r.lastUpdatedMin,
+      tags: r.tags,
     });
   }
   return pts;
