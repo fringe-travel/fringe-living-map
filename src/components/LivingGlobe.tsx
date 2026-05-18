@@ -111,6 +111,10 @@ type Pin = {
   slug?: string;
   isRegion?: boolean;
   isAmbient?: boolean;
+  freshVibes?: number;
+  activeSpots?: number;
+  lastUpdatedMin?: number;
+  tags?: string;
 };
 
 function buildPins(): Pin[] {
