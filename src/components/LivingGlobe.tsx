@@ -298,6 +298,10 @@ export function LivingGlobe() {
                 <span class="fringe-beacon-ring r3"></span>
               </span>
               <span class="fringe-beacon-core"></span>
+              <span class="fringe-beacon-chip">
+                <span class="fringe-beacon-chip-dot"></span>
+                ${escapeHtml(p.label)}
+              </span>
               <div class="fringe-card" role="group">
                 <div class="fringe-card-head">
                   <span class="fringe-card-live">
