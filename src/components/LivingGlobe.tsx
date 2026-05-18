@@ -171,13 +171,13 @@ export function LivingGlobe() {
         projection: "globe" as any,
         zoom: GLOBE_INITIAL_ZOOM,
         center: GLOBE_INITIAL_CENTER,
-        offset: GLOBE_INITIAL_OFFSET,
         pitch: 0,
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
       });
       mapRef.current = map;
+      map.jumpTo({ center: GLOBE_INITIAL_CENTER, zoom: GLOBE_INITIAL_ZOOM, offset: GLOBE_INITIAL_OFFSET } as any);
 
       map.on("style.load", () => {
         map.setFog({
