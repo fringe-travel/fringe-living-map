@@ -57,6 +57,9 @@ const TAG_EMOJI: Record<string, string> = {
   vibe: "✨",
 };
 
+const GLOBE_INITIAL_CENTER: [number, number] = [10, 0];
+const GLOBE_INITIAL_ZOOM = 0.85;
+
 type Pin = {
   id: string;
   coords: [number, number];
@@ -165,8 +168,8 @@ export function LivingGlobe() {
         container: containerRef.current,
         style: "mapbox://styles/mapbox/satellite-v9",
         projection: "globe" as any,
-        zoom: 0.85,
-        center: [10, -35],
+        zoom: GLOBE_INITIAL_ZOOM,
+        center: GLOBE_INITIAL_CENTER,
         pitch: 0,
         attributionControl: false,
         interactive: true,
@@ -245,6 +248,8 @@ export function LivingGlobe() {
       const secondsPerRevolution = 120;
       const maxSpinZoom = 4;
 
+      const frameGlobe = () => map.resize();
+
       const spin = () => {
         if (!mapRef.current) return;
         const z = mapRef.current.getZoom();
@@ -252,6 +257,7 @@ export function LivingGlobe() {
           const distancePerSecond = 360 / secondsPerRevolution;
           const c = mapRef.current.getCenter();
           c.lng -= distancePerSecond;
+          c.lat = GLOBE_INITIAL_CENTER[1];
           mapRef.current.easeTo({ center: c, duration: 1000, easing: (n: number) => n });
         }
         spinTimer = window.setTimeout(spin, 1000);
@@ -265,11 +271,11 @@ export function LivingGlobe() {
 
       spinTimer = window.setTimeout(spin, 1500);
 
-      const onResize = () => map.resize();
+      const onResize = frameGlobe;
       window.addEventListener("resize", onResize);
-      const ro = new ResizeObserver(() => map.resize());
+      const ro = new ResizeObserver(frameGlobe);
       ro.observe(containerRef.current);
-      setTimeout(() => map.resize(), 100);
+      setTimeout(frameGlobe, 100);
 
       (map as any).__cleanup = () => {
         window.removeEventListener("resize", onResize);
@@ -291,7 +297,7 @@ export function LivingGlobe() {
 
   return (
     <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
-      <div ref={containerRef} className="absolute inset-0" />
+      <div ref={containerRef} className="absolute inset-0 -translate-y-72" />
 
       {!ready && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
