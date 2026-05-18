@@ -653,6 +653,38 @@ export function LivingGlobe() {
           70%  { opacity: 0.15; }
           100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
+        /* Compact always-visible chip */
+        .fringe-beacon-chip {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, 22px);
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 3px 8px 3px 7px;
+          background: rgba(6,9,11,0.82);
+          border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.4);
+          border-radius: 9999px;
+          backdrop-filter: blur(6px);
+          font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          color: #fff;
+          white-space: nowrap;
+          pointer-events: none;
+          transition: opacity 0.15s ease;
+        }
+        .fringe-beacon-chip-dot {
+          width: 5px; height: 5px; border-radius: 9999px;
+          background: hsl(var(--signal, 165 85% 56%));
+          box-shadow: 0 0 6px hsl(var(--signal, 165 85% 56%));
+        }
+        .fringe-beacon:hover .fringe-beacon-chip {
+          opacity: 0;
+        }
+
         /* Rich spot card */
         .fringe-card {
           position: absolute;
