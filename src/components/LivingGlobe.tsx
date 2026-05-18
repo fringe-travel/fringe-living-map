@@ -33,18 +33,17 @@ const REGION_CENTER: Record<string, [number, number]> = {
 };
 
 const AMBIENT_SPOTS: { coords: [number, number]; label: string }[] = [
-  { coords: [-156.3, 20.8], label: "Maui" },
-  { coords: [-122.4, 37.8], label: "San Francisco" },
-  { coords: [-75.6, 35.2], label: "Cape Hatteras" },
-  { coords: [-70.4, 19.8], label: "Cabarete" },
-  { coords: [-38.6, -3.6], label: "Cumbuco" },
-  { coords: [-5.6, 36.0], label: "Tarifa" },
-  { coords: [-9.07, 39.6], label: "Nazaré" },
-  { coords: [13.6, 68.0], label: "Lofoten" },
-  { coords: [151.2, -33.8], label: "Sydney" },
-  { coords: [18.4, -34.0], label: "Cape Town" },
-  { coords: [139.7, 35.6], label: "Tokyo" },
-  { coords: [100.5, 13.7], label: "Bangkok" },
+  { coords: [-156.3319, 20.7984], label: "Maui" },
+  { coords: [-122.4194, 37.7749], label: "San Francisco" },
+  { coords: [-75.5277, 35.2515], label: "Cape Hatteras" },
+  { coords: [-70.4187, 19.7582], label: "Cabarete" },
+  { coords: [-38.7228, -3.6247], label: "Cumbuco" },
+  { coords: [-5.6044, 36.0143], label: "Tarifa" },
+  { coords: [-9.0707, 39.6017], label: "Nazaré" },
+  { coords: [151.2093, -33.8688], label: "Sydney" },
+  { coords: [18.4233, -33.9249], label: "Cape Town" },
+  { coords: [139.6917, 35.6895], label: "Tokyo" },
+  { coords: [100.5018, 13.7563], label: "Bangkok" },
 ];
 
 const TAG_EMOJI: Record<string, string> = {
