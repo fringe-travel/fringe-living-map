@@ -60,6 +60,18 @@ const TAG_EMOJI: Record<string, string> = {
 const GLOBE_INITIAL_CENTER: [number, number] = [-98, 40];
 const GLOBE_INITIAL_ZOOM = 2.3;
 
+// Compute the zoom level needed for the globe sphere to fill the
+// container's shorter dimension. In Mapbox's globe projection the sphere's
+// on-screen diameter is approximately (tileSize * 2^zoom) / PI with
+// tileSize = 512. Solving for zoom given a desired diameter in CSS pixels:
+//   zoom = log2(diameter * PI / 512)
+// `fill` lets callers slightly over- or under-fill (1 = tangent to edges).
+function zoomToFill(widthPx: number, heightPx: number, fill = 1): number {
+  const target = Math.min(widthPx, heightPx) * fill;
+  if (target <= 0) return GLOBE_INITIAL_ZOOM;
+  return Math.log2((target * Math.PI) / 512);
+}
+
 type Pin = {
   id: string;
   coords: [number, number];
