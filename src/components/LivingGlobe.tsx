@@ -155,6 +155,16 @@ export function LivingGlobe() {
   }, [mode]);
 
   useEffect(() => {
+    if (!mapRef.current) return;
+    const m = mapRef.current;
+    const targetZoom = isFullscreen ? 3.1 : GLOBE_INITIAL_ZOOM;
+    try {
+      m.resize();
+      m.easeTo({ zoom: targetZoom, duration: 600 });
+    } catch {}
+  }, [isFullscreen]);
+
+  useEffect(() => {
     if (typeof window === "undefined" || !containerRef.current) return;
     let cancelled = false;
     let spinTimer: number | undefined;
