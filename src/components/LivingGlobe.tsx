@@ -57,6 +57,18 @@ const TAG_EMOJI: Record<string, string> = {
   vibe: "✨",
 };
 
+const GLOBE_INITIAL_CENTER: [number, number] = [10, 0];
+const GLOBE_INITIAL_ZOOM = 0.62;
+
+function getGlobePadding(height: number) {
+  return {
+    top: 0,
+    right: 0,
+    bottom: Math.round(Math.min(260, Math.max(140, height * 0.24))),
+    left: 0,
+  };
+}
+
 type Pin = {
   id: string;
   coords: [number, number];
@@ -165,8 +177,9 @@ export function LivingGlobe() {
         container: containerRef.current,
         style: "mapbox://styles/mapbox/satellite-v9",
         projection: "globe" as any,
-        zoom: 0.85,
-        center: [10, -35],
+        zoom: GLOBE_INITIAL_ZOOM,
+        center: GLOBE_INITIAL_CENTER,
+        padding: getGlobePadding(containerRef.current.clientHeight),
         pitch: 0,
         attributionControl: false,
         interactive: true,
@@ -245,6 +258,12 @@ export function LivingGlobe() {
       const secondsPerRevolution = 120;
       const maxSpinZoom = 4;
 
+      const frameGlobe = () => {
+        if (!containerRef.current) return;
+        map.setPadding(getGlobePadding(containerRef.current.clientHeight) as any);
+        map.resize();
+      };
+
       const spin = () => {
         if (!mapRef.current) return;
         const z = mapRef.current.getZoom();
@@ -265,11 +284,11 @@ export function LivingGlobe() {
 
       spinTimer = window.setTimeout(spin, 1500);
 
-      const onResize = () => map.resize();
+      const onResize = frameGlobe;
       window.addEventListener("resize", onResize);
-      const ro = new ResizeObserver(() => map.resize());
+      const ro = new ResizeObserver(frameGlobe);
       ro.observe(containerRef.current);
-      setTimeout(() => map.resize(), 100);
+      setTimeout(frameGlobe, 100);
 
       (map as any).__cleanup = () => {
         window.removeEventListener("resize", onResize);
