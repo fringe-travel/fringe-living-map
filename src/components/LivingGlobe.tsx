@@ -266,14 +266,21 @@ export function LivingGlobe() {
 
       spinTimer = window.setTimeout(spin, 1500);
 
-      const onResize = () => map.resize();
+      const onResize = () => {
+        map.resize();
+        map.jumpTo({ center: map.getCenter(), zoom: 1.2 });
+      };
       window.addEventListener("resize", onResize);
-      const ro = new ResizeObserver(() => map.resize());
+      const ro = new ResizeObserver(() => {
+        map.resize();
+        map.jumpTo({ center: map.getCenter(), zoom: 1.2 });
+      });
       ro.observe(containerRef.current);
       setTimeout(() => {
         map.resize();
         map.jumpTo({ center: [10, 20], zoom: 1.2 });
-      }, 200);
+        console.log("[globe] canvas", map.getCanvas().clientWidth, map.getCanvas().clientHeight, "container", containerRef.current?.clientWidth, containerRef.current?.clientHeight);
+      }, 400);
 
       (map as any).__cleanup = () => {
         window.removeEventListener("resize", onResize);
