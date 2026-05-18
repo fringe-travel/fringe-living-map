@@ -166,7 +166,7 @@ export function LivingGlobe() {
         container: containerRef.current,
         style: "mapbox://styles/mapbox/satellite-v9",
         projection: "globe" as any,
-        zoom: 1.6,
+        zoom: 1.2,
         center: [10, 20],
         pitch: 0,
         attributionControl: false,
