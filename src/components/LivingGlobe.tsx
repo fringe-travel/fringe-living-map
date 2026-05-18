@@ -831,11 +831,11 @@ export function LivingGlobe() {
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, 28px);
+          transform: translate(-50%, 32px);
           display: inline-flex;
           align-items: center;
           gap: 7px;
-          padding: 6px 13px 6px 11px;
+          padding: 6px 11px 6px 11px;
           background: rgba(6,9,11,0.88);
           border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.55);
           border-radius: 9999px;
@@ -856,8 +856,23 @@ export function LivingGlobe() {
           background: hsl(var(--signal, 165 85% 56%));
           box-shadow: 0 0 8px hsl(var(--signal, 165 85% 56%));
         }
+        .fringe-beacon-chip-viewers {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          margin-left: 4px;
+          padding-left: 8px;
+          border-left: 1px solid hsl(var(--signal, 165 85% 56%) / 0.35);
+          font-size: 11px;
+          font-weight: 700;
+          color: hsl(var(--signal, 165 85% 56%));
+          font-variant-numeric: tabular-nums;
+        }
+        .fringe-beacon-chip-viewers svg {
+          opacity: 0.95;
+        }
         .fringe-beacon:hover .fringe-beacon-chip {
-          transform: translate(-50%, 32px) scale(1.04);
+          transform: translate(-50%, 36px) scale(1.04);
         }
 
         /* Rich spot card */
