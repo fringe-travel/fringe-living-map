@@ -759,6 +759,7 @@ export function LivingGlobe() {
         }
         .fringe-beacon:hover .fringe-beacon-thumb {
           opacity: 1;
+        }
         @keyframes fringe-beacon-core-pulse {
           0%, 100% { transform: scale(1); }
           50%      { transform: scale(1.18); }
