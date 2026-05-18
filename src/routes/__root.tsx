@@ -11,7 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import ogGlobe from "@/assets/og-globe.jpg";
 
-const OG_IMAGE_URL = `https://real-time-vibe-map.lovable.app${ogGlobe}`;
+const OG_IMAGE_URL = `https://fringe-living-map.lovable.app${ogGlobe}`;
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -79,7 +79,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "FRiNGE — See what's happening there right now." },
-      { name: "description", content: "Unlock real-time access to live places and see what's happening now." },
       { name: "twitter:description", content: "Unlock real-time access to live places and see what's happening now." },
       { property: "og:image", content: OG_IMAGE_URL },
       { property: "og:image:width", content: "1200" },
