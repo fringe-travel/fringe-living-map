@@ -649,37 +649,148 @@ export function LivingGlobe() {
           70%  { opacity: 0.15; }
           100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
-        .fringe-beacon-label {
+        /* Rich spot card */
+        .fringe-card {
           position: absolute;
-          top: 100%;
+          top: 50%;
           left: 50%;
-          transform: translate(-50%, 18px);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1px;
-          padding: 3px 7px;
-          background: rgba(0,0,0,0.78);
-          border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 4px;
-          backdrop-filter: blur(6px);
-          white-space: nowrap;
+          transform: translate(-50%, 38px);
+          width: 240px;
+          padding: 12px 13px 11px;
+          background: linear-gradient(180deg, rgba(10,14,16,0.92), rgba(6,9,11,0.95));
+          border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.35);
+          border-radius: 12px;
+          backdrop-filter: blur(10px);
+          box-shadow:
+            0 10px 30px rgba(0,0,0,0.55),
+            0 0 0 1px rgba(255,255,255,0.04) inset,
+            0 0 24px hsl(var(--signal, 165 85% 56%) / 0.18);
+          color: rgba(255,255,255,0.95);
+          opacity: 0;
           pointer-events: none;
+          transition: opacity 0.18s ease, transform 0.18s ease;
+          z-index: 5;
         }
-        .fringe-beacon-name {
+        .fringe-card::before {
+          content: "";
+          position: absolute;
+          top: -6px;
+          left: 50%;
+          transform: translateX(-50%) rotate(45deg);
+          width: 10px;
+          height: 10px;
+          background: rgba(10,14,16,0.92);
+          border-left: 1px solid hsl(var(--signal, 165 85% 56%) / 0.35);
+          border-top: 1px solid hsl(var(--signal, 165 85% 56%) / 0.35);
+        }
+        .fringe-beacon:hover .fringe-card,
+        .fringe-beacon:focus-within .fringe-card {
+          opacity: 1;
+          transform: translate(-50%, 30px);
+        }
+        .fringe-card-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 6px;
+        }
+        .fringe-card-live {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
           font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-          font-size: 10px;
+          font-size: 9px;
           font-weight: 700;
+          letter-spacing: 0.2em;
+          color: hsl(var(--signal, 165 85% 56%));
+        }
+        .fringe-card-live-dot {
+          width: 6px; height: 6px; border-radius: 9999px;
+          background: hsl(var(--signal, 165 85% 56%));
+          box-shadow: 0 0 8px hsl(var(--signal, 165 85% 56%));
+          animation: fringe-card-blink 1.6s ease-in-out infinite;
+        }
+        @keyframes fringe-card-blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.35; }
+        }
+        .fringe-card-time {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px;
+          color: rgba(255,255,255,0.55);
+          letter-spacing: 0.08em;
+        }
+        .fringe-card-title {
+          font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif;
+          font-size: 16px;
+          font-weight: 800;
+          letter-spacing: -0.01em;
+          color: #fff;
+          line-height: 1.1;
+        }
+        .fringe-card-sub {
+          margin-top: 2px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.98);
+          color: rgba(255,255,255,0.55);
         }
-        .fringe-beacon-sub {
+        .fringe-card-stats {
+          display: flex;
+          gap: 10px;
+          margin-top: 8px;
+          padding-top: 8px;
+          border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .fringe-card-stat {
+          font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+          font-size: 10px;
+          color: rgba(255,255,255,0.6);
+        }
+        .fringe-card-stat b {
+          color: #fff;
+          font-weight: 700;
+          margin-right: 3px;
+        }
+        .fringe-card-quote {
+          margin-top: 9px;
+          display: flex;
+          gap: 6px;
+          align-items: flex-start;
+        }
+        .fringe-card-quote-tag {
+          font-size: 12px;
+          line-height: 1.3;
+          flex-shrink: 0;
+        }
+        .fringe-card-quote-text {
+          font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+          font-size: 11px;
+          line-height: 1.35;
+          color: rgba(255,255,255,0.82);
+          font-style: italic;
+        }
+        .fringe-card-by {
+          margin-top: 3px;
+          margin-left: 18px;
           font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-          font-size: 8.5px;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: hsl(var(--signal, 165 85% 56%) / 0.85);
+          font-size: 9px;
+          color: rgba(255,255,255,0.5);
+        }
+        .fringe-card-cta {
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 7px 10px;
+          background: hsl(var(--signal, 165 85% 56%));
+          color: #04110e;
+          border-radius: 7px;
+          font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
         }
         .fringe-beacon:hover .fringe-beacon-core {
           box-shadow:
