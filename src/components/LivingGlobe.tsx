@@ -331,7 +331,9 @@ export function LivingGlobe() {
                 <span class="fringe-beacon-ring r2"></span>
                 <span class="fringe-beacon-ring r3"></span>
               </span>
-              <span class="fringe-beacon-core"></span>
+              <span class="fringe-beacon-core">
+                ${p.image ? `<img class="fringe-beacon-thumb" src="${escapeHtml(p.image)}" alt="" loading="lazy" />` : ""}
+              </span>
               <span class="fringe-beacon-chip">
                 <span class="fringe-beacon-chip-dot"></span>
                 ${escapeHtml(p.label)}
