@@ -230,7 +230,6 @@ export function LivingGlobe() {
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
-        preserveDrawingBuffer: true,
       });
       mapRef.current = map;
 
