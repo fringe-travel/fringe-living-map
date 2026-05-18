@@ -177,52 +177,32 @@ export function LivingGlobe() {
     } catch {}
   }, [mode]);
 
-  // Use the rendered canvas itself as the source of truth. Mapbox's globe
-  // projection is non-linear, so formula-only zoom guesses drift across
-  // viewport sizes; measuring the actual drawn sphere lets us correct both
-  // zoom and vertical framing until the bottom reaches the container edge.
+  // Keep Mapbox's WebGL context untouched. The previous pixel-read framing
+  // loop could stall the renderer; resizing plus a conservative zoom keeps
+  // the globe stable without hijacking the canvas.
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    let raf = 0;
-    const apply = () => {
+    const frameGlobe = () => {
       const m = mapRef.current;
       if (!m) return;
       const rect = el.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
       try {
         m.resize();
-        const bounds = mode === "3d" ? measureRenderedGlobeBounds(el) : null;
-        if (!bounds) return;
-
-        const targetBottom = rect.height - GLOBE_BOTTOM_MARGIN;
-        const zoomScale = clamp(rect.height / bounds.height, 1, 1.28);
-        const nextZoom = clamp(m.getZoom() + Math.log2(zoomScale), GLOBE_INITIAL_ZOOM, GLOBE_MAX_AUTO_ZOOM);
-        const bottomGap = targetBottom - bounds.bottom;
-        const screenCenterY = rect.height / 2;
-        const globeCenterY = (bounds.top + bounds.bottom) / 2;
-        const verticalOffset = clamp(bottomGap + (screenCenterY - globeCenterY) * 0.18, -rect.height * 0.3, rect.height * 0.45);
-
-        if (Math.abs(nextZoom - m.getZoom()) > 0.01) m.setZoom(nextZoom);
-        if (Math.abs(verticalOffset) > 2) m.panBy([0, verticalOffset], { duration: 0 });
+        const viewportScale = Math.min(rect.width / 1411, rect.height / 904);
+        const nextZoom = clamp(GLOBE_INITIAL_ZOOM + Math.log2(Math.max(viewportScale, 0.72)) * 0.28, 2.05, GLOBE_MAX_AUTO_ZOOM);
+        if (mode === "3d" && Math.abs(m.getZoom() - nextZoom) > 0.15) m.setZoom(nextZoom);
         framedCenterLatRef.current = m.getCenter().lat;
       } catch {}
     };
     const schedule = () => {
-      cancelAnimationFrame(raf);
-      let passes = 0;
-      const tick = () => {
-        apply();
-        passes += 1;
-        if (passes < 8) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
+      requestAnimationFrame(frameGlobe);
     };
     schedule();
     const ro = new ResizeObserver(schedule);
     ro.observe(el);
     return () => {
-      cancelAnimationFrame(raf);
       ro.disconnect();
     };
   }, [isFullscreen, ready, mode]);
