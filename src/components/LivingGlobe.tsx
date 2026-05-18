@@ -28,7 +28,7 @@ const SPOT_COORDS: Record<string, [number, number]> = {
 
 const REGION_CENTER: Record<string, [number, number]> = {
   boracay: [121.9248, 11.9674],
-  rio: [-43.1729, -22.9711],
+  rio: [-43.1822, -22.9846],
   "hood-river": [-121.5215, 45.7054],
 };
 
