@@ -801,7 +801,33 @@ export function LivingGlobe() {
           z-index: 2;
           pointer-events: auto;
           animation: fringe-beacon-core-pulse 2.2s ease-in-out infinite;
+          transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, box-shadow 0.25s ease;
+          overflow: hidden;
         }
+        .fringe-beacon-thumb {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 9999px;
+          opacity: 0;
+          transition: opacity 0.25s ease;
+          pointer-events: none;
+        }
+        .fringe-beacon:hover .fringe-beacon-core {
+          width: 56px;
+          height: 56px;
+          margin: -28px 0 0 -28px;
+          animation: none;
+          box-shadow:
+            0 0 0 2px rgba(0,0,0,0.7),
+            0 0 0 3px hsl(var(--signal, 165 85% 56%)),
+            0 0 24px hsl(var(--signal, 165 85% 56%) / 0.9),
+            0 8px 28px rgba(0,0,0,0.5);
+        }
+        .fringe-beacon:hover .fringe-beacon-thumb {
+          opacity: 1;
         @keyframes fringe-beacon-core-pulse {
           0%, 100% { transform: scale(1); }
           50%      { transform: scale(1.18); }
