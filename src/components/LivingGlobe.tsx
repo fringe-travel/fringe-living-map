@@ -769,21 +769,23 @@ export function LivingGlobe() {
           letter-spacing: 0.02em;
         }
 
-        /* Radiant pulse beacon — for live regions */
+        /* Radiant pulse beacon — for live regions.
+           Zero-size container so the geographic coord stays the exact
+           anchor at every zoom level, regardless of chip/card layout. */
         .fringe-beacon {
           position: relative;
-          width: 18px;
-          height: 18px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          pointer-events: auto;
+          width: 0;
+          height: 0;
+          pointer-events: none;
           cursor: pointer;
         }
         .fringe-beacon-core {
           position: absolute;
+          top: 0;
+          left: 0;
           width: 10px;
           height: 10px;
+          margin: -5px 0 0 -5px;
           border-radius: 9999px;
           background: hsl(var(--signal, 165 85% 56%));
           box-shadow:
@@ -791,6 +793,7 @@ export function LivingGlobe() {
             0 0 12px hsl(var(--signal, 165 85% 56%) / 0.95),
             0 0 28px hsl(var(--signal, 165 85% 56%) / 0.65);
           z-index: 2;
+          pointer-events: auto;
         }
         .fringe-beacon-rings {
           position: absolute;
