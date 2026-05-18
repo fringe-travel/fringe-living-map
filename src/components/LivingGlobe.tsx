@@ -823,7 +823,8 @@ export function LivingGlobe() {
           letter-spacing: 0.01em;
           color: #fff;
           white-space: nowrap;
-          pointer-events: none;
+          pointer-events: auto;
+          cursor: pointer;
           box-shadow: 0 6px 18px rgba(0,0,0,0.45), 0 0 18px hsl(var(--signal, 165 85% 56%) / 0.25);
           transition: opacity 0.15s ease, transform 0.18s ease;
         }
