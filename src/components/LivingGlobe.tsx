@@ -161,13 +161,12 @@ export function LivingGlobe() {
       if (cancelled || !containerRef.current) return;
 
       mapboxgl.accessToken = MAPBOX_TOKEN;
-
       const map = new mapboxgl.Map({
         container: containerRef.current,
         style: "mapbox://styles/mapbox/satellite-v9",
         projection: "globe" as any,
-        zoom: 1.2,
-        center: [10, 20],
+        zoom: 0.85,
+        center: [10, -35],
         pitch: 0,
         attributionControl: false,
         interactive: true,
@@ -291,7 +290,7 @@ export function LivingGlobe() {
   }, [navigate, pins]);
 
   return (
-    <section id="living-globe" ref={sectionRef} className="relative h-[calc(100vh-4rem)] w-full overflow-hidden bg-background">
+    <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
       <div ref={containerRef} className="absolute inset-0" />
 
       {!ready && (
