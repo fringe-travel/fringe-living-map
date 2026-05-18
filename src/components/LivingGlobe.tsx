@@ -27,24 +27,10 @@ const SPOT_COORDS: Record<string, [number, number]> = {
 };
 
 const REGION_CENTER: Record<string, [number, number]> = {
-  boracay: [121.93, 11.97],
-  rio: [-43.18, -22.91],
-  "hood-river": [-121.51, 45.71],
+  boracay: [121.9248, 11.9674],
+  rio: [-43.1729, -22.9711],
+  "hood-river": [-121.5215, 45.7054],
 };
-
-const AMBIENT_SPOTS: { coords: [number, number]; label: string }[] = [
-  { coords: [-156.3319, 20.7984], label: "Maui" },
-  { coords: [-122.4194, 37.7749], label: "San Francisco" },
-  { coords: [-75.5277, 35.2515], label: "Cape Hatteras" },
-  { coords: [-70.4187, 19.7582], label: "Cabarete" },
-  { coords: [-38.7228, -3.6247], label: "Cumbuco" },
-  { coords: [-5.6044, 36.0143], label: "Tarifa" },
-  { coords: [-9.0707, 39.6017], label: "Nazaré" },
-  { coords: [151.2093, -33.8688], label: "Sydney" },
-  { coords: [18.4233, -33.9249], label: "Cape Town" },
-  { coords: [139.6917, 35.6895], label: "Tokyo" },
-  { coords: [100.5018, 13.7563], label: "Bangkok" },
-];
 
 const TAG_EMOJI: Record<string, string> = {
   crowd: "👥",
