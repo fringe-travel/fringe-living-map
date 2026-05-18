@@ -57,7 +57,7 @@ const TAG_EMOJI: Record<string, string> = {
   vibe: "✨",
 };
 
-const GLOBE_INITIAL_CENTER: [number, number] = [10, -80];
+const GLOBE_INITIAL_CENTER: [number, number] = [-98, 40];
 const GLOBE_INITIAL_ZOOM = 1.4;
 
 type Pin = {
