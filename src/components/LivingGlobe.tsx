@@ -528,6 +528,120 @@ export function LivingGlobe() {
         </p>
       </div>
 
+      {/* Spot card modal */}
+      {selectedRegion && (
+        <div
+          className="absolute inset-0 z-30 flex items-end justify-center bg-black/55 backdrop-blur-sm sm:items-center"
+          onClick={() => setSelectedSlug(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="relative w-full max-w-lg overflow-hidden rounded-t-3xl border border-signal/40 bg-background shadow-2xl sm:rounded-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="relative inline-flex size-2">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
+                    <span className="relative size-2 rounded-full bg-signal" />
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-signal">
+                    On air · {selectedRegion.lastUpdatedMin}m ago
+                  </span>
+                </div>
+                <h3 className="mt-1.5 text-2xl font-extrabold tracking-tight">
+                  {selectedRegion.name.replace(" Signal", "")}
+                </h3>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/55">
+                  {selectedRegion.country}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedSlug(null)}
+                aria-label="Close"
+                className="rounded-full border border-border bg-surface px-2.5 py-1 text-sm leading-none text-foreground/70 transition-colors hover:text-foreground"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 border-b border-border bg-surface/40 px-6 py-4 text-center">
+              <ModalStat n={selectedRegion.freshVibes} label="Fresh vibes" highlight />
+              <ModalStat n={selectedRegion.activeSpots} label="Active spots" />
+              <ModalStat n={selectedRegion.previewFeed.length} label="Recent drops" />
+            </div>
+
+            <div className="max-h-[55vh] overflow-y-auto px-6 py-5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/55">
+                Locations in the area
+              </p>
+              <ul className="mt-3 grid grid-cols-2 gap-2">
+                {selectedRegion.spots.map((s) => {
+                  const fresh = selectedRegion.previewFeed.find((d) => d.spot.includes(s));
+                  return (
+                    <li
+                      key={s}
+                      className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface/60 px-3 py-2 text-sm"
+                    >
+                      <span className="font-semibold text-foreground/90">{s}</span>
+                      <span
+                        className={`size-1.5 rounded-full ${fresh ? "bg-signal shadow-[0_0_8px_hsl(var(--signal))]" : "bg-foreground/20"}`}
+                        aria-label={fresh ? "Fresh vibe" : "Quiet"}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/55">
+                Latest vibes
+              </p>
+              <ul className="mt-3 space-y-2.5">
+                {selectedRegion.previewFeed.slice(0, 5).map((d, i) => {
+                  const emoji = TAG_EMOJI[d.tag] ?? "✨";
+                  return (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 rounded-xl border border-border bg-background px-3 py-2.5"
+                    >
+                      <span className="text-lg leading-none">{emoji}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="truncate text-xs font-bold text-foreground/90">
+                            {d.spot}
+                          </span>
+                          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-signal">
+                            {d.minutesAgo}m
+                          </span>
+                        </div>
+                        <p className="mt-0.5 text-sm text-foreground/80">"{d.vibe}"</p>
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/45">
+                          @{d.by}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <div className="border-t border-border bg-surface/40 px-6 py-4">
+              <Link
+                to="/regions/$slug"
+                params={{ slug: selectedRegion.slug }}
+                onClick={() => setSelectedSlug(null)}
+                className="block w-full rounded-xl bg-signal py-3 text-center text-sm font-extrabold uppercase tracking-[0.12em] text-background transition-transform hover:scale-[1.02]"
+              >
+                Open full signal →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         /* Ambient (label-only) pin */
         .fringe-pin {
