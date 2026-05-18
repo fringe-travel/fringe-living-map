@@ -64,6 +64,7 @@ type Pin = {
   id: string;
   coords: [number, number];
   label: string;
+  sublabel?: string;
   vibe?: string;
   by?: string;
   minutesAgo?: number;
