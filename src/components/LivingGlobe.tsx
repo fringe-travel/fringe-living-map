@@ -684,36 +684,37 @@ export function LivingGlobe() {
           70%  { opacity: 0.15; }
           100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
-        /* Compact always-visible chip */
+        /* Compact always-visible chip — bigger, easier to read */
         .fringe-beacon-chip {
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, 22px);
+          transform: translate(-50%, 28px);
           display: inline-flex;
           align-items: center;
-          gap: 5px;
-          padding: 3px 8px 3px 7px;
-          background: rgba(6,9,11,0.82);
-          border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.4);
+          gap: 7px;
+          padding: 6px 13px 6px 11px;
+          background: rgba(6,9,11,0.88);
+          border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.55);
           border-radius: 9999px;
-          backdrop-filter: blur(6px);
+          backdrop-filter: blur(8px);
           font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-          font-size: 10px;
+          font-size: 13px;
           font-weight: 700;
-          letter-spacing: 0.04em;
+          letter-spacing: 0.01em;
           color: #fff;
           white-space: nowrap;
           pointer-events: none;
-          transition: opacity 0.15s ease;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.45), 0 0 18px hsl(var(--signal, 165 85% 56%) / 0.25);
+          transition: opacity 0.15s ease, transform 0.18s ease;
         }
         .fringe-beacon-chip-dot {
-          width: 5px; height: 5px; border-radius: 9999px;
+          width: 7px; height: 7px; border-radius: 9999px;
           background: hsl(var(--signal, 165 85% 56%));
-          box-shadow: 0 0 6px hsl(var(--signal, 165 85% 56%));
+          box-shadow: 0 0 8px hsl(var(--signal, 165 85% 56%));
         }
         .fringe-beacon:hover .fringe-beacon-chip {
-          opacity: 0;
+          transform: translate(-50%, 32px) scale(1.04);
         }
 
         /* Rich spot card */
