@@ -270,7 +270,10 @@ export function LivingGlobe() {
       window.addEventListener("resize", onResize);
       const ro = new ResizeObserver(() => map.resize());
       ro.observe(containerRef.current);
-      setTimeout(() => map.resize(), 100);
+      setTimeout(() => {
+        map.resize();
+        map.jumpTo({ center: [10, 20], zoom: 1.2 });
+      }, 200);
 
       (map as any).__cleanup = () => {
         window.removeEventListener("resize", onResize);
