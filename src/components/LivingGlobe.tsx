@@ -47,13 +47,27 @@ const AMBIENT_SPOTS: { coords: [number, number]; label: string }[] = [
   { coords: [100.5, 13.7], label: "Bangkok" },
 ];
 
+const TAG_EMOJI: Record<string, string> = {
+  crowd: "👥",
+  wind: "💨",
+  sunset: "🌅",
+  food: "🍽️",
+  music: "🎶",
+  surf: "🏄",
+  vibe: "✨",
+};
+
 type Pin = {
   id: string;
   coords: [number, number];
   label: string;
   vibe?: string;
+  by?: string;
+  minutesAgo?: number;
+  tag?: string;
   slug?: string;
   isRegion?: boolean;
+  isAmbient?: boolean;
 };
 
 function buildPins(): Pin[] {
@@ -73,14 +87,21 @@ function buildPins(): Pin[] {
         coords: SPOT_COORDS[d.spot] ?? center,
         label: d.spot,
         vibe: d.vibe,
+        by: d.by,
+        minutesAgo: d.minutesAgo,
+        tag: d.tag,
         slug: r.slug,
       });
     }
   }
   for (const a of AMBIENT_SPOTS) {
-    pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label });
+    pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label, isAmbient: true });
   }
   return pts;
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 }
 
 export function LivingGlobe() {
