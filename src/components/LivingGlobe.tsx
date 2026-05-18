@@ -307,12 +307,17 @@ export function LivingGlobe() {
               <span class="fringe-pin-label">${escapeHtml(p.label)}</span>
             `;
           } else if (p.isRegion) {
-            el.className = "fringe-spot";
+            el.className = "fringe-beacon";
             el.innerHTML = `
-              <span class="fringe-spot-icon region">🟢</span>
-              <span class="fringe-spot-label">
-                <span class="fringe-spot-name">${escapeHtml(p.label)}</span>
-                ${p.sublabel ? `<span class="fringe-spot-sub">${escapeHtml(p.sublabel)}</span>` : ""}
+              <span class="fringe-beacon-rings">
+                <span class="fringe-beacon-ring r1"></span>
+                <span class="fringe-beacon-ring r2"></span>
+                <span class="fringe-beacon-ring r3"></span>
+              </span>
+              <span class="fringe-beacon-core"></span>
+              <span class="fringe-beacon-label">
+                <span class="fringe-beacon-name">${escapeHtml(p.label)}</span>
+                ${p.sublabel ? `<span class="fringe-beacon-sub">${escapeHtml(p.sublabel)}</span>` : ""}
               </span>
             `;
           } else {
