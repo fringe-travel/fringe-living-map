@@ -333,6 +333,7 @@ export function LivingGlobe() {
               <span class="fringe-beacon-chip">
                 <span class="fringe-beacon-chip-dot"></span>
                 ${escapeHtml(p.label)}
+                ${typeof p.freshVibes === "number" ? `<span class="fringe-beacon-chip-viewers" aria-label="viewers"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>${(p.freshVibes * 37 + 184).toLocaleString()}</span>` : ""}
               </span>
               <div class="fringe-card" role="group">
                 <div class="fringe-card-head">
@@ -783,17 +784,23 @@ export function LivingGlobe() {
           position: absolute;
           top: 0;
           left: 0;
-          width: 10px;
-          height: 10px;
-          margin: -5px 0 0 -5px;
+          width: 16px;
+          height: 16px;
+          margin: -8px 0 0 -8px;
           border-radius: 9999px;
-          background: hsl(var(--signal, 165 85% 56%));
+          background: radial-gradient(circle at 30% 30%, #fff 0%, hsl(var(--signal, 165 85% 56%)) 55%, hsl(var(--signal, 165 85% 56%) / 0.85) 100%);
           box-shadow:
-            0 0 0 2px rgba(0,0,0,0.55),
-            0 0 12px hsl(var(--signal, 165 85% 56%) / 0.95),
-            0 0 28px hsl(var(--signal, 165 85% 56%) / 0.65);
+            0 0 0 2px rgba(0,0,0,0.6),
+            0 0 0 4px hsl(var(--signal, 165 85% 56%) / 0.35),
+            0 0 18px hsl(var(--signal, 165 85% 56%) / 0.95),
+            0 0 36px hsl(var(--signal, 165 85% 56%) / 0.7);
           z-index: 2;
           pointer-events: auto;
+          animation: fringe-beacon-core-pulse 2.2s ease-in-out infinite;
+        }
+        @keyframes fringe-beacon-core-pulse {
+          0%, 100% { transform: scale(1); }
+          50%      { transform: scale(1.18); }
         }
         .fringe-beacon-rings {
           position: absolute;
@@ -811,9 +818,9 @@ export function LivingGlobe() {
           opacity: 0;
           animation: fringe-beacon-ping 2.6s cubic-bezier(0,0,0.2,1) infinite;
         }
-        .fringe-beacon-ring.r1 { width: 28px; height: 28px; animation-delay: 0s; }
-        .fringe-beacon-ring.r2 { width: 44px; height: 44px; animation-delay: 0.6s; }
-        .fringe-beacon-ring.r3 { width: 60px; height: 60px; animation-delay: 1.2s; }
+        .fringe-beacon-ring.r1 { width: 36px; height: 36px; animation-delay: 0s; }
+        .fringe-beacon-ring.r2 { width: 56px; height: 56px; animation-delay: 0.6s; }
+        .fringe-beacon-ring.r3 { width: 78px; height: 78px; animation-delay: 1.2s; }
         @keyframes fringe-beacon-ping {
           0%   { transform: translate(-50%, -50%) scale(0.35); opacity: 0.9; }
           70%  { opacity: 0.15; }
@@ -824,11 +831,11 @@ export function LivingGlobe() {
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, 28px);
+          transform: translate(-50%, 32px);
           display: inline-flex;
           align-items: center;
           gap: 7px;
-          padding: 6px 13px 6px 11px;
+          padding: 6px 11px 6px 11px;
           background: rgba(6,9,11,0.88);
           border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.55);
           border-radius: 9999px;
@@ -849,8 +856,23 @@ export function LivingGlobe() {
           background: hsl(var(--signal, 165 85% 56%));
           box-shadow: 0 0 8px hsl(var(--signal, 165 85% 56%));
         }
+        .fringe-beacon-chip-viewers {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          margin-left: 4px;
+          padding-left: 8px;
+          border-left: 1px solid hsl(var(--signal, 165 85% 56%) / 0.35);
+          font-size: 11px;
+          font-weight: 700;
+          color: hsl(var(--signal, 165 85% 56%));
+          font-variant-numeric: tabular-nums;
+        }
+        .fringe-beacon-chip-viewers svg {
+          opacity: 0.95;
+        }
         .fringe-beacon:hover .fringe-beacon-chip {
-          transform: translate(-50%, 32px) scale(1.04);
+          transform: translate(-50%, 36px) scale(1.04);
         }
 
         /* Rich spot card */
