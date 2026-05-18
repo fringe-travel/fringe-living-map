@@ -372,7 +372,7 @@ export function LivingGlobe() {
             el.style.cursor = "pointer";
             el.addEventListener("click", (e) => {
               e.stopPropagation();
-              navigate({ to: "/regions/$slug", params: { slug: p.slug! } });
+              setSelectedSlug(p.slug!);
             });
           }
           const anchor = "center";
