@@ -201,35 +201,22 @@ export function LivingGlobe() {
               <span class="fringe-pin-label">${escapeHtml(p.label)}</span>
             `;
           } else if (p.isRegion) {
-            el.className = "fringe-spot-card region";
+            el.className = "fringe-spot";
             el.innerHTML = `
-              <div class="fringe-card-body">
-                <div class="fringe-card-row">
-                  <span class="fringe-card-emoji">🟢</span>
-                  <span class="fringe-card-title">${escapeHtml(p.label)}</span>
-                </div>
-                <div class="fringe-card-cta">Open Signal →</div>
-              </div>
-              <span class="fringe-card-tail"></span>
-              <span class="fringe-anchor"><span class="fringe-anchor-dot region"></span></span>
+              <span class="fringe-spot-icon region">🟢</span>
+              <span class="fringe-spot-label">
+                <span class="fringe-spot-name">${escapeHtml(p.label)}</span>
+                ${p.sublabel ? `<span class="fringe-spot-sub">${escapeHtml(p.sublabel)}</span>` : ""}
+              </span>
             `;
           } else {
-            el.className = "fringe-spot-card";
-            const meta = [
-              p.by ? `@${escapeHtml(p.by)}` : "",
-              p.minutesAgo != null ? `${p.minutesAgo}m ago` : "",
-            ].filter(Boolean).join(" · ");
+            el.className = "fringe-spot";
             el.innerHTML = `
-              <div class="fringe-card-body">
-                <div class="fringe-card-row">
-                  <span class="fringe-card-emoji">${emoji}</span>
-                  <span class="fringe-card-title">${escapeHtml(p.label)}</span>
-                </div>
-                ${p.vibe ? `<div class="fringe-card-vibe">${escapeHtml(p.vibe)}</div>` : ""}
-                ${meta ? `<div class="fringe-card-meta">${meta}</div>` : ""}
-              </div>
-              <span class="fringe-card-tail"></span>
-              <span class="fringe-anchor"><span class="fringe-anchor-dot"></span></span>
+              <span class="fringe-spot-icon">${emoji}</span>
+              <span class="fringe-spot-label">
+                <span class="fringe-spot-name">${escapeHtml(p.label)}</span>
+                ${p.sublabel ? `<span class="fringe-spot-sub">${escapeHtml(p.sublabel)}</span>` : ""}
+              </span>
             `;
           }
 
