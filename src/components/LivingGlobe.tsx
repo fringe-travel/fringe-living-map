@@ -51,54 +51,6 @@ function clamp(n: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, n));
 }
 
-function isGlobePixel(r: number, g: number, b: number, a: number): boolean {
-  if (a < 20) return false;
-  if (r > 238 && g > 238 && b > 238) return false;
-  const avg = (r + g + b) / 3;
-  return (b > 42 && avg > 28) || (g > 48 && avg > 34) || (r > 58 && g > 48 && b > 32);
-}
-
-function measureRenderedGlobeBounds(container: HTMLDivElement): { top: number; bottom: number; height: number } | null {
-  const canvas = container.querySelector(".mapboxgl-canvas") as HTMLCanvasElement | null;
-  if (!canvas || canvas.clientWidth === 0 || canvas.clientHeight === 0) return null;
-  const gl = (canvas.getContext("webgl2") || canvas.getContext("webgl")) as WebGL2RenderingContext | WebGLRenderingContext | null;
-  if (!gl) return null;
-
-  const width = gl.drawingBufferWidth;
-  const height = gl.drawingBufferHeight;
-  if (width <= 0 || height <= 0) return null;
-
-  const pixels = new Uint8Array(width * height * 4);
-  try {
-    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-  } catch {
-    return null;
-  }
-
-  const step = clamp(Math.floor(Math.min(width, height) / 220), 3, 8);
-  const xMin = Math.floor(width * 0.2);
-  const xMax = Math.floor(width * 0.8);
-  const minRowHits = Math.max(8, Math.floor(((xMax - xMin) / step) * 0.07));
-  let top = Infinity;
-  let bottom = -Infinity;
-
-  for (let y = 0; y < height; y += step) {
-    let hits = 0;
-    for (let x = xMin; x < xMax; x += step) {
-      const idx = (y * width + x) * 4;
-      if (isGlobePixel(pixels[idx], pixels[idx + 1], pixels[idx + 2], pixels[idx + 3])) hits += 1;
-    }
-    if (hits >= minRowHits) {
-      const cssY = canvas.clientHeight - (y / height) * canvas.clientHeight;
-      top = Math.min(top, cssY);
-      bottom = Math.max(bottom, cssY);
-    }
-  }
-
-  if (!Number.isFinite(top) || !Number.isFinite(bottom) || bottom <= top) return null;
-  return { top, bottom, height: bottom - top };
-}
-
 type Pin = {
   id: string;
   coords: [number, number];
@@ -225,52 +177,32 @@ export function LivingGlobe() {
     } catch {}
   }, [mode]);
 
-  // Use the rendered canvas itself as the source of truth. Mapbox's globe
-  // projection is non-linear, so formula-only zoom guesses drift across
-  // viewport sizes; measuring the actual drawn sphere lets us correct both
-  // zoom and vertical framing until the bottom reaches the container edge.
+  // Keep Mapbox's WebGL context untouched. The previous pixel-read framing
+  // loop could stall the renderer; resizing plus a conservative zoom keeps
+  // the globe stable without hijacking the canvas.
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    let raf = 0;
-    const apply = () => {
+    const frameGlobe = () => {
       const m = mapRef.current;
       if (!m) return;
       const rect = el.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
       try {
         m.resize();
-        const bounds = mode === "3d" ? measureRenderedGlobeBounds(el) : null;
-        if (!bounds) return;
-
-        const targetBottom = rect.height - GLOBE_BOTTOM_MARGIN;
-        const zoomScale = clamp(rect.height / bounds.height, 1, 1.28);
-        const nextZoom = clamp(m.getZoom() + Math.log2(zoomScale), GLOBE_INITIAL_ZOOM, GLOBE_MAX_AUTO_ZOOM);
-        const bottomGap = targetBottom - bounds.bottom;
-        const screenCenterY = rect.height / 2;
-        const globeCenterY = (bounds.top + bounds.bottom) / 2;
-        const verticalOffset = clamp(bottomGap + (screenCenterY - globeCenterY) * 0.18, -rect.height * 0.3, rect.height * 0.45);
-
-        if (Math.abs(nextZoom - m.getZoom()) > 0.01) m.setZoom(nextZoom);
-        if (Math.abs(verticalOffset) > 2) m.panBy([0, verticalOffset], { duration: 0 });
+        const viewportScale = Math.min(rect.width / 1411, rect.height / 904);
+        const nextZoom = clamp(GLOBE_INITIAL_ZOOM + Math.log2(Math.max(viewportScale, 0.72)) * 0.28, 2.05, GLOBE_MAX_AUTO_ZOOM);
+        if (mode === "3d" && Math.abs(m.getZoom() - nextZoom) > 0.15) m.setZoom(nextZoom);
         framedCenterLatRef.current = m.getCenter().lat;
       } catch {}
     };
     const schedule = () => {
-      cancelAnimationFrame(raf);
-      let passes = 0;
-      const tick = () => {
-        apply();
-        passes += 1;
-        if (passes < 8) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
+      requestAnimationFrame(frameGlobe);
     };
     schedule();
     const ro = new ResizeObserver(schedule);
     ro.observe(el);
     return () => {
-      cancelAnimationFrame(raf);
       ro.disconnect();
     };
   }, [isFullscreen, ready, mode]);
@@ -298,7 +230,6 @@ export function LivingGlobe() {
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
-        preserveDrawingBuffer: true,
       });
       mapRef.current = map;
 
@@ -828,6 +759,7 @@ export function LivingGlobe() {
         }
         .fringe-beacon:hover .fringe-beacon-thumb {
           opacity: 1;
+        }
         @keyframes fringe-beacon-core-pulse {
           0%, 100% { transform: scale(1); }
           50%      { transform: scale(1.18); }
