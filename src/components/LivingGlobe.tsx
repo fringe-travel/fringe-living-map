@@ -60,6 +60,18 @@ const TAG_EMOJI: Record<string, string> = {
 const GLOBE_INITIAL_CENTER: [number, number] = [-98, 40];
 const GLOBE_INITIAL_ZOOM = 2.3;
 
+// Compute the zoom level needed for the globe sphere to fill the
+// container's shorter dimension. In Mapbox's globe projection the sphere's
+// on-screen diameter is approximately (tileSize * 2^zoom) / PI with
+// tileSize = 512. Solving for zoom given a desired diameter in CSS pixels:
+//   zoom = log2(diameter * PI / 512)
+// `fill` lets callers slightly over- or under-fill (1 = tangent to edges).
+function zoomToFill(widthPx: number, heightPx: number, fill = 1): number {
+  const target = Math.min(widthPx, heightPx) * fill;
+  if (target <= 0) return GLOBE_INITIAL_ZOOM;
+  return Math.log2((target * Math.PI) / 512);
+}
+
 type Pin = {
   id: string;
   coords: [number, number];
@@ -154,15 +166,31 @@ export function LivingGlobe() {
     } catch {}
   }, [mode]);
 
+  // Keep the globe sphere sized to the container: recompute the zoom that
+  // makes the sphere's diameter equal the container's shorter side whenever
+  // the container resizes, the projection mode changes, or fullscreen toggles.
   useEffect(() => {
-    if (!mapRef.current) return;
-    const m = mapRef.current;
-    const targetZoom = isFullscreen ? 3.1 : GLOBE_INITIAL_ZOOM;
-    try {
-      m.resize();
-      m.easeTo({ zoom: targetZoom, duration: 600 });
-    } catch {}
-  }, [isFullscreen]);
+    const el = containerRef.current;
+    if (!el) return;
+    const apply = (animate: boolean) => {
+      const m = mapRef.current;
+      if (!m) return;
+      const rect = el.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      // Slightly over-fill so the sphere meets the top/bottom edges instead
+      // of leaving a visible gap above the bottom hint line.
+      const z = zoomToFill(rect.width, rect.height, 1.02);
+      try {
+        m.resize();
+        if (animate) m.easeTo({ zoom: z, duration: 500 });
+        else m.setZoom(z);
+      } catch {}
+    };
+    apply(true);
+    const ro = new ResizeObserver(() => apply(false));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isFullscreen, ready, mode]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !containerRef.current) return;
