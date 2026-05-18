@@ -1000,3 +1000,15 @@ export function LivingGlobe() {
     </section>
   );
 }
+function ModalStat({ n, label, highlight }: { n: number; label: string; highlight?: boolean }) {
+  return (
+    <div>
+      <p className={`text-2xl font-extrabold tracking-tight ${highlight ? "text-signal" : "text-foreground"}`}>
+        {n}
+      </p>
+      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/55">
+        {label}
+      </p>
+    </div>
+  );
+}
