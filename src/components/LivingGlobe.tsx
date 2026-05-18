@@ -291,7 +291,7 @@ export function LivingGlobe() {
   }, [navigate, pins]);
 
   return (
-    <section id="living-globe" ref={sectionRef} className="relative -mt-16 h-screen w-full overflow-hidden bg-background">
+    <section id="living-globe" ref={sectionRef} className="relative h-[calc(100vh-4rem)] w-full overflow-hidden bg-background">
       <div ref={containerRef} className="absolute inset-0" />
 
       {!ready && (
