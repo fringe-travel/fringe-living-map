@@ -719,6 +719,7 @@ export function LivingGlobe() {
 
         /* Rich spot card */
         .fringe-card {
+          display: none;
           position: absolute;
           top: 50%;
           left: 50%;
