@@ -64,7 +64,7 @@ function getGlobePadding(height: number) {
   return {
     top: 0,
     right: 0,
-    bottom: Math.round(Math.min(260, Math.max(140, height * 0.24))),
+    bottom: Math.round(Math.min(680, Math.max(420, height * 0.72))),
     left: 0,
   };
 }
