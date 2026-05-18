@@ -759,12 +759,13 @@ export function LivingGlobe() {
         /* Radiant pulse beacon — for live regions */
         .fringe-beacon {
           position: relative;
-          width: 0;
-          height: 0;
+          width: 18px;
+          height: 18px;
           display: flex;
           align-items: center;
           justify-content: center;
           pointer-events: auto;
+          cursor: pointer;
         }
         .fringe-beacon-core {
           position: absolute;
