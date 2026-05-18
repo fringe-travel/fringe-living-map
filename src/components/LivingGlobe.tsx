@@ -117,30 +117,19 @@ function buildPins(): Pin[] {
   const pts: Pin[] = [];
   for (const r of regions) {
     const center = REGION_CENTER[r.slug] ?? [0, 0];
+    const latest = r.previewFeed[0];
     pts.push({
       id: `region-${r.slug}`,
       coords: center,
       label: r.name.replace(" Signal", ""),
       sublabel: r.country,
+      vibe: latest?.vibe,
+      by: latest?.by,
+      minutesAgo: latest?.minutesAgo,
+      tag: latest?.tag,
       slug: r.slug,
       isRegion: true,
     });
-    for (const d of r.previewFeed.slice(0, 3)) {
-      pts.push({
-        id: `${r.slug}-${d.spot}-${d.by}`,
-        coords: SPOT_COORDS[d.spot] ?? center,
-        label: d.spot,
-        sublabel: r.country,
-        vibe: d.vibe,
-        by: d.by,
-        minutesAgo: d.minutesAgo,
-        tag: d.tag,
-        slug: r.slug,
-      });
-    }
-  }
-  for (const a of AMBIENT_SPOTS) {
-    pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label, isAmbient: true });
   }
   return pts;
 }
