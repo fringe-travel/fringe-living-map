@@ -58,16 +58,8 @@ const TAG_EMOJI: Record<string, string> = {
 };
 
 const GLOBE_INITIAL_CENTER: [number, number] = [10, 0];
-const GLOBE_INITIAL_ZOOM = 0.62;
-
-function getGlobePadding(height: number) {
-  return {
-    top: 0,
-    right: 0,
-    bottom: Math.round(Math.min(680, Math.max(420, height * 0.72))),
-    left: 0,
-  };
-}
+const GLOBE_INITIAL_ZOOM = 0.58;
+const GLOBE_INITIAL_OFFSET: [number, number] = [0, -150];
 
 type Pin = {
   id: string;
@@ -179,13 +171,13 @@ export function LivingGlobe() {
         projection: "globe" as any,
         zoom: GLOBE_INITIAL_ZOOM,
         center: GLOBE_INITIAL_CENTER,
+        offset: GLOBE_INITIAL_OFFSET,
         pitch: 0,
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
       });
       mapRef.current = map;
-      (map as any).setPadding(getGlobePadding(containerRef.current.clientHeight));
 
       map.on("style.load", () => {
         map.setFog({
@@ -259,8 +251,6 @@ export function LivingGlobe() {
       const maxSpinZoom = 4;
 
       const frameGlobe = () => {
-        if (!containerRef.current) return;
-        (map as any).setPadding(getGlobePadding(containerRef.current.clientHeight));
         map.resize();
       };
 
