@@ -599,26 +599,39 @@ export function LivingGlobe() {
               <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/55">
                 Latest vibes
               </p>
-              <ul className="mt-3 space-y-2.5">
-                {selectedRegion.previewFeed.slice(0, 5).map((d, i) => {
+              <ul className="mt-3 grid grid-cols-2 gap-3">
+                {selectedRegion.previewFeed.slice(0, 4).map((d, i) => {
                   const emoji = TAG_EMOJI[d.tag] ?? "✨";
                   return (
                     <li
                       key={i}
-                      className="flex items-start gap-3 rounded-xl border border-border bg-background px-3 py-2.5"
+                      className="overflow-hidden rounded-xl border border-border bg-background"
                     >
-                      <span className="text-lg leading-none">{emoji}</span>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2">
+                      <div className="relative aspect-video w-full overflow-hidden bg-surface-2">
+                        <video
+                          src="/fringe-app-preview.mp4"
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                        <span className="absolute left-2 top-2 rounded-full bg-black/65 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-signal backdrop-blur-sm">
+                          ● Live
+                        </span>
+                        <span className="absolute right-2 top-2 rounded-full bg-black/65 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-white backdrop-blur-sm">
+                          {d.minutesAgo}m
+                        </span>
+                      </div>
+                      <div className="px-3 py-2.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-sm leading-none">{emoji}</span>
                           <span className="truncate text-xs font-bold text-foreground/90">
                             {d.spot}
                           </span>
-                          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-signal">
-                            {d.minutesAgo}m
-                          </span>
                         </div>
-                        <p className="mt-0.5 text-sm text-foreground/80">"{d.vibe}"</p>
-                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/45">
+                        <p className="mt-1 line-clamp-2 text-xs text-foreground/75">"{d.vibe}"</p>
+                        <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.15em] text-foreground/45">
                           @{d.by}
                         </p>
                       </div>
