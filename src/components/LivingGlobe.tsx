@@ -168,6 +168,7 @@ export function LivingGlobe() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const mapRef = useRef<any>(null);
+  const framedCenterLatRef = useRef(GLOBE_INITIAL_CENTER[1]);
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
@@ -229,22 +230,25 @@ export function LivingGlobe() {
         const targetBottom = rect.height - GLOBE_BOTTOM_MARGIN;
         const zoomScale = clamp(rect.height / bounds.height, 1, 1.28);
         const nextZoom = clamp(m.getZoom() + Math.log2(zoomScale), GLOBE_INITIAL_ZOOM, GLOBE_MAX_AUTO_ZOOM);
-        const center = m.getCenter();
         const bottomGap = targetBottom - bounds.bottom;
         const screenCenterY = rect.height / 2;
         const globeCenterY = (bounds.top + bounds.bottom) / 2;
         const verticalOffset = clamp(bottomGap + (screenCenterY - globeCenterY) * 0.18, -rect.height * 0.3, rect.height * 0.45);
 
         if (Math.abs(nextZoom - m.getZoom()) > 0.01) m.setZoom(nextZoom);
-        if (Math.abs(verticalOffset) > 2) m.panBy([0, -verticalOffset], { duration: 0 });
+        if (Math.abs(verticalOffset) > 2) m.panBy([0, verticalOffset], { duration: 0 });
+        framedCenterLatRef.current = m.getCenter().lat;
       } catch {}
     };
     const schedule = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
+      let passes = 0;
+      const tick = () => {
         apply();
-        raf = requestAnimationFrame(apply);
-      });
+        passes += 1;
+        if (passes < 8) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
     };
     schedule();
     const ro = new ResizeObserver(schedule);
@@ -350,7 +354,7 @@ export function LivingGlobe() {
           const distancePerSecond = 360 / secondsPerRevolution;
           const c = mapRef.current.getCenter();
           c.lng -= distancePerSecond;
-          c.lat = GLOBE_INITIAL_CENTER[1];
+          c.lat = framedCenterLatRef.current;
           mapRef.current.easeTo({ center: c, duration: 1000, easing: (n: number) => n });
         }
         spinTimer = window.setTimeout(spin, 1000);
@@ -390,7 +394,7 @@ export function LivingGlobe() {
 
   return (
     <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
-      <div ref={containerRef} className="absolute inset-0" />
+      <div ref={containerRef} className="living-globe-map absolute inset-0" />
 
       {!ready && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -593,7 +597,16 @@ export function LivingGlobe() {
           letter-spacing: 0.02em;
         }
 
-        .mapboxgl-canvas { outline: none; }
+        .living-globe-map,
+        .living-globe-map .mapboxgl-map,
+        .living-globe-map .mapboxgl-canvas-container,
+        .living-globe-map .mapboxgl-canvas {
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        .living-globe-map .mapboxgl-canvas { outline: none; }
       `}</style>
     </section>
   );
