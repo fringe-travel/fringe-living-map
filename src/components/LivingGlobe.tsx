@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { regions } from "@/lib/regions";
 
 const MAPBOX_TOKEN =
@@ -155,7 +155,39 @@ export function LivingGlobe() {
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const pins = useMemo(buildPins, []);
+
+  const totals = useMemo(() => {
+    const totalVibes = regions.reduce((s, r) => s + r.freshVibes, 0);
+    const totalSpots = regions.reduce((s, r) => s + r.activeSpots, 0);
+    return { totalVibes, totalSpots };
+  }, []);
+
+  // Simulated current-viewer ticker — derived from totals with gentle drift.
+  const [viewers, setViewers] = useState(() => totals.totalVibes * 347 + 11820);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setViewers((v) => {
+        const drift = Math.floor((Math.random() - 0.45) * 24);
+        const next = v + drift;
+        return next < 8000 ? 8000 + Math.floor(Math.random() * 50) : next;
+      });
+    }, 1800);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const selectedRegion = useMemo(
+    () => (selectedSlug ? regions.find((r) => r.slug === selectedSlug) ?? null : null),
+    [selectedSlug],
+  );
+
+  useEffect(() => {
+    if (!selectedSlug) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setSelectedSlug(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedSlug]);
 
   useEffect(() => {
     const onChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -340,7 +372,7 @@ export function LivingGlobe() {
             el.style.cursor = "pointer";
             el.addEventListener("click", (e) => {
               e.stopPropagation();
-              navigate({ to: "/regions/$slug", params: { slug: p.slug! } });
+              setSelectedSlug(p.slug!);
             });
           }
           const anchor = "center";
@@ -427,15 +459,19 @@ export function LivingGlobe() {
 
       {/* Top overlay: live badge + controls */}
       <div className="pointer-events-none absolute inset-x-0 top-16 z-10 flex flex-wrap items-center justify-between gap-2 px-3 pt-3 sm:gap-3 sm:px-6 sm:pt-4 md:pt-6">
-        <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/60 px-2.5 py-1 backdrop-blur-md sm:px-3 sm:py-1.5">
-          <span className="relative inline-flex size-1.5">
+        <div className="pointer-events-auto flex items-center gap-2.5 rounded-2xl border border-signal/40 bg-background/70 px-3.5 py-2 shadow-lg backdrop-blur-md sm:gap-3 sm:px-4 sm:py-2.5">
+          <span className="relative inline-flex size-2">
             <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
-            <span className="relative size-1.5 rounded-full bg-signal" />
+            <span className="relative size-2 rounded-full bg-signal" />
           </span>
-          <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-signal sm:text-[10px] sm:tracking-[0.25em]">
-            <span className="sm:hidden">Live</span>
-            <span className="hidden sm:inline">The Living Globe is on</span>
-          </span>
+          <div className="flex flex-col leading-tight">
+            <span className="text-sm font-extrabold tracking-tight text-foreground sm:text-base">
+              FRiNGE Sessions
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/70 sm:text-[11px]">
+              {totals.totalVibes} fresh vibes · {viewers.toLocaleString()} viewers
+            </span>
+          </div>
         </div>
         <div className="pointer-events-auto flex flex-wrap items-center justify-end gap-2">
           <div className="inline-flex overflow-hidden rounded-full border border-foreground/20 bg-background/60 backdrop-blur-md">
@@ -491,6 +527,120 @@ export function LivingGlobe() {
           Tap a region pin · drag to spin · pinch or +/− to zoom
         </p>
       </div>
+
+      {/* Spot card modal */}
+      {selectedRegion && (
+        <div
+          className="absolute inset-0 z-30 flex items-end justify-center bg-black/55 backdrop-blur-sm sm:items-center"
+          onClick={() => setSelectedSlug(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="relative w-full max-w-lg overflow-hidden rounded-t-3xl border border-signal/40 bg-background shadow-2xl sm:rounded-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="relative inline-flex size-2">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
+                    <span className="relative size-2 rounded-full bg-signal" />
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-signal">
+                    On air · {selectedRegion.lastUpdatedMin}m ago
+                  </span>
+                </div>
+                <h3 className="mt-1.5 text-2xl font-extrabold tracking-tight">
+                  {selectedRegion.name.replace(" Signal", "")}
+                </h3>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/55">
+                  {selectedRegion.country}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedSlug(null)}
+                aria-label="Close"
+                className="rounded-full border border-border bg-surface px-2.5 py-1 text-sm leading-none text-foreground/70 transition-colors hover:text-foreground"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 border-b border-border bg-surface/40 px-6 py-4 text-center">
+              <ModalStat n={selectedRegion.freshVibes} label="Fresh vibes" highlight />
+              <ModalStat n={selectedRegion.activeSpots} label="Active spots" />
+              <ModalStat n={selectedRegion.previewFeed.length} label="Recent drops" />
+            </div>
+
+            <div className="max-h-[55vh] overflow-y-auto px-6 py-5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/55">
+                Locations in the area
+              </p>
+              <ul className="mt-3 grid grid-cols-2 gap-2">
+                {selectedRegion.spots.map((s) => {
+                  const fresh = selectedRegion.previewFeed.find((d) => d.spot.includes(s));
+                  return (
+                    <li
+                      key={s}
+                      className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface/60 px-3 py-2 text-sm"
+                    >
+                      <span className="font-semibold text-foreground/90">{s}</span>
+                      <span
+                        className={`size-1.5 rounded-full ${fresh ? "bg-signal shadow-[0_0_8px_hsl(var(--signal))]" : "bg-foreground/20"}`}
+                        aria-label={fresh ? "Fresh vibe" : "Quiet"}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/55">
+                Latest vibes
+              </p>
+              <ul className="mt-3 space-y-2.5">
+                {selectedRegion.previewFeed.slice(0, 5).map((d, i) => {
+                  const emoji = TAG_EMOJI[d.tag] ?? "✨";
+                  return (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 rounded-xl border border-border bg-background px-3 py-2.5"
+                    >
+                      <span className="text-lg leading-none">{emoji}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="truncate text-xs font-bold text-foreground/90">
+                            {d.spot}
+                          </span>
+                          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-signal">
+                            {d.minutesAgo}m
+                          </span>
+                        </div>
+                        <p className="mt-0.5 text-sm text-foreground/80">"{d.vibe}"</p>
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/45">
+                          @{d.by}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <div className="border-t border-border bg-surface/40 px-6 py-4">
+              <Link
+                to="/regions/$slug"
+                params={{ slug: selectedRegion.slug }}
+                onClick={() => setSelectedSlug(null)}
+                className="block w-full rounded-xl bg-signal py-3 text-center text-sm font-extrabold uppercase tracking-[0.12em] text-background transition-transform hover:scale-[1.02]"
+              >
+                Open full signal →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         /* Ambient (label-only) pin */
@@ -652,40 +802,42 @@ export function LivingGlobe() {
           70%  { opacity: 0.15; }
           100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
-        /* Compact always-visible chip */
+        /* Compact always-visible chip — bigger, easier to read */
         .fringe-beacon-chip {
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, 22px);
+          transform: translate(-50%, 28px);
           display: inline-flex;
           align-items: center;
-          gap: 5px;
-          padding: 3px 8px 3px 7px;
-          background: rgba(6,9,11,0.82);
-          border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.4);
+          gap: 7px;
+          padding: 6px 13px 6px 11px;
+          background: rgba(6,9,11,0.88);
+          border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.55);
           border-radius: 9999px;
-          backdrop-filter: blur(6px);
+          backdrop-filter: blur(8px);
           font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-          font-size: 10px;
+          font-size: 13px;
           font-weight: 700;
-          letter-spacing: 0.04em;
+          letter-spacing: 0.01em;
           color: #fff;
           white-space: nowrap;
           pointer-events: none;
-          transition: opacity 0.15s ease;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.45), 0 0 18px hsl(var(--signal, 165 85% 56%) / 0.25);
+          transition: opacity 0.15s ease, transform 0.18s ease;
         }
         .fringe-beacon-chip-dot {
-          width: 5px; height: 5px; border-radius: 9999px;
+          width: 7px; height: 7px; border-radius: 9999px;
           background: hsl(var(--signal, 165 85% 56%));
-          box-shadow: 0 0 6px hsl(var(--signal, 165 85% 56%));
+          box-shadow: 0 0 8px hsl(var(--signal, 165 85% 56%));
         }
         .fringe-beacon:hover .fringe-beacon-chip {
-          opacity: 0;
+          transform: translate(-50%, 32px) scale(1.04);
         }
 
         /* Rich spot card */
         .fringe-card {
+          display: none;
           position: absolute;
           top: 50%;
           left: 50%;
@@ -846,5 +998,17 @@ export function LivingGlobe() {
         .living-globe-map .mapboxgl-canvas { outline: none; }
       `}</style>
     </section>
+  );
+}
+function ModalStat({ n, label, highlight }: { n: number; label: string; highlight?: boolean }) {
+  return (
+    <div>
+      <p className={`text-2xl font-extrabold tracking-tight ${highlight ? "text-signal" : "text-foreground"}`}>
+        {n}
+      </p>
+      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/55">
+        {label}
+      </p>
+    </div>
   );
 }
