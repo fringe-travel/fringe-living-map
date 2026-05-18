@@ -290,6 +290,7 @@ export function LivingGlobe() {
             `;
           } else if (p.isRegion) {
             el.className = "fringe-beacon";
+            const tagEmoji = p.tag ? TAG_EMOJI[p.tag] ?? "✨" : "✨";
             el.innerHTML = `
               <span class="fringe-beacon-rings">
                 <span class="fringe-beacon-ring r1"></span>
@@ -297,10 +298,28 @@ export function LivingGlobe() {
                 <span class="fringe-beacon-ring r3"></span>
               </span>
               <span class="fringe-beacon-core"></span>
-              <span class="fringe-beacon-label">
-                <span class="fringe-beacon-name">${escapeHtml(p.label)}</span>
-                ${p.sublabel ? `<span class="fringe-beacon-sub">${escapeHtml(p.sublabel)}</span>` : ""}
-              </span>
+              <div class="fringe-card" role="group">
+                <div class="fringe-card-head">
+                  <span class="fringe-card-live">
+                    <span class="fringe-card-live-dot"></span>LIVE
+                  </span>
+                  ${typeof p.lastUpdatedMin === "number" ? `<span class="fringe-card-time">${p.lastUpdatedMin}m ago</span>` : ""}
+                </div>
+                <div class="fringe-card-title">${escapeHtml(p.label)}</div>
+                ${p.sublabel ? `<div class="fringe-card-sub">${escapeHtml(p.sublabel)}</div>` : ""}
+                <div class="fringe-card-stats">
+                  ${typeof p.freshVibes === "number" ? `<span class="fringe-card-stat"><b>${p.freshVibes}</b> fresh</span>` : ""}
+                  ${typeof p.activeSpots === "number" ? `<span class="fringe-card-stat"><b>${p.activeSpots}</b> spots</span>` : ""}
+                </div>
+                ${p.vibe ? `
+                  <div class="fringe-card-quote">
+                    <span class="fringe-card-quote-tag">${tagEmoji}</span>
+                    <span class="fringe-card-quote-text">"${escapeHtml(p.vibe)}"</span>
+                  </div>
+                  ${p.by ? `<div class="fringe-card-by">@${escapeHtml(p.by)}</div>` : ""}
+                ` : ""}
+                <div class="fringe-card-cta">Open Signal <span aria-hidden>→</span></div>
+              </div>
             `;
           } else {
             el.className = "fringe-spot";
