@@ -187,12 +187,47 @@ export function LivingGlobe() {
 
         for (const p of pins) {
           const el = document.createElement("div");
-          el.className = "fringe-pin";
-          el.innerHTML = `
-            <span class="fringe-pin-ring"></span>
-            <span class="fringe-pin-dot ${p.isRegion ? "is-region" : ""}"></span>
-            <span class="fringe-pin-label">${p.label}</span>
-          `;
+          const emoji = p.tag ? TAG_EMOJI[p.tag] ?? "📍" : "📍";
+
+          if (p.isAmbient) {
+            el.className = "fringe-pin";
+            el.innerHTML = `
+              <span class="fringe-anchor"><span class="fringe-anchor-dot ambient"></span></span>
+              <span class="fringe-pin-label">${escapeHtml(p.label)}</span>
+            `;
+          } else if (p.isRegion) {
+            el.className = "fringe-spot-card region";
+            el.innerHTML = `
+              <div class="fringe-card-body">
+                <div class="fringe-card-row">
+                  <span class="fringe-card-emoji">🟢</span>
+                  <span class="fringe-card-title">${escapeHtml(p.label)}</span>
+                </div>
+                <div class="fringe-card-cta">Open Signal →</div>
+              </div>
+              <span class="fringe-card-tail"></span>
+              <span class="fringe-anchor"><span class="fringe-anchor-dot region"></span></span>
+            `;
+          } else {
+            el.className = "fringe-spot-card";
+            const meta = [
+              p.by ? `@${escapeHtml(p.by)}` : "",
+              p.minutesAgo != null ? `${p.minutesAgo}m ago` : "",
+            ].filter(Boolean).join(" · ");
+            el.innerHTML = `
+              <div class="fringe-card-body">
+                <div class="fringe-card-row">
+                  <span class="fringe-card-emoji">${emoji}</span>
+                  <span class="fringe-card-title">${escapeHtml(p.label)}</span>
+                </div>
+                ${p.vibe ? `<div class="fringe-card-vibe">${escapeHtml(p.vibe)}</div>` : ""}
+                ${meta ? `<div class="fringe-card-meta">${meta}</div>` : ""}
+              </div>
+              <span class="fringe-card-tail"></span>
+              <span class="fringe-anchor"><span class="fringe-anchor-dot"></span></span>
+            `;
+          }
+
           if (p.slug) {
             el.style.cursor = "pointer";
             el.addEventListener("click", (e) => {
@@ -200,11 +235,12 @@ export function LivingGlobe() {
               navigate({ to: "/regions/$slug", params: { slug: p.slug! } });
             });
           }
-          const m = new mapboxgl.Marker({ element: el, anchor: "center" })
+          const m = new mapboxgl.Marker({ element: el, anchor: "bottom", offset: [0, 0] })
             .setLngLat(p.coords)
             .addTo(map);
           markers.push(m);
         }
+
       });
 
       const secondsPerRevolution = 120;
