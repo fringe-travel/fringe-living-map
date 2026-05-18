@@ -155,7 +155,39 @@ export function LivingGlobe() {
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const pins = useMemo(buildPins, []);
+
+  const totals = useMemo(() => {
+    const totalVibes = regions.reduce((s, r) => s + r.freshVibes, 0);
+    const totalSpots = regions.reduce((s, r) => s + r.activeSpots, 0);
+    return { totalVibes, totalSpots };
+  }, []);
+
+  // Simulated current-viewer ticker — derived from totals with gentle drift.
+  const [viewers, setViewers] = useState(() => totals.totalVibes * 347 + 11820);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setViewers((v) => {
+        const drift = Math.floor((Math.random() - 0.45) * 24);
+        const next = v + drift;
+        return next < 8000 ? 8000 + Math.floor(Math.random() * 50) : next;
+      });
+    }, 1800);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const selectedRegion = useMemo(
+    () => (selectedSlug ? regions.find((r) => r.slug === selectedSlug) ?? null : null),
+    [selectedSlug],
+  );
+
+  useEffect(() => {
+    if (!selectedSlug) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setSelectedSlug(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedSlug]);
 
   useEffect(() => {
     const onChange = () => setIsFullscreen(!!document.fullscreenElement);
