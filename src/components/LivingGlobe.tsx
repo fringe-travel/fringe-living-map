@@ -165,8 +165,8 @@ export function LivingGlobe() {
         container: containerRef.current,
         style: "mapbox://styles/mapbox/satellite-v9",
         projection: "globe" as any,
-        zoom: 1.2,
-        center: [10, 20],
+        zoom: 0.9,
+        center: [10, 0],
         pitch: 0,
         attributionControl: false,
         interactive: true,
@@ -290,8 +290,8 @@ export function LivingGlobe() {
   }, [navigate, pins]);
 
   return (
-    <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] min-h-[620px] w-full overflow-hidden bg-background">
-      <div ref={containerRef} className="absolute inset-0" />
+    <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
+      <div ref={containerRef} className="absolute inset-x-0 -top-32 bottom-0" />
 
       {!ready && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
