@@ -57,8 +57,8 @@ const TAG_EMOJI: Record<string, string> = {
   vibe: "✨",
 };
 
-const GLOBE_INITIAL_CENTER: [number, number] = [10, 0];
-const GLOBE_INITIAL_ZOOM = 0.45;
+const GLOBE_INITIAL_CENTER: [number, number] = [10, 45];
+const GLOBE_INITIAL_ZOOM = 0.85;
 
 type Pin = {
   id: string;
@@ -257,6 +257,7 @@ export function LivingGlobe() {
           const distancePerSecond = 360 / secondsPerRevolution;
           const c = mapRef.current.getCenter();
           c.lng -= distancePerSecond;
+          c.lat = GLOBE_INITIAL_CENTER[1];
           mapRef.current.easeTo({ center: c, duration: 1000, easing: (n: number) => n });
         }
         spinTimer = window.setTimeout(spin, 1000);
