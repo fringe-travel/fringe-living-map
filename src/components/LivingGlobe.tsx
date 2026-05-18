@@ -440,84 +440,52 @@ export function LivingGlobe() {
           80%, 100% { transform: scale(2.2); opacity: 0; }
         }
 
-        /* Spot card — anchored above the location dot */
-        .fringe-spot-card {
+        /* Compact spot pin — icon centered on coord, two-line label below */
+        .fringe-spot {
           position: relative;
           display: flex;
           flex-direction: column;
           align-items: center;
           pointer-events: auto;
-          /* card grows up, anchor dot sits at bottom on the coord */
+          transition: transform 0.18s ease;
         }
-        .fringe-spot-card .fringe-card-body {
-          min-width: 150px;
-          max-width: 220px;
-          padding: 8px 10px;
-          border-radius: 10px;
-          background: rgba(10, 10, 14, 0.82);
-          border: 1px solid rgba(255,255,255,0.12);
-          backdrop-filter: blur(10px);
-          box-shadow: 0 10px 28px -10px rgba(0,0,0,0.75);
-          color: rgba(255,255,255,0.95);
-          font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif;
-          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-        }
-        .fringe-spot-card:hover .fringe-card-body {
-          transform: translateY(-2px);
-          border-color: hsl(var(--signal, 142 76% 55%) / 0.55);
-          box-shadow: 0 14px 36px -10px rgba(0,0,0,0.85), 0 0 0 1px hsl(var(--signal, 142 76% 55%) / 0.25);
-        }
-        .fringe-spot-card.region .fringe-card-body {
-          background: rgba(8, 20, 14, 0.88);
-          border-color: hsl(var(--signal, 142 76% 55%) / 0.45);
-        }
-        .fringe-card-row {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        .fringe-card-emoji {
-          font-size: 13px;
+        .fringe-spot:hover { transform: translateY(-1px); }
+        .fringe-spot-icon {
+          font-size: 16px;
           line-height: 1;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.85));
+          transition: transform 0.18s ease, filter 0.18s ease;
         }
-        .fringe-card-title {
-          font-size: 11px;
+        .fringe-spot:hover .fringe-spot-icon {
+          transform: scale(1.15);
+          filter: drop-shadow(0 0 8px hsl(var(--signal, 142 76% 55%) / 0.9));
+        }
+        .fringe-spot-icon.region {
+          font-size: 12px;
+        }
+        .fringe-spot-label {
+          margin-top: 2px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          line-height: 1.15;
+          text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 6px rgba(0,0,0,0.85);
+          white-space: nowrap;
+          pointer-events: none;
+        }
+        .fringe-spot-name {
+          font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif;
+          font-size: 10px;
           font-weight: 700;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.96);
+          color: rgba(255,255,255,0.98);
+          letter-spacing: 0.02em;
         }
-        .fringe-card-vibe {
-          margin-top: 4px;
-          font-size: 11px;
-          line-height: 1.35;
-          color: rgba(255,255,255,0.82);
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        .fringe-card-meta {
-          margin-top: 6px;
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        .fringe-spot-sub {
+          font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif;
           font-size: 9px;
-          letter-spacing: 0.15em;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.55);
-        }
-        .fringe-card-cta {
-          margin-top: 4px;
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-          font-size: 9px;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          color: hsl(var(--signal, 142 76% 55%));
-        }
-        /* Tail / connector from card to anchor dot */
-        .fringe-card-tail {
-          width: 2px;
-          height: 10px;
-          background: linear-gradient(to bottom, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+          font-weight: 500;
+          color: rgba(255,255,255,0.78);
+          letter-spacing: 0.02em;
         }
 
         .mapboxgl-canvas { outline: none; }
