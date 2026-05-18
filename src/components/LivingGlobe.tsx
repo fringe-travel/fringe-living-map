@@ -357,24 +357,37 @@ export function LivingGlobe() {
 
       const frameGlobe = () => map.resize();
 
+      let userHasInteracted = false;
+
       const spin = () => {
         if (!mapRef.current) return;
         const z = mapRef.current.getZoom();
-        if (!userInteracting && z < maxSpinZoom) {
+        if (!userInteracting && !userHasInteracted && z < maxSpinZoom) {
           const distancePerSecond = 360 / secondsPerRevolution;
           const c = mapRef.current.getCenter();
           c.lng -= distancePerSecond;
           c.lat = framedCenterLatRef.current;
           mapRef.current.easeTo({ center: c, duration: 1000, easing: (n: number) => n });
         }
-        spinTimer = window.setTimeout(spin, 1000);
+        if (!userHasInteracted) {
+          spinTimer = window.setTimeout(spin, 1000);
+        }
       };
 
-      map.on("mousedown", () => { userInteracting = true; });
+      const stopSpin = () => {
+        userHasInteracted = true;
+        if (spinTimer) {
+          clearTimeout(spinTimer);
+          spinTimer = undefined;
+        }
+      };
+
+      map.on("mousedown", () => { userInteracting = true; stopSpin(); });
       map.on("mouseup", () => { userInteracting = false; });
       map.on("dragend", () => { userInteracting = false; });
-      map.on("touchstart", () => { userInteracting = true; });
+      map.on("touchstart", () => { userInteracting = true; stopSpin(); });
       map.on("touchend", () => { userInteracting = false; });
+      map.on("wheel", stopSpin);
 
       spinTimer = window.setTimeout(spin, 1500);
 
