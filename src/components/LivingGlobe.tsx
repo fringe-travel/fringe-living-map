@@ -115,6 +115,7 @@ type Pin = {
   activeSpots?: number;
   lastUpdatedMin?: number;
   tags?: string;
+  image?: string;
 };
 
 function buildPins(): Pin[] {
@@ -137,6 +138,7 @@ function buildPins(): Pin[] {
       activeSpots: r.activeSpots,
       lastUpdatedMin: r.lastUpdatedMin,
       tags: r.tags,
+      image: r.image,
     });
   }
   return pts;
