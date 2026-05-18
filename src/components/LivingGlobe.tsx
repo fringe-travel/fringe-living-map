@@ -169,7 +169,7 @@ export function LivingGlobe() {
         zoom: 1.4,
         center: [10, 20],
         pitch: 0,
-        padding: { top: 0, bottom: 160, left: 0, right: 0 } as any,
+        ...({ padding: { top: 0, bottom: 160, left: 0, right: 0 } } as any),
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
