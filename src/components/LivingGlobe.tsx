@@ -459,15 +459,19 @@ export function LivingGlobe() {
 
       {/* Top overlay: live badge + controls */}
       <div className="pointer-events-none absolute inset-x-0 top-16 z-10 flex flex-wrap items-center justify-between gap-2 px-3 pt-3 sm:gap-3 sm:px-6 sm:pt-4 md:pt-6">
-        <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-signal/40 bg-background/60 px-2.5 py-1 backdrop-blur-md sm:px-3 sm:py-1.5">
-          <span className="relative inline-flex size-1.5">
+        <div className="pointer-events-auto flex items-center gap-2.5 rounded-2xl border border-signal/40 bg-background/70 px-3.5 py-2 shadow-lg backdrop-blur-md sm:gap-3 sm:px-4 sm:py-2.5">
+          <span className="relative inline-flex size-2">
             <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
-            <span className="relative size-1.5 rounded-full bg-signal" />
+            <span className="relative size-2 rounded-full bg-signal" />
           </span>
-          <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-signal sm:text-[10px] sm:tracking-[0.25em]">
-            <span className="sm:hidden">Live</span>
-            <span className="hidden sm:inline">The Living Globe is on</span>
-          </span>
+          <div className="flex flex-col leading-tight">
+            <span className="text-sm font-extrabold tracking-tight text-foreground sm:text-base">
+              FRiNGE Sessions
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/70 sm:text-[11px]">
+              {totals.totalVibes} fresh vibes · {viewers.toLocaleString()} viewers
+            </span>
+          </div>
         </div>
         <div className="pointer-events-auto flex flex-wrap items-center justify-end gap-2">
           <div className="inline-flex overflow-hidden rounded-full border border-foreground/20 bg-background/60 backdrop-blur-md">
