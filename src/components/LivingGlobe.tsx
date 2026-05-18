@@ -333,6 +333,7 @@ export function LivingGlobe() {
               <span class="fringe-beacon-chip">
                 <span class="fringe-beacon-chip-dot"></span>
                 ${escapeHtml(p.label)}
+                ${typeof p.freshVibes === "number" ? `<span class="fringe-beacon-chip-viewers" aria-label="viewers"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>${(p.freshVibes * 37 + 184).toLocaleString()}</span>` : ""}
               </span>
               <div class="fringe-card" role="group">
                 <div class="fringe-card-head">
