@@ -31,7 +31,7 @@ export function SiteNav() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+      <div className="flex h-16 w-full items-center justify-between px-4 sm:px-6">
         <Link to="/" onClick={closeMenu} className="flex flex-col leading-none">
           <span className="text-xl font-extrabold tracking-tighter text-foreground">FRiNGE</span>
           <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary">
