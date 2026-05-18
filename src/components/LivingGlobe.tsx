@@ -171,11 +171,11 @@ export function LivingGlobe() {
         zoom: 0.95,
         center: [10, 0],
         pitch: 0,
-        padding: { bottom: bottomGlobePadding },
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
       });
+      map.setPadding({ bottom: bottomGlobePadding });
       mapRef.current = map;
 
       map.on("style.load", () => {
