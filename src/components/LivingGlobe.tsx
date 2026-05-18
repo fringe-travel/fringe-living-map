@@ -602,21 +602,6 @@ export function LivingGlobe() {
           letter-spacing: 0.02em;
         }
 
-        .living-globe-map,
-        .living-globe-map .mapboxgl-map,
-        .living-globe-map .mapboxgl-canvas-container,
-        .living-globe-map .mapboxgl-canvas {
-          position: absolute !important;
-          inset: 0 !important;
-          width: 100% !important;
-          height: 100% !important;
-        }
-        .living-globe-map .mapboxgl-canvas { outline: none; }
-      `}</style>
-    </section>
-  );
-        }
-
         /* Radiant pulse beacon — for live regions */
         .fringe-beacon {
           position: relative;
@@ -656,8 +641,8 @@ export function LivingGlobe() {
           animation: fringe-beacon-ping 2.6s cubic-bezier(0,0,0.2,1) infinite;
         }
         .fringe-beacon-ring.r1 { width: 28px; height: 28px; animation-delay: 0s; }
-        .fringe-beacon-ring.r2 { width: 44px; height: 44px; animation-delay: 0.6s; opacity: 0; }
-        .fringe-beacon-ring.r3 { width: 60px; height: 60px; animation-delay: 1.2s; opacity: 0; }
+        .fringe-beacon-ring.r2 { width: 44px; height: 44px; animation-delay: 0.6s; }
+        .fringe-beacon-ring.r3 { width: 60px; height: 60px; animation-delay: 1.2s; }
         @keyframes fringe-beacon-ping {
           0%   { transform: translate(-50%, -50%) scale(0.35); opacity: 0.9; }
           70%  { opacity: 0.15; }
@@ -701,4 +686,18 @@ export function LivingGlobe() {
             0 0 16px hsl(var(--signal, 165 85% 56%)),
             0 0 36px hsl(var(--signal, 165 85% 56%) / 0.8);
         }
-        .fringe-beacon[style*="cursor: pointer"] { cursor: pointer; }
+
+        .living-globe-map,
+        .living-globe-map .mapboxgl-map,
+        .living-globe-map .mapboxgl-canvas-container,
+        .living-globe-map .mapboxgl-canvas {
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        .living-globe-map .mapboxgl-canvas { outline: none; }
+      `}</style>
+    </section>
+  );
+}
