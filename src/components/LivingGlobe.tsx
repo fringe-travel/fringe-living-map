@@ -47,13 +47,27 @@ const AMBIENT_SPOTS: { coords: [number, number]; label: string }[] = [
   { coords: [100.5, 13.7], label: "Bangkok" },
 ];
 
+const TAG_EMOJI: Record<string, string> = {
+  crowd: "👥",
+  wind: "💨",
+  sunset: "🌅",
+  food: "🍽️",
+  music: "🎶",
+  surf: "🏄",
+  vibe: "✨",
+};
+
 type Pin = {
   id: string;
   coords: [number, number];
   label: string;
   vibe?: string;
+  by?: string;
+  minutesAgo?: number;
+  tag?: string;
   slug?: string;
   isRegion?: boolean;
+  isAmbient?: boolean;
 };
 
 function buildPins(): Pin[] {
@@ -73,14 +87,21 @@ function buildPins(): Pin[] {
         coords: SPOT_COORDS[d.spot] ?? center,
         label: d.spot,
         vibe: d.vibe,
+        by: d.by,
+        minutesAgo: d.minutesAgo,
+        tag: d.tag,
         slug: r.slug,
       });
     }
   }
   for (const a of AMBIENT_SPOTS) {
-    pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label });
+    pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label, isAmbient: true });
   }
   return pts;
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 }
 
 export function LivingGlobe() {
@@ -166,12 +187,47 @@ export function LivingGlobe() {
 
         for (const p of pins) {
           const el = document.createElement("div");
-          el.className = "fringe-pin";
-          el.innerHTML = `
-            <span class="fringe-pin-ring"></span>
-            <span class="fringe-pin-dot ${p.isRegion ? "is-region" : ""}"></span>
-            <span class="fringe-pin-label">${p.label}</span>
-          `;
+          const emoji = p.tag ? TAG_EMOJI[p.tag] ?? "📍" : "📍";
+
+          if (p.isAmbient) {
+            el.className = "fringe-pin";
+            el.innerHTML = `
+              <span class="fringe-anchor"><span class="fringe-anchor-dot ambient"></span></span>
+              <span class="fringe-pin-label">${escapeHtml(p.label)}</span>
+            `;
+          } else if (p.isRegion) {
+            el.className = "fringe-spot-card region";
+            el.innerHTML = `
+              <div class="fringe-card-body">
+                <div class="fringe-card-row">
+                  <span class="fringe-card-emoji">🟢</span>
+                  <span class="fringe-card-title">${escapeHtml(p.label)}</span>
+                </div>
+                <div class="fringe-card-cta">Open Signal →</div>
+              </div>
+              <span class="fringe-card-tail"></span>
+              <span class="fringe-anchor"><span class="fringe-anchor-dot region"></span></span>
+            `;
+          } else {
+            el.className = "fringe-spot-card";
+            const meta = [
+              p.by ? `@${escapeHtml(p.by)}` : "",
+              p.minutesAgo != null ? `${p.minutesAgo}m ago` : "",
+            ].filter(Boolean).join(" · ");
+            el.innerHTML = `
+              <div class="fringe-card-body">
+                <div class="fringe-card-row">
+                  <span class="fringe-card-emoji">${emoji}</span>
+                  <span class="fringe-card-title">${escapeHtml(p.label)}</span>
+                </div>
+                ${p.vibe ? `<div class="fringe-card-vibe">${escapeHtml(p.vibe)}</div>` : ""}
+                ${meta ? `<div class="fringe-card-meta">${meta}</div>` : ""}
+              </div>
+              <span class="fringe-card-tail"></span>
+              <span class="fringe-anchor"><span class="fringe-anchor-dot"></span></span>
+            `;
+          }
+
           if (p.slug) {
             el.style.cursor = "pointer";
             el.addEventListener("click", (e) => {
@@ -179,11 +235,12 @@ export function LivingGlobe() {
               navigate({ to: "/regions/$slug", params: { slug: p.slug! } });
             });
           }
-          const m = new mapboxgl.Marker({ element: el, anchor: "center" })
+          const m = new mapboxgl.Marker({ element: el, anchor: "bottom", offset: [0, 0] })
             .setLngLat(p.coords)
             .addTo(map);
           markers.push(m);
         }
+
       });
 
       const secondsPerRevolution = 120;
@@ -325,35 +382,60 @@ export function LivingGlobe() {
       </div>
 
       <style>{`
+        /* Ambient (label-only) pin */
         .fringe-pin {
           position: relative;
           display: flex;
           flex-direction: column;
           align-items: center;
-          transform: translate(-50%, -50%);
           pointer-events: auto;
         }
-        .fringe-pin-dot {
-          display: block;
+        .fringe-pin-label {
+          margin-top: 4px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.85);
+          background: rgba(0,0,0,0.5);
+          padding: 2px 6px;
+          border-radius: 4px;
+          white-space: nowrap;
+          backdrop-filter: blur(4px);
+        }
+
+        /* Anchor dot — sits exactly on the lng/lat */
+        .fringe-anchor {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 14px;
+          height: 14px;
+        }
+        .fringe-anchor-dot {
           width: 10px;
           height: 10px;
           border-radius: 9999px;
           background: hsl(var(--sunset, 28 92% 60%));
-          box-shadow: 0 0 0 2px rgba(0,0,0,0.6), 0 0 16px rgba(255,180,80,0.7);
+          box-shadow: 0 0 0 2px rgba(0,0,0,0.65), 0 0 14px rgba(255,180,80,0.75);
         }
-        .fringe-pin-dot.is-region {
-          width: 14px;
-          height: 14px;
+        .fringe-anchor-dot.region {
+          width: 12px; height: 12px;
           background: hsl(var(--signal, 142 76% 55%));
-          box-shadow: 0 0 0 2px rgba(0,0,0,0.7), 0 0 20px rgba(80,255,160,0.85);
+          box-shadow: 0 0 0 2px rgba(0,0,0,0.7), 0 0 18px rgba(80,255,160,0.9);
         }
-        .fringe-pin-ring {
+        .fringe-anchor-dot.ambient {
+          width: 8px; height: 8px;
+          background: rgba(255,255,255,0.85);
+          box-shadow: 0 0 0 2px rgba(0,0,0,0.6), 0 0 10px rgba(255,255,255,0.5);
+        }
+        .fringe-anchor-dot::after {
+          content: "";
           position: absolute;
-          top: 0; left: 50%;
-          width: 22px; height: 22px;
-          margin-left: -11px;
+          inset: -6px;
           border-radius: 9999px;
-          border: 1.5px solid rgba(255,255,255,0.65);
+          border: 1.5px solid rgba(255,255,255,0.55);
           animation: fringe-ping 2.4s cubic-bezier(0,0,0.2,1) infinite;
           opacity: 0;
         }
@@ -361,21 +443,90 @@ export function LivingGlobe() {
           0% { transform: scale(0.4); opacity: 0.9; }
           80%, 100% { transform: scale(2.2); opacity: 0; }
         }
-        .fringe-pin-label {
+
+        /* Spot card — anchored above the location dot */
+        .fringe-spot-card {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          pointer-events: auto;
+          /* card grows up, anchor dot sits at bottom on the coord */
+        }
+        .fringe-spot-card .fringe-card-body {
+          min-width: 150px;
+          max-width: 220px;
+          padding: 8px 10px;
+          border-radius: 10px;
+          background: rgba(10, 10, 14, 0.82);
+          border: 1px solid rgba(255,255,255,0.12);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 10px 28px -10px rgba(0,0,0,0.75);
+          color: rgba(255,255,255,0.95);
+          font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif;
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+        .fringe-spot-card:hover .fringe-card-body {
+          transform: translateY(-2px);
+          border-color: hsl(var(--signal, 142 76% 55%) / 0.55);
+          box-shadow: 0 14px 36px -10px rgba(0,0,0,0.85), 0 0 0 1px hsl(var(--signal, 142 76% 55%) / 0.25);
+        }
+        .fringe-spot-card.region .fringe-card-body {
+          background: rgba(8, 20, 14, 0.88);
+          border-color: hsl(var(--signal, 142 76% 55%) / 0.45);
+        }
+        .fringe-card-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .fringe-card-emoji {
+          font-size: 13px;
+          line-height: 1;
+        }
+        .fringe-card-title {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.96);
+        }
+        .fringe-card-vibe {
+          margin-top: 4px;
+          font-size: 11px;
+          line-height: 1.35;
+          color: rgba(255,255,255,0.82);
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .fringe-card-meta {
           margin-top: 6px;
           font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
           font-size: 9px;
-          letter-spacing: 0.18em;
+          letter-spacing: 0.15em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.92);
-          background: rgba(0,0,0,0.55);
-          padding: 2px 6px;
-          border-radius: 4px;
-          white-space: nowrap;
-          backdrop-filter: blur(4px);
+          color: rgba(255,255,255,0.55);
         }
+        .fringe-card-cta {
+          margin-top: 4px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: hsl(var(--signal, 142 76% 55%));
+        }
+        /* Tail / connector from card to anchor dot */
+        .fringe-card-tail {
+          width: 2px;
+          height: 10px;
+          background: linear-gradient(to bottom, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+        }
+
         .mapboxgl-canvas { outline: none; }
       `}</style>
     </section>
   );
 }
+
