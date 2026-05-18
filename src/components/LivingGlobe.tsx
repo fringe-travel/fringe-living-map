@@ -784,17 +784,23 @@ export function LivingGlobe() {
           position: absolute;
           top: 0;
           left: 0;
-          width: 10px;
-          height: 10px;
-          margin: -5px 0 0 -5px;
+          width: 16px;
+          height: 16px;
+          margin: -8px 0 0 -8px;
           border-radius: 9999px;
-          background: hsl(var(--signal, 165 85% 56%));
+          background: radial-gradient(circle at 30% 30%, #fff 0%, hsl(var(--signal, 165 85% 56%)) 55%, hsl(var(--signal, 165 85% 56%) / 0.85) 100%);
           box-shadow:
-            0 0 0 2px rgba(0,0,0,0.55),
-            0 0 12px hsl(var(--signal, 165 85% 56%) / 0.95),
-            0 0 28px hsl(var(--signal, 165 85% 56%) / 0.65);
+            0 0 0 2px rgba(0,0,0,0.6),
+            0 0 0 4px hsl(var(--signal, 165 85% 56%) / 0.35),
+            0 0 18px hsl(var(--signal, 165 85% 56%) / 0.95),
+            0 0 36px hsl(var(--signal, 165 85% 56%) / 0.7);
           z-index: 2;
           pointer-events: auto;
+          animation: fringe-beacon-core-pulse 2.2s ease-in-out infinite;
+        }
+        @keyframes fringe-beacon-core-pulse {
+          0%, 100% { transform: scale(1); }
+          50%      { transform: scale(1.18); }
         }
         .fringe-beacon-rings {
           position: absolute;
@@ -812,9 +818,9 @@ export function LivingGlobe() {
           opacity: 0;
           animation: fringe-beacon-ping 2.6s cubic-bezier(0,0,0.2,1) infinite;
         }
-        .fringe-beacon-ring.r1 { width: 28px; height: 28px; animation-delay: 0s; }
-        .fringe-beacon-ring.r2 { width: 44px; height: 44px; animation-delay: 0.6s; }
-        .fringe-beacon-ring.r3 { width: 60px; height: 60px; animation-delay: 1.2s; }
+        .fringe-beacon-ring.r1 { width: 36px; height: 36px; animation-delay: 0s; }
+        .fringe-beacon-ring.r2 { width: 56px; height: 56px; animation-delay: 0.6s; }
+        .fringe-beacon-ring.r3 { width: 78px; height: 78px; animation-delay: 1.2s; }
         @keyframes fringe-beacon-ping {
           0%   { transform: translate(-50%, -50%) scale(0.35); opacity: 0.9; }
           70%  { opacity: 0.15; }
