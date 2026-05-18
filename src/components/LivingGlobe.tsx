@@ -59,7 +59,6 @@ const TAG_EMOJI: Record<string, string> = {
 
 const GLOBE_INITIAL_CENTER: [number, number] = [10, 0];
 const GLOBE_INITIAL_ZOOM = 0.58;
-const GLOBE_INITIAL_OFFSET: [number, number] = [0, -150];
 
 type Pin = {
   id: string;
@@ -177,7 +176,6 @@ export function LivingGlobe() {
         scrollZoom: false,
       });
       mapRef.current = map;
-      map.jumpTo({ center: GLOBE_INITIAL_CENTER, zoom: GLOBE_INITIAL_ZOOM, offset: GLOBE_INITIAL_OFFSET } as any);
 
       map.on("style.load", () => {
         map.setFog({
@@ -250,9 +248,7 @@ export function LivingGlobe() {
       const secondsPerRevolution = 120;
       const maxSpinZoom = 4;
 
-      const frameGlobe = () => {
-        map.resize();
-      };
+      const frameGlobe = () => map.resize();
 
       const spin = () => {
         if (!mapRef.current) return;
@@ -300,7 +296,7 @@ export function LivingGlobe() {
 
   return (
     <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
-      <div ref={containerRef} className="absolute inset-0" />
+      <div ref={containerRef} className="absolute inset-x-0 -top-40 bottom-0" />
 
       {!ready && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
