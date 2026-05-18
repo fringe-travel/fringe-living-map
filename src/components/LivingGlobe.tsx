@@ -58,7 +58,7 @@ const TAG_EMOJI: Record<string, string> = {
 };
 
 const GLOBE_INITIAL_CENTER: [number, number] = [10, -80];
-const GLOBE_INITIAL_ZOOM = 0.85;
+const GLOBE_INITIAL_ZOOM = 1.4;
 
 type Pin = {
   id: string;
