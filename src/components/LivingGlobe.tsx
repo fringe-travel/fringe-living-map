@@ -440,16 +440,16 @@ export function LivingGlobe() {
           80%, 100% { transform: scale(2.2); opacity: 0; }
         }
 
-        /* Compact spot pin — icon centered on coord, two-line label below */
+        /* Compact spot pin — icon centered exactly on coord, label floats below without affecting anchor */
         .fringe-spot {
           position: relative;
+          width: 0;
+          height: 0;
           display: flex;
-          flex-direction: column;
           align-items: center;
+          justify-content: center;
           pointer-events: auto;
-          transition: transform 0.18s ease;
         }
-        .fringe-spot:hover { transform: translateY(-1px); }
         .fringe-spot-icon {
           font-size: 16px;
           line-height: 1;
@@ -464,7 +464,10 @@ export function LivingGlobe() {
           font-size: 12px;
         }
         .fringe-spot-label {
-          margin-top: 2px;
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translate(-50%, 4px);
           display: flex;
           flex-direction: column;
           align-items: center;
