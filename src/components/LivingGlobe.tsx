@@ -307,12 +307,17 @@ export function LivingGlobe() {
               <span class="fringe-pin-label">${escapeHtml(p.label)}</span>
             `;
           } else if (p.isRegion) {
-            el.className = "fringe-spot";
+            el.className = "fringe-beacon";
             el.innerHTML = `
-              <span class="fringe-spot-icon region">🟢</span>
-              <span class="fringe-spot-label">
-                <span class="fringe-spot-name">${escapeHtml(p.label)}</span>
-                ${p.sublabel ? `<span class="fringe-spot-sub">${escapeHtml(p.sublabel)}</span>` : ""}
+              <span class="fringe-beacon-rings">
+                <span class="fringe-beacon-ring r1"></span>
+                <span class="fringe-beacon-ring r2"></span>
+                <span class="fringe-beacon-ring r3"></span>
+              </span>
+              <span class="fringe-beacon-core"></span>
+              <span class="fringe-beacon-label">
+                <span class="fringe-beacon-name">${escapeHtml(p.label)}</span>
+                ${p.sublabel ? `<span class="fringe-beacon-sub">${escapeHtml(p.sublabel)}</span>` : ""}
               </span>
             `;
           } else {
@@ -597,6 +602,91 @@ export function LivingGlobe() {
           letter-spacing: 0.02em;
         }
 
+        /* Radiant pulse beacon — for live regions */
+        .fringe-beacon {
+          position: relative;
+          width: 0;
+          height: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          pointer-events: auto;
+        }
+        .fringe-beacon-core {
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          border-radius: 9999px;
+          background: hsl(var(--signal, 165 85% 56%));
+          box-shadow:
+            0 0 0 2px rgba(0,0,0,0.55),
+            0 0 12px hsl(var(--signal, 165 85% 56%) / 0.95),
+            0 0 28px hsl(var(--signal, 165 85% 56%) / 0.65);
+          z-index: 2;
+        }
+        .fringe-beacon-rings {
+          position: absolute;
+          inset: 0;
+          display: block;
+          pointer-events: none;
+        }
+        .fringe-beacon-ring {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          border-radius: 9999px;
+          border: 1.5px solid hsl(var(--signal, 165 85% 56%));
+          transform: translate(-50%, -50%) scale(0.4);
+          opacity: 0;
+          animation: fringe-beacon-ping 2.6s cubic-bezier(0,0,0.2,1) infinite;
+        }
+        .fringe-beacon-ring.r1 { width: 28px; height: 28px; animation-delay: 0s; }
+        .fringe-beacon-ring.r2 { width: 44px; height: 44px; animation-delay: 0.6s; }
+        .fringe-beacon-ring.r3 { width: 60px; height: 60px; animation-delay: 1.2s; }
+        @keyframes fringe-beacon-ping {
+          0%   { transform: translate(-50%, -50%) scale(0.35); opacity: 0.9; }
+          70%  { opacity: 0.15; }
+          100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        .fringe-beacon-label {
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translate(-50%, 18px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1px;
+          padding: 3px 7px;
+          background: rgba(0,0,0,0.78);
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 4px;
+          backdrop-filter: blur(6px);
+          white-space: nowrap;
+          pointer-events: none;
+        }
+        .fringe-beacon-name {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.98);
+        }
+        .fringe-beacon-sub {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 8.5px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: hsl(var(--signal, 165 85% 56%) / 0.85);
+        }
+        .fringe-beacon:hover .fringe-beacon-core {
+          box-shadow:
+            0 0 0 2px rgba(0,0,0,0.55),
+            0 0 16px hsl(var(--signal, 165 85% 56%)),
+            0 0 36px hsl(var(--signal, 165 85% 56%) / 0.8);
+        }
+
         .living-globe-map,
         .living-globe-map .mapboxgl-map,
         .living-globe-map .mapboxgl-canvas-container,
@@ -611,4 +701,3 @@ export function LivingGlobe() {
     </section>
   );
 }
-
