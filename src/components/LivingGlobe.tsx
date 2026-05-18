@@ -59,17 +59,59 @@ const TAG_EMOJI: Record<string, string> = {
 
 const GLOBE_INITIAL_CENTER: [number, number] = [-98, 40];
 const GLOBE_INITIAL_ZOOM = 2.3;
+const GLOBE_MAX_AUTO_ZOOM = 3.45;
+const GLOBE_BOTTOM_MARGIN = 2;
 
-// Compute the zoom level needed for the globe sphere to fill the
-// container's shorter dimension. In Mapbox's globe projection the sphere's
-// on-screen diameter is approximately (tileSize * 2^zoom) / PI with
-// tileSize = 512. Solving for zoom given a desired diameter in CSS pixels:
-//   zoom = log2(diameter * PI / 512)
-// `fill` lets callers slightly over- or under-fill (1 = tangent to edges).
-function zoomToFill(widthPx: number, heightPx: number, fill = 1): number {
-  const target = Math.min(widthPx, heightPx) * fill;
-  if (target <= 0) return GLOBE_INITIAL_ZOOM;
-  return Math.log2((target * Math.PI) / 512);
+function clamp(n: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, n));
+}
+
+function isGlobePixel(r: number, g: number, b: number, a: number): boolean {
+  if (a < 20) return false;
+  if (r > 238 && g > 238 && b > 238) return false;
+  const avg = (r + g + b) / 3;
+  return (b > 42 && avg > 28) || (g > 48 && avg > 34) || (r > 58 && g > 48 && b > 32);
+}
+
+function measureRenderedGlobeBounds(container: HTMLDivElement): { top: number; bottom: number; height: number } | null {
+  const canvas = container.querySelector(".mapboxgl-canvas") as HTMLCanvasElement | null;
+  if (!canvas || canvas.clientWidth === 0 || canvas.clientHeight === 0) return null;
+  const gl = (canvas.getContext("webgl2") || canvas.getContext("webgl")) as WebGL2RenderingContext | WebGLRenderingContext | null;
+  if (!gl) return null;
+
+  const width = gl.drawingBufferWidth;
+  const height = gl.drawingBufferHeight;
+  if (width <= 0 || height <= 0) return null;
+
+  const pixels = new Uint8Array(width * height * 4);
+  try {
+    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+  } catch {
+    return null;
+  }
+
+  const step = clamp(Math.floor(Math.min(width, height) / 220), 3, 8);
+  const xMin = Math.floor(width * 0.2);
+  const xMax = Math.floor(width * 0.8);
+  const minRowHits = Math.max(8, Math.floor(((xMax - xMin) / step) * 0.07));
+  let top = Infinity;
+  let bottom = -Infinity;
+
+  for (let y = 0; y < height; y += step) {
+    let hits = 0;
+    for (let x = xMin; x < xMax; x += step) {
+      const idx = (y * width + x) * 4;
+      if (isGlobePixel(pixels[idx], pixels[idx + 1], pixels[idx + 2], pixels[idx + 3])) hits += 1;
+    }
+    if (hits >= minRowHits) {
+      const cssY = canvas.clientHeight - (y / height) * canvas.clientHeight;
+      top = Math.min(top, cssY);
+      bottom = Math.max(bottom, cssY);
+    }
+  }
+
+  if (!Number.isFinite(top) || !Number.isFinite(bottom) || bottom <= top) return null;
+  return { top, bottom, height: bottom - top };
 }
 
 type Pin = {
@@ -126,6 +168,7 @@ export function LivingGlobe() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const mapRef = useRef<any>(null);
+  const framedCenterLatRef = useRef(GLOBE_INITIAL_CENTER[1]);
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
@@ -166,30 +209,54 @@ export function LivingGlobe() {
     } catch {}
   }, [mode]);
 
-  // Keep the globe sphere sized to the container: recompute the zoom that
-  // makes the sphere's diameter equal the container's shorter side whenever
-  // the container resizes, the projection mode changes, or fullscreen toggles.
+  // Use the rendered canvas itself as the source of truth. Mapbox's globe
+  // projection is non-linear, so formula-only zoom guesses drift across
+  // viewport sizes; measuring the actual drawn sphere lets us correct both
+  // zoom and vertical framing until the bottom reaches the container edge.
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const apply = (animate: boolean) => {
+    let raf = 0;
+    const apply = () => {
       const m = mapRef.current;
       if (!m) return;
       const rect = el.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
-      // Slightly over-fill so the sphere meets the top/bottom edges instead
-      // of leaving a visible gap above the bottom hint line.
-      const z = zoomToFill(rect.width, rect.height, 1.02);
       try {
         m.resize();
-        if (animate) m.easeTo({ zoom: z, duration: 500 });
-        else m.setZoom(z);
+        const bounds = mode === "3d" ? measureRenderedGlobeBounds(el) : null;
+        if (!bounds) return;
+
+        const targetBottom = rect.height - GLOBE_BOTTOM_MARGIN;
+        const zoomScale = clamp(rect.height / bounds.height, 1, 1.28);
+        const nextZoom = clamp(m.getZoom() + Math.log2(zoomScale), GLOBE_INITIAL_ZOOM, GLOBE_MAX_AUTO_ZOOM);
+        const bottomGap = targetBottom - bounds.bottom;
+        const screenCenterY = rect.height / 2;
+        const globeCenterY = (bounds.top + bounds.bottom) / 2;
+        const verticalOffset = clamp(bottomGap + (screenCenterY - globeCenterY) * 0.18, -rect.height * 0.3, rect.height * 0.45);
+
+        if (Math.abs(nextZoom - m.getZoom()) > 0.01) m.setZoom(nextZoom);
+        if (Math.abs(verticalOffset) > 2) m.panBy([0, verticalOffset], { duration: 0 });
+        framedCenterLatRef.current = m.getCenter().lat;
       } catch {}
     };
-    apply(true);
-    const ro = new ResizeObserver(() => apply(false));
+    const schedule = () => {
+      cancelAnimationFrame(raf);
+      let passes = 0;
+      const tick = () => {
+        apply();
+        passes += 1;
+        if (passes < 8) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+    schedule();
+    const ro = new ResizeObserver(schedule);
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
   }, [isFullscreen, ready, mode]);
 
   useEffect(() => {
@@ -215,6 +282,7 @@ export function LivingGlobe() {
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
+        preserveDrawingBuffer: true,
       });
       mapRef.current = map;
 
@@ -286,7 +354,7 @@ export function LivingGlobe() {
           const distancePerSecond = 360 / secondsPerRevolution;
           const c = mapRef.current.getCenter();
           c.lng -= distancePerSecond;
-          c.lat = GLOBE_INITIAL_CENTER[1];
+          c.lat = framedCenterLatRef.current;
           mapRef.current.easeTo({ center: c, duration: 1000, easing: (n: number) => n });
         }
         spinTimer = window.setTimeout(spin, 1000);
@@ -326,7 +394,7 @@ export function LivingGlobe() {
 
   return (
     <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
-      <div ref={containerRef} className="absolute inset-0" />
+      <div ref={containerRef} className="living-globe-map absolute inset-0" />
 
       {!ready && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -529,7 +597,16 @@ export function LivingGlobe() {
           letter-spacing: 0.02em;
         }
 
-        .mapboxgl-canvas { outline: none; }
+        .living-globe-map,
+        .living-globe-map .mapboxgl-map,
+        .living-globe-map .mapboxgl-canvas-container,
+        .living-globe-map .mapboxgl-canvas {
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        .living-globe-map .mapboxgl-canvas { outline: none; }
       `}</style>
     </section>
   );
