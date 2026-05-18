@@ -179,13 +179,13 @@ export function LivingGlobe() {
         projection: "globe" as any,
         zoom: GLOBE_INITIAL_ZOOM,
         center: GLOBE_INITIAL_CENTER,
-        padding: getGlobePadding(containerRef.current.clientHeight),
         pitch: 0,
         attributionControl: false,
         interactive: true,
         scrollZoom: false,
       });
       mapRef.current = map;
+      (map as any).setPadding(getGlobePadding(containerRef.current.clientHeight));
 
       map.on("style.load", () => {
         map.setFog({
@@ -260,7 +260,7 @@ export function LivingGlobe() {
 
       const frameGlobe = () => {
         if (!containerRef.current) return;
-        map.setPadding(getGlobePadding(containerRef.current.clientHeight) as any);
+        (map as any).setPadding(getGlobePadding(containerRef.current.clientHeight));
         map.resize();
       };
 
