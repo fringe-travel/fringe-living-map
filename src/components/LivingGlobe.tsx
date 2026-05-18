@@ -27,24 +27,10 @@ const SPOT_COORDS: Record<string, [number, number]> = {
 };
 
 const REGION_CENTER: Record<string, [number, number]> = {
-  boracay: [121.93, 11.97],
-  rio: [-43.18, -22.91],
-  "hood-river": [-121.51, 45.71],
+  boracay: [121.9248, 11.9674],
+  rio: [-43.1729, -22.9711],
+  "hood-river": [-121.5215, 45.7054],
 };
-
-const AMBIENT_SPOTS: { coords: [number, number]; label: string }[] = [
-  { coords: [-156.3319, 20.7984], label: "Maui" },
-  { coords: [-122.4194, 37.7749], label: "San Francisco" },
-  { coords: [-75.5277, 35.2515], label: "Cape Hatteras" },
-  { coords: [-70.4187, 19.7582], label: "Cabarete" },
-  { coords: [-38.7228, -3.6247], label: "Cumbuco" },
-  { coords: [-5.6044, 36.0143], label: "Tarifa" },
-  { coords: [-9.0707, 39.6017], label: "Nazaré" },
-  { coords: [151.2093, -33.8688], label: "Sydney" },
-  { coords: [18.4233, -33.9249], label: "Cape Town" },
-  { coords: [139.6917, 35.6895], label: "Tokyo" },
-  { coords: [100.5018, 13.7563], label: "Bangkok" },
-];
 
 const TAG_EMOJI: Record<string, string> = {
   crowd: "👥",
@@ -125,36 +111,33 @@ type Pin = {
   slug?: string;
   isRegion?: boolean;
   isAmbient?: boolean;
+  freshVibes?: number;
+  activeSpots?: number;
+  lastUpdatedMin?: number;
+  tags?: string;
 };
 
 function buildPins(): Pin[] {
   const pts: Pin[] = [];
   for (const r of regions) {
     const center = REGION_CENTER[r.slug] ?? [0, 0];
+    const latest = r.previewFeed[0];
     pts.push({
       id: `region-${r.slug}`,
       coords: center,
       label: r.name.replace(" Signal", ""),
       sublabel: r.country,
+      vibe: latest?.vibe,
+      by: latest?.by,
+      minutesAgo: latest?.minutesAgo,
+      tag: latest?.tag,
       slug: r.slug,
       isRegion: true,
+      freshVibes: r.freshVibes,
+      activeSpots: r.activeSpots,
+      lastUpdatedMin: r.lastUpdatedMin,
+      tags: r.tags,
     });
-    for (const d of r.previewFeed.slice(0, 3)) {
-      pts.push({
-        id: `${r.slug}-${d.spot}-${d.by}`,
-        coords: SPOT_COORDS[d.spot] ?? center,
-        label: d.spot,
-        sublabel: r.country,
-        vibe: d.vibe,
-        by: d.by,
-        minutesAgo: d.minutesAgo,
-        tag: d.tag,
-        slug: r.slug,
-      });
-    }
-  }
-  for (const a of AMBIENT_SPOTS) {
-    pts.push({ id: `ambient-${a.label}`, coords: a.coords, label: a.label, isAmbient: true });
   }
   return pts;
 }
@@ -307,6 +290,7 @@ export function LivingGlobe() {
             `;
           } else if (p.isRegion) {
             el.className = "fringe-beacon";
+            const tagEmoji = p.tag ? TAG_EMOJI[p.tag] ?? "✨" : "✨";
             el.innerHTML = `
               <span class="fringe-beacon-rings">
                 <span class="fringe-beacon-ring r1"></span>
@@ -314,10 +298,32 @@ export function LivingGlobe() {
                 <span class="fringe-beacon-ring r3"></span>
               </span>
               <span class="fringe-beacon-core"></span>
-              <span class="fringe-beacon-label">
-                <span class="fringe-beacon-name">${escapeHtml(p.label)}</span>
-                ${p.sublabel ? `<span class="fringe-beacon-sub">${escapeHtml(p.sublabel)}</span>` : ""}
+              <span class="fringe-beacon-chip">
+                <span class="fringe-beacon-chip-dot"></span>
+                ${escapeHtml(p.label)}
               </span>
+              <div class="fringe-card" role="group">
+                <div class="fringe-card-head">
+                  <span class="fringe-card-live">
+                    <span class="fringe-card-live-dot"></span>LIVE
+                  </span>
+                  ${typeof p.lastUpdatedMin === "number" ? `<span class="fringe-card-time">${p.lastUpdatedMin}m ago</span>` : ""}
+                </div>
+                <div class="fringe-card-title">${escapeHtml(p.label)}</div>
+                ${p.sublabel ? `<div class="fringe-card-sub">${escapeHtml(p.sublabel)}</div>` : ""}
+                <div class="fringe-card-stats">
+                  ${typeof p.freshVibes === "number" ? `<span class="fringe-card-stat"><b>${p.freshVibes}</b> fresh</span>` : ""}
+                  ${typeof p.activeSpots === "number" ? `<span class="fringe-card-stat"><b>${p.activeSpots}</b> spots</span>` : ""}
+                </div>
+                ${p.vibe ? `
+                  <div class="fringe-card-quote">
+                    <span class="fringe-card-quote-tag">${tagEmoji}</span>
+                    <span class="fringe-card-quote-text">"${escapeHtml(p.vibe)}"</span>
+                  </div>
+                  ${p.by ? `<div class="fringe-card-by">@${escapeHtml(p.by)}</div>` : ""}
+                ` : ""}
+                <div class="fringe-card-cta">Open Signal <span aria-hidden>→</span></div>
+              </div>
             `;
           } else {
             el.className = "fringe-spot";
@@ -647,37 +653,180 @@ export function LivingGlobe() {
           70%  { opacity: 0.15; }
           100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
-        .fringe-beacon-label {
+        /* Compact always-visible chip */
+        .fringe-beacon-chip {
           position: absolute;
-          top: 100%;
+          top: 50%;
           left: 50%;
-          transform: translate(-50%, 18px);
-          display: flex;
-          flex-direction: column;
+          transform: translate(-50%, 22px);
+          display: inline-flex;
           align-items: center;
-          gap: 1px;
-          padding: 3px 7px;
-          background: rgba(0,0,0,0.78);
-          border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 4px;
+          gap: 5px;
+          padding: 3px 8px 3px 7px;
+          background: rgba(6,9,11,0.82);
+          border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.4);
+          border-radius: 9999px;
           backdrop-filter: blur(6px);
-          white-space: nowrap;
-          pointer-events: none;
-        }
-        .fringe-beacon-name {
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
           font-size: 10px;
           font-weight: 700;
+          letter-spacing: 0.04em;
+          color: #fff;
+          white-space: nowrap;
+          pointer-events: none;
+          transition: opacity 0.15s ease;
+        }
+        .fringe-beacon-chip-dot {
+          width: 5px; height: 5px; border-radius: 9999px;
+          background: hsl(var(--signal, 165 85% 56%));
+          box-shadow: 0 0 6px hsl(var(--signal, 165 85% 56%));
+        }
+        .fringe-beacon:hover .fringe-beacon-chip {
+          opacity: 0;
+        }
+
+        /* Rich spot card */
+        .fringe-card {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, 38px);
+          width: 240px;
+          padding: 12px 13px 11px;
+          background: linear-gradient(180deg, rgba(10,14,16,0.92), rgba(6,9,11,0.95));
+          border: 1px solid hsl(var(--signal, 165 85% 56%) / 0.35);
+          border-radius: 12px;
+          backdrop-filter: blur(10px);
+          box-shadow:
+            0 10px 30px rgba(0,0,0,0.55),
+            0 0 0 1px rgba(255,255,255,0.04) inset,
+            0 0 24px hsl(var(--signal, 165 85% 56%) / 0.18);
+          color: rgba(255,255,255,0.95);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.18s ease, transform 0.18s ease;
+          z-index: 5;
+        }
+        .fringe-card::before {
+          content: "";
+          position: absolute;
+          top: -6px;
+          left: 50%;
+          transform: translateX(-50%) rotate(45deg);
+          width: 10px;
+          height: 10px;
+          background: rgba(10,14,16,0.92);
+          border-left: 1px solid hsl(var(--signal, 165 85% 56%) / 0.35);
+          border-top: 1px solid hsl(var(--signal, 165 85% 56%) / 0.35);
+        }
+        .fringe-beacon:hover .fringe-card,
+        .fringe-beacon:focus-within .fringe-card {
+          opacity: 1;
+          transform: translate(-50%, 30px);
+        }
+        .fringe-card-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 6px;
+        }
+        .fringe-card-live {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.2em;
+          color: hsl(var(--signal, 165 85% 56%));
+        }
+        .fringe-card-live-dot {
+          width: 6px; height: 6px; border-radius: 9999px;
+          background: hsl(var(--signal, 165 85% 56%));
+          box-shadow: 0 0 8px hsl(var(--signal, 165 85% 56%));
+          animation: fringe-card-blink 1.6s ease-in-out infinite;
+        }
+        @keyframes fringe-card-blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.35; }
+        }
+        .fringe-card-time {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px;
+          color: rgba(255,255,255,0.55);
+          letter-spacing: 0.08em;
+        }
+        .fringe-card-title {
+          font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif;
+          font-size: 16px;
+          font-weight: 800;
+          letter-spacing: -0.01em;
+          color: #fff;
+          line-height: 1.1;
+        }
+        .fringe-card-sub {
+          margin-top: 2px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.98);
+          color: rgba(255,255,255,0.55);
         }
-        .fringe-beacon-sub {
+        .fringe-card-stats {
+          display: flex;
+          gap: 10px;
+          margin-top: 8px;
+          padding-top: 8px;
+          border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .fringe-card-stat {
+          font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+          font-size: 10px;
+          color: rgba(255,255,255,0.6);
+        }
+        .fringe-card-stat b {
+          color: #fff;
+          font-weight: 700;
+          margin-right: 3px;
+        }
+        .fringe-card-quote {
+          margin-top: 9px;
+          display: flex;
+          gap: 6px;
+          align-items: flex-start;
+        }
+        .fringe-card-quote-tag {
+          font-size: 12px;
+          line-height: 1.3;
+          flex-shrink: 0;
+        }
+        .fringe-card-quote-text {
+          font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+          font-size: 11px;
+          line-height: 1.35;
+          color: rgba(255,255,255,0.82);
+          font-style: italic;
+        }
+        .fringe-card-by {
+          margin-top: 3px;
+          margin-left: 18px;
           font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-          font-size: 8.5px;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: hsl(var(--signal, 165 85% 56%) / 0.85);
+          font-size: 9px;
+          color: rgba(255,255,255,0.5);
+        }
+        .fringe-card-cta {
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 7px 10px;
+          background: hsl(var(--signal, 165 85% 56%));
+          color: #04110e;
+          border-radius: 7px;
+          font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
         }
         .fringe-beacon:hover .fringe-beacon-core {
           box-shadow:
