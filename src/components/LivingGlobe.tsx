@@ -227,7 +227,8 @@ export function LivingGlobe() {
               navigate({ to: "/regions/$slug", params: { slug: p.slug! } });
             });
           }
-          const m = new mapboxgl.Marker({ element: el, anchor: "bottom", offset: [0, 0] })
+          const anchor = p.isAmbient ? "top" : "center";
+          const m = new mapboxgl.Marker({ element: el, anchor, offset: [0, 0] })
             .setLngLat(p.coords)
             .addTo(map);
           markers.push(m);
