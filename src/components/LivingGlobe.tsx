@@ -81,6 +81,7 @@ function buildPins(): Pin[] {
       id: `region-${r.slug}`,
       coords: center,
       label: r.name.replace(" Signal", ""),
+      sublabel: r.country,
       slug: r.slug,
       isRegion: true,
     });
@@ -89,6 +90,7 @@ function buildPins(): Pin[] {
         id: `${r.slug}-${d.spot}-${d.by}`,
         coords: SPOT_COORDS[d.spot] ?? center,
         label: d.spot,
+        sublabel: r.country,
         vibe: d.vibe,
         by: d.by,
         minutesAgo: d.minutesAgo,
