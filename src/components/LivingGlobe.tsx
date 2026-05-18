@@ -57,7 +57,7 @@ const TAG_EMOJI: Record<string, string> = {
   vibe: "✨",
 };
 
-const GLOBE_INITIAL_CENTER: [number, number] = [10, -80];
+const GLOBE_INITIAL_CENTER: [number, number] = [-98, 40];
 const GLOBE_INITIAL_ZOOM = 1.4;
 
 type Pin = {
@@ -288,7 +288,7 @@ export function LivingGlobe() {
 
   return (
     <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
-      <div ref={containerRef} className="absolute inset-0 -translate-y-36 md:-translate-y-44" />
+      <div ref={containerRef} className="absolute inset-0" />
 
       {!ready && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
