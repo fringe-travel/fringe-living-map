@@ -141,9 +141,6 @@ function AccountPage() {
           </button>
         </div>
         {error && <p className="mt-3 text-xs text-red-500">{error}</p>}
-        {activeSubs.length === 0 && (
-          <p className="mt-3 text-xs text-foreground/50">Buy a pass to enable billing management.</p>
-        )}
       </header>
 
       <div>
