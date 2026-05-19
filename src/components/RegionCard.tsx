@@ -38,14 +38,6 @@ export function RegionCard({ region }: { region: Region }) {
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent" />
-        <span
-          className={`absolute right-4 top-4 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em] ${badge.cls}`}
-        >
-          {region.status === "signal" && (
-            <span className="mr-1.5 inline-block size-1.5 animate-pulse rounded-full bg-primary-foreground align-middle" />
-          )}
-          {badge.label}
-        </span>
         <div className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/70">
           {region.country}
         </div>
