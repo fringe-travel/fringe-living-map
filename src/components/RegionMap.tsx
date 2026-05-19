@@ -149,12 +149,25 @@ export function RegionMap({
           font-size: 9px;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.95);
+          color: rgba(255,255,255,0.98);
           background: rgba(0,0,0,0.65);
-          padding: 2px 6px;
+          padding: 3px 7px;
           border-radius: 4px;
           white-space: nowrap;
           backdrop-filter: blur(4px);
+          border: 1px solid rgba(80,255,160,0.55);
+          text-shadow: 0 0 6px rgba(80,255,160,0.9);
+          animation: region-pin-glow 2.2s ease-in-out infinite;
+        }
+        @keyframes region-pin-glow {
+          0%, 100% {
+            box-shadow: 0 0 6px rgba(80,255,160,0.45), 0 0 14px rgba(80,255,160,0.25);
+            border-color: rgba(80,255,160,0.45);
+          }
+          50% {
+            box-shadow: 0 0 12px rgba(80,255,160,0.9), 0 0 26px rgba(80,255,160,0.55);
+            border-color: rgba(80,255,160,0.9);
+          }
         }
         .region-map-shell .mapboxgl-map,
         .region-map-shell .mapboxgl-canvas-container,
