@@ -127,6 +127,7 @@ function RootComponent() {
       <AuthProvider>
         <div className="flex min-h-screen flex-col bg-background">
           <PaymentTestModeBanner />
+          <FoundingMemberBanner />
           <SiteNav />
           <main className="flex-1">
             <Outlet />
