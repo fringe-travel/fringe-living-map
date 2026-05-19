@@ -14,6 +14,8 @@ import ogGlobe from "@/assets/og-globe.jpg";
 const OG_IMAGE_URL = `https://fringe-living-map.lovable.app${ogGlobe}`;
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AuthProvider } from "@/hooks/useAuth";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
 function NotFoundComponent() {
   return (
@@ -120,13 +122,16 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background">
-        <SiteNav />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
+      <AuthProvider>
+        <div className="flex min-h-screen flex-col bg-background">
+          <PaymentTestModeBanner />
+          <SiteNav />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
