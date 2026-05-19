@@ -28,10 +28,10 @@ export function useRegionAccess(regionSlug: string): AccessState {
     }
     setState((s) => ({ ...s, loading: true }));
 
-    // Active subscriptions
+    // Active subscriptions — key off stable price_id (lookup_key), not Stripe's internal prod_xxx product_id.
     const { data: subs } = await supabase
       .from("subscriptions")
-      .select("product_id, status, current_period_end")
+      .select("price_id, status, current_period_end")
       .eq("user_id", user.id)
       .eq("environment", env)
       .order("created_at", { ascending: false });
@@ -45,11 +45,11 @@ export function useRegionAccess(regionSlug: string): AccessState {
     };
 
     const activeSubs = (subs || []).filter(isSubActive);
-    if (activeSubs.some((s: any) => s.product_id === "global_pass")) {
+    if (activeSubs.some((s: any) => s.price_id === "global_pass")) {
       setState({ hasAccess: true, reason: "global", loading: false, refetch: fetchAccess });
       return;
     }
-    if (activeSubs.some((s: any) => s.product_id === `${regionSlug}_pass`)) {
+    if (activeSubs.some((s: any) => s.price_id === `${regionSlug}_pass`)) {
       setState({ hasAccess: true, reason: "region_monthly", loading: false, refetch: fetchAccess });
       return;
     }
