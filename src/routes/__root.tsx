@@ -16,6 +16,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { AuthProvider } from "@/hooks/useAuth";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { FoundingMemberBanner } from "@/components/FoundingMemberBanner";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -126,6 +127,7 @@ function RootComponent() {
       <AuthProvider>
         <div className="flex min-h-screen flex-col bg-background">
           <PaymentTestModeBanner />
+          <FoundingMemberBanner />
           <SiteNav />
           <main className="flex-1">
             <Outlet />
