@@ -1,10 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { LivingGlobe } from "@/components/LivingGlobe";
 import { UnlockButton } from "@/components/UnlockButton";
-import {
-  REGION_SUPPORT_PRICE_IDS,
-  VIBE_REQUEST_PRICE_IDS,
-} from "@/lib/pricing-ids";
+import { FOUNDING_MEMBER_PRICE_ID } from "@/lib/pricing-ids";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -13,7 +10,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A giant, always-rotating Living Globe of fresh vibes from real people on the ground around the world.",
+          "Discover adventure through real people around the world. Fresh vibes captured by people on the ground. No uploads. No edits. No filters.",
       },
       { property: "og:title", content: "FRiNGE — The Living Globe" },
       {
@@ -29,19 +26,50 @@ function HomePage() {
   return (
     <div>
       <LivingGlobe />
+
+      {/* Hero copy + dual CTA */}
       <section className="border-t border-border bg-background px-6 py-20 text-center">
         <div className="mx-auto max-w-3xl">
           <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-foreground md:text-6xl lg:text-7xl">
-            Real vibes. Real places. Right now.
+            Discover adventure through real people around the world.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base text-foreground/70 md:text-lg">
-            A giant, always-rotating globe of fresh signals from real people on the ground.
+            Fresh vibes captured by people on the ground. No uploads. No edits. No filters.
+          </p>
+
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a
+              href="#living-globe"
+              onClick={(e) => {
+                if (typeof window === "undefined") return;
+                const el = document.getElementById("living-globe");
+                if (el) {
+                  e.preventDefault();
+                  el.scrollIntoView({ behavior: "smooth" });
+                  el.requestFullscreen?.().catch(() => {});
+                }
+              }}
+              className="inline-flex w-full items-center justify-center rounded-full bg-foreground px-7 py-3.5 text-sm font-bold text-background transition-transform hover:scale-105 sm:w-auto"
+            >
+              Explore the Globe
+            </a>
+            <Link
+              to="/pricing"
+              className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:w-auto"
+            >
+              Claim Founding Member Pass — $100
+            </Link>
+          </div>
+
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
+            Real people · Real places · Fresh signals
           </p>
         </div>
       </section>
+
       <WhatMakesDifferent />
+      <FoundingMemberSection />
       <Glossary />
-      <FourCTAs />
     </div>
   );
 }
@@ -86,6 +114,71 @@ function WhatMakesDifferent() {
   );
 }
 
+/* ───────── Founding Member Section ───────── */
+function FoundingMemberSection() {
+  const includes = [
+    "Founding Member badge and number",
+    "Early access to the Living Globe",
+    "Early access to Boracay, Rio, and Hood River",
+    "First access to Shakas, Vibe Requests, and Region Support",
+    "Private founder updates",
+    "Vote on future regions",
+    "Invite codes for friends",
+  ];
+
+  return (
+    <section className="border-t border-border bg-background px-6 py-24">
+      <div className="mx-auto max-w-5xl">
+        <div className="overflow-hidden rounded-3xl border border-primary/40 bg-gradient-to-br from-primary/10 via-background to-sunset/5 p-8 md:p-12">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">
+            Founding Members · Limited to 2,000
+          </p>
+          <h2 className="mt-3 text-balance text-4xl font-extrabold tracking-tighter md:text-5xl">
+            Become one of the first 2,000.
+          </h2>
+          <p className="mt-5 max-w-2xl text-foreground/70">
+            FRiNGE is building the Living Globe — fresh vibes from real people in
+            real places around the world. Founding Members help shape the
+            community from the beginning and get lifetime founding status.
+          </p>
+
+          <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <span className="text-5xl font-extrabold tracking-tighter">$100</span>
+            <span className="text-sm text-foreground/60">one-time · lifetime</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
+              · Limited to 2,000 members
+            </span>
+          </div>
+
+          <ul className="mt-8 grid gap-2 text-sm text-foreground/80 md:grid-cols-2">
+            {includes.map((line) => (
+              <li key={line} className="flex gap-3">
+                <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-10">
+            <UnlockButton
+              priceId={FOUNDING_MEMBER_PRICE_ID}
+              reason="Claim your Founding Member Pass"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground transition-all hover:brightness-110 disabled:opacity-60 sm:w-auto"
+            >
+              Claim Founding Member Pass
+            </UnlockButton>
+          </div>
+
+          <p className="mt-8 max-w-2xl text-[11px] leading-relaxed text-foreground/50">
+            This is a community membership, not an investment. No equity, tokens,
+            profit share, revenue share, resale rights, or financial return.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ───────── Glossary ───────── */
 function Glossary() {
   const terms = [
@@ -115,118 +208,5 @@ function Glossary() {
         </dl>
       </div>
     </section>
-  );
-}
-
-/* ───────── Four CTAs Band ───────── */
-function FourCTAs() {
-  return (
-    <section className="border-t border-border bg-background py-20">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 max-w-2xl">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-            Power the Living Globe
-          </p>
-          <h2 className="mt-3 text-balance text-4xl font-extrabold tracking-tighter md:text-5xl">
-            Pure signal stays pure when the community powers it.
-          </h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <CTA
-            tag="Send a Shaka"
-            title="Tip a viber"
-            body="Support a real person for capturing a real moment."
-            tone="sunset"
-            actionLabel="🤙 Try it"
-            href="/pricing"
-          />
-          <CTA
-            tag="Request a Vibe"
-            title="Ask for a fresh signal"
-            body="Pay $1–$5 to have a local viber capture exactly what you want to see."
-            tone="primary"
-            actionLabel="Open a request"
-            priceId={VIBE_REQUEST_PRICE_IDS.basic}
-            reason="Request a fresh vibe"
-          />
-          <CTA
-            tag="Support a Region"
-            title="Keep Boracay, Rio, or Hood River live"
-            body="$5–$25/month goes to the local vibers covering the region."
-            tone="signal"
-            actionLabel="Become a Supporter"
-            priceId={REGION_SUPPORT_PRICE_IDS.supporter}
-            reason="Support a region"
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CTA({
-  tag,
-  title,
-  body,
-  tone,
-  actionLabel,
-  href,
-  external,
-  priceId,
-  reason,
-}: {
-  tag: string;
-  title: string;
-  body: string;
-  tone: "primary" | "sunset" | "signal" | "muted";
-  actionLabel: string;
-  href?: string;
-  external?: boolean;
-  priceId?: string;
-  reason?: string;
-}) {
-  const toneClasses = {
-    primary: "border-primary/30 bg-primary/5",
-    sunset: "border-sunset/30 bg-sunset/5",
-    signal: "border-signal/30 bg-signal/5",
-    muted: "border-border bg-surface",
-  }[tone];
-  const tagToneClasses = {
-    primary: "text-primary",
-    sunset: "text-sunset",
-    signal: "text-signal",
-    muted: "text-foreground/50",
-  }[tone];
-
-  return (
-    <div className={`flex flex-col rounded-3xl border p-7 ${toneClasses}`}>
-      <p className={`font-mono text-[10px] uppercase tracking-[0.2em] ${tagToneClasses}`}>{tag}</p>
-      <h3 className="mt-3 text-xl font-bold tracking-tight">{title}</h3>
-      <p className="mt-3 flex-1 text-sm text-foreground/70">{body}</p>
-
-      {priceId ? (
-        <UnlockButton
-          priceId={priceId}
-          reason={reason}
-          className="mt-6 w-full rounded-xl bg-foreground py-3 text-center text-sm font-bold text-background transition-colors hover:bg-primary disabled:opacity-60"
-        >
-          {actionLabel}
-        </UnlockButton>
-      ) : external ? (
-        <a
-          href={href}
-          className="mt-6 w-full rounded-xl bg-foreground py-3 text-center text-sm font-bold text-background transition-colors hover:bg-primary"
-        >
-          {actionLabel}
-        </a>
-      ) : (
-        <Link
-          to={href as "/pricing"}
-          className="mt-6 w-full rounded-xl bg-foreground py-3 text-center text-sm font-bold text-background transition-colors hover:bg-primary"
-        >
-          {actionLabel}
-        </Link>
-      )}
-    </div>
   );
 }
