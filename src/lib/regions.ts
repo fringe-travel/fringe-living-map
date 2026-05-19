@@ -38,6 +38,7 @@ export const regions: Region[] = [
     country: "Philippines",
     tags: "Beach · Sunset · Nightlife · Island energy",
     image: boracayImg,
+    video: DEFAULT_VIBE_VIDEO,
     freshVibes: 18,
     activeSpots: 7,
     lastUpdatedMin: 8,
