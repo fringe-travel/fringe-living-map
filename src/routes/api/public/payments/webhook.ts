@@ -21,6 +21,13 @@ const DAY_PASS_TO_REGION: Record<string, string> = {
   hood_river_day: "hood-river",
 };
 
+// Map Shaka pack price IDs -> number of Shakas credited to the buyer's wallet
+const SHAKA_PACK_AMOUNTS: Record<string, number> = {
+  shaka_pack_5: 5,
+  shaka_pack_15: 15,
+  shaka_pack_50: 50,
+};
+
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   // Subscriptions are handled via customer.subscription.* events.
   if (session.mode !== "payment") return;
@@ -47,9 +54,21 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     return;
   }
 
+  // Shaka pack purchase, credit the buyer's wallet
+  const shakaAmount = SHAKA_PACK_AMOUNTS[priceLookup];
+  if (shakaAmount) {
+    const { error } = await getSupabase().rpc("credit_shaka_purchase", {
+      p_user: userId,
+      p_amount: shakaAmount,
+      p_price_id: priceLookup,
+      p_session_id: session.id,
+    });
+    if (error) console.error("credit_shaka_purchase failed", error);
+    return;
+  }
+
   const regionSlug = session.metadata?.regionSlug || DAY_PASS_TO_REGION[priceLookup];
   if (!regionSlug) {
-    // Could be a Shaka tip or another non-region purchase, nothing to record.
     console.log("checkout.session.completed: non-region purchase", priceLookup);
     return;
   }

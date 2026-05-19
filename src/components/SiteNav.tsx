@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/integrations/supabase/client";
+import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
 
 const links = [
   { to: "/signal-regions", label: "Regions" },
@@ -55,6 +56,7 @@ export function SiteNav() {
         <div className="flex items-center gap-3">
           {user ? (
             <>
+              <ShakaWalletBadge />
               <Link
                 to="/account"
                 className="hidden text-sm font-medium text-foreground/60 hover:text-foreground md:inline"
