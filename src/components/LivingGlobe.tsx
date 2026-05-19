@@ -92,6 +92,7 @@ function buildPins(): Pin[] {
       lastUpdatedMin: r.lastUpdatedMin,
       tags: r.tags,
       image: r.image,
+      video: r.video,
     });
   }
   return pts;
