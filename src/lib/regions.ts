@@ -16,6 +16,7 @@ export type Region = {
   country: string;
   tags: string;
   image: string;
+  video?: string;
   freshVibes: number;
   activeSpots: number;
   lastUpdatedMin: number;
@@ -26,6 +27,9 @@ export type Region = {
   description: string;
   previewFeed: SignalDrop[];
 };
+
+const DEFAULT_VIBE_VIDEO = "/fringe-app-preview.mp4";
+
 
 export const regions: Region[] = [
   {
