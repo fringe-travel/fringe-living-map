@@ -68,7 +68,7 @@ export function ComparisonSection() {
                     }`}
                   >
                     <span className={c.tone === "primary" ? "text-primary" : "text-foreground/30"}>
-                      {c.tone === "primary" ? "+" : "—"}
+                      {c.tone === "primary" ? "+" : "·"}
                     </span>
                     {i}
                   </li>
