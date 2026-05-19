@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 
@@ -24,13 +25,30 @@ export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
     setLoading(true);
     setError(null);
     try {
-      const fn = mode === "signin"
-        ? supabase.auth.signInWithPassword({ email, password })
-        : supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
-      const { error } = await fn;
-      if (error) throw error;
-      onAuthed?.();
-      onClose();
+      if (mode === "signin") {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        if (!data.session) throw new Error("No session returned. Please try again.");
+        toast.success("Signed in", { description: `Welcome back${data.user?.email ? `, ${data.user.email}` : ""}.` });
+        onAuthed?.();
+        onClose();
+      } else {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: window.location.origin },
+        });
+        if (error) throw error;
+        if (data.session) {
+          toast.success("Account created", { description: "You're signed in." });
+          onAuthed?.();
+        } else {
+          toast.success("Check your email", {
+            description: "We sent a confirmation link to finish signing up.",
+          });
+        }
+        onClose();
+      }
     } catch (err: any) {
       setError(err.message ?? "Something went wrong.");
     } finally {
