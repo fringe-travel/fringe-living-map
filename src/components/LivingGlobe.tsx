@@ -109,6 +109,9 @@ export function LivingGlobe() {
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = paused; }, [paused]);
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const pins = useMemo(buildPins, []);
 
@@ -328,7 +331,7 @@ export function LivingGlobe() {
       const spin = () => {
         if (!mapRef.current) return;
         const z = mapRef.current.getZoom();
-        if (!userInteracting && z < maxSpinZoom) {
+        if (!userInteracting && !pausedRef.current && z < maxSpinZoom) {
           const distancePerSecond = 360 / secondsPerRevolution;
           const c = mapRef.current.getCenter();
           c.lng -= distancePerSecond;
@@ -445,6 +448,16 @@ export function LivingGlobe() {
               −
             </button>
           </div>
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-foreground/20 bg-background/60 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-foreground/80 backdrop-blur-md transition-colors hover:text-foreground sm:px-3 sm:py-1.5 sm:text-[10px] sm:tracking-[0.25em]"
+            aria-label={paused ? "Resume rotation" : "Pause rotation"}
+            aria-pressed={paused}
+          >
+            <span aria-hidden>{paused ? "▶" : "❚❚"}</span>
+            {paused ? "Play" : "Pause"}
+          </button>
           <button
             type="button"
             onClick={toggleFullscreen}
