@@ -7,6 +7,7 @@ import { SupportRegionBlock } from "@/components/SupportRegionBlock";
 
 import { UnlockButton } from "@/components/UnlockButton";
 import { VIBE_REQUEST_PRICE_IDS } from "@/lib/pricing-ids";
+import { RegionAccessGate } from "@/components/RegionAccessGate";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
@@ -80,6 +81,13 @@ function Page() {
           <Stat big={String(region.freshVibes)} label="Fresh signals today" />
           <Stat big={String(region.activeSpots)} label="Active spots right now" highlight />
           <Stat big={`${region.lastUpdatedMin}m`} label="Since last vibe" />
+        </div>
+      </section>
+
+      {/* Access gate */}
+      <section className="border-b border-border bg-background py-12">
+        <div className="mx-auto max-w-7xl px-6">
+          <RegionAccessGate regionSlug={region.slug} regionName={shortName} />
         </div>
       </section>
 
