@@ -8,8 +8,8 @@ import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
 const links = [
   { to: "/signal-regions", label: "Regions" },
   { to: "/vibers", label: "Become a Viber" },
-  { to: "/pricing", label: "Founding Members" },
 ] as const;
+
 
 export function SiteNav() {
   const { user } = useAuth();
