@@ -4,6 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { createPortalSession } from "@/utils/payments.functions";
+import { getShakaWallet } from "@/utils/shaka.functions";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { ShakaPacksDialog } from "@/components/ShakaPacksDialog";
 
 export const Route = createFileRoute("/account")({
   head: () => ({
