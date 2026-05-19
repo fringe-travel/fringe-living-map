@@ -41,10 +41,12 @@ export function RegionMap({
   slug,
   spots,
   label,
+  video,
 }: {
   slug: string;
   spots: string[];
   label: string;
+  video?: string;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -82,7 +84,10 @@ export function RegionMap({
           if (!coords) continue;
           const el = document.createElement("div");
           el.className = "region-pin";
-          el.innerHTML = `<span class="region-pin-dot"></span><span class="region-pin-label">${s}</span>`;
+          const videoHtml = video
+            ? `<video class="region-pin-video" src="${video}" autoplay loop muted playsinline></video>`
+            : "";
+          el.innerHTML = `<div class="region-pin-card">${videoHtml}<span class="region-pin-label">${s}</span></div><span class="region-pin-dot"></span>`;
           const m = new mapboxgl.Marker({ element: el, anchor: "center" })
             .setLngLat(coords)
             .addTo(map);
