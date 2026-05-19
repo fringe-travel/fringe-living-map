@@ -286,15 +286,52 @@ export function RegionMap({
           box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 22px rgba(80,255,160,0.25);
           backdrop-filter: blur(8px);
         }
-        .region-popup-video {
-          display: block;
-          width: 100%;
-          height: 140px;
+        .region-mapbox-popup .mapboxgl-popup-content { max-width: 300px; }
+        .region-popup-body { padding: 14px 14px 12px; width: 280px; }
+        .region-popup-vibes {
+          margin-top: 10px;
+          display: flex; flex-direction: column; gap: 8px;
+          max-height: 320px; overflow-y: auto;
+          padding-right: 2px;
+        }
+        .region-popup-vibes::-webkit-scrollbar { width: 4px; }
+        .region-popup-vibes::-webkit-scrollbar-thumb { background: rgba(80,255,160,0.4); border-radius: 2px; }
+        .region-popup-vibe {
+          display: flex; gap: 8px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 10px;
+          padding: 6px;
+        }
+        .region-popup-vibe-video {
+          width: 64px; height: 64px;
+          flex-shrink: 0;
           object-fit: cover;
           background: #000;
-          border-bottom: 1px solid rgba(80,255,160,0.35);
+          border-radius: 6px;
+          border: 1px solid rgba(80,255,160,0.35);
         }
-        .region-popup-body { padding: 14px 14px 12px; }
+        .region-popup-vibe-meta {
+          flex: 1; min-width: 0;
+          display: flex; flex-direction: column; gap: 2px;
+        }
+        .region-popup-vibe-top {
+          display: flex; align-items: center; justify-content: space-between; gap: 6px;
+        }
+        .region-popup-vibe-tag { font-size: 13px; line-height: 1; }
+        .region-popup-vibe-time {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+          color: rgba(255,255,255,0.55);
+        }
+        .region-popup-vibe-text {
+          font-size: 11.5px; line-height: 1.3;
+          color: rgba(255,255,255,0.9);
+        }
+        .region-popup-vibe-by {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9.5px; color: rgb(80,255,160);
+        }
         .region-mapbox-popup .mapboxgl-popup-tip {
           border-top-color: rgba(80,255,160,0.55) !important;
           border-bottom-color: rgba(80,255,160,0.55) !important;
