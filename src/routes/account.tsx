@@ -31,6 +31,7 @@ function AccountPage() {
   const env = getStripeEnvironment();
   const [subs, setSubs] = useState<SubRow[]>([]);
   const [passes, setPasses] = useState<AccessRow[]>([]);
+  const [founding, setFounding] = useState<FoundingRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
