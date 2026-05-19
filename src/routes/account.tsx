@@ -114,6 +114,17 @@ function AccountPage() {
       <header>
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Your account</p>
         <h1 className="mt-2 text-4xl font-extrabold tracking-tighter">{user.email}</h1>
+        {founding && (
+          <div className="mt-4 inline-flex items-center gap-3 rounded-full border border-sunset/40 bg-gradient-to-r from-primary/15 via-sunset/10 to-transparent px-4 py-2">
+            <span className="text-lg">🏝️</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">
+              Founding Member
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/60">
+              #{String(founding.founding_number).padStart(4, "0")} / 2000
+            </span>
+          </div>
+        )}
         <div className="mt-4 flex flex-wrap gap-3">
           <button
             onClick={openPortal}
