@@ -45,7 +45,7 @@ function AccountPage() {
     let cancelled = false;
     const load = async () => {
       setLoading(true);
-      const [{ data: s }, { data: p }] = await Promise.all([
+      const [{ data: s }, { data: p }, { data: f }] = await Promise.all([
         supabase
           .from("subscriptions")
           .select("paddle_subscription_id, price_id, status, current_period_end, cancel_at_period_end")
@@ -59,10 +59,16 @@ function AccountPage() {
           .eq("environment", env)
           .gt("expires_at", new Date().toISOString())
           .order("expires_at", { ascending: false }),
+        supabase
+          .from("founding_members")
+          .select("founding_number, claimed_at")
+          .eq("user_id", user.id)
+          .maybeSingle(),
       ]);
       if (!cancelled) {
         setSubs((s as SubRow[]) || []);
         setPasses((p as AccessRow[]) || []);
+        setFounding((f as FoundingRow) || null);
         setLoading(false);
       }
     };
@@ -71,6 +77,7 @@ function AccountPage() {
       .channel(`account-${user.id}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${user.id}` }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "region_access", filter: `user_id=eq.${user.id}` }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "founding_members", filter: `user_id=eq.${user.id}` }, load)
       .subscribe();
     return () => {
       cancelled = true;
