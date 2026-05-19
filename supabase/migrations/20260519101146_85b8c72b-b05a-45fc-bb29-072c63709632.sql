@@ -1,0 +1,2 @@
+revoke execute on function public.claim_founding_member(uuid, text, text) from public, anon, authenticated;
+revoke execute on function public.credit_shaka_purchase(uuid, integer, text, text) from public, anon, authenticated;
