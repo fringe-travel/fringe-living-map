@@ -132,6 +132,7 @@ function RootComponent() {
           </main>
           <SiteFooter />
         </div>
+        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   );
