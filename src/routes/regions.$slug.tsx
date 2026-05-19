@@ -35,7 +35,7 @@ function Page() {
     <>
       {/* Map header */}
       <section className="relative border-b border-border">
-        <RegionMap slug={region.slug} spots={region.spots} label={shortName} video={region.video} />
+        <RegionMap slug={region.slug} spots={region.spots} label={shortName} video={region.video} feed={region.previewFeed} />
         <div className="absolute left-4 bottom-4 z-10">
           <Link
             to="/signal-regions"
