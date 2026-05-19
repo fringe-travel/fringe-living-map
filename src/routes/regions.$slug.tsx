@@ -143,7 +143,8 @@ function Page() {
         </div>
       </section>
 
-      <SponsorRegionCTA slug={region.slug} regionName={shortName} />
+
+
     </>
   );
 }
