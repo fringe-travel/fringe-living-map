@@ -138,15 +138,6 @@ export function SiteNav() {
                   >
                     Account
                   </Link>
-                  <button
-                    onClick={() => {
-                      supabase.auth.signOut();
-                      closeMenu();
-                    }}
-                    className="w-full rounded-xl px-3 py-3 text-left text-sm font-mono uppercase tracking-[0.18em] text-foreground/60 hover:bg-surface hover:text-foreground"
-                  >
-                    Sign out
-                  </button>
                 </>
               ) : (
                 <button
