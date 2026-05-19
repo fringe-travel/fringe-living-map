@@ -48,10 +48,44 @@ function Page() {
         ))}
       </ul>
 
-      <div className="mt-14 flex flex-wrap gap-3">
-        <Link to="/" className="rounded-xl bg-primary px-7 py-4 font-bold text-primary-foreground transition-transform hover:scale-105">
+      <div className="mt-14">
+        <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-foreground/60">
           Apply to be a Viber
-        </Link>
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <a
+            href="https://fringe.travel/become-a-viber/rio"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-xl border border-border bg-surface px-6 py-4 font-bold transition-colors hover:bg-foreground hover:text-background"
+          >
+            Rio
+          </a>
+          <a
+            href="https://fringe.travel/become-a-viber/hood-river"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-xl border border-border bg-surface px-6 py-4 font-bold transition-colors hover:bg-foreground hover:text-background"
+          >
+            Hood River
+          </a>
+          <a
+            href="https://fringe.travel/become-a-viber/boracay"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-xl border border-border bg-surface px-6 py-4 font-bold transition-colors hover:bg-foreground hover:text-background"
+          >
+            Boracay
+          </a>
+          <a
+            href="https://fringe.travel/become-a-viber"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-xl bg-primary px-7 py-4 font-bold text-primary-foreground transition-transform hover:scale-105"
+          >
+            Any region →
+          </a>
+        </div>
       </div>
 
       {/* iOS app download */}
