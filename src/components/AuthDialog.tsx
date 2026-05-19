@@ -47,9 +47,9 @@ export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16 sm:items-center sm:pt-4" onClick={onClose}>
       <div
-        className="relative w-full max-w-md rounded-3xl border border-border bg-background p-8"
+        className="relative my-auto w-full max-w-md rounded-3xl border border-border bg-background p-8"
         onClick={(e) => e.stopPropagation()}
       >
         <button
