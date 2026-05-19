@@ -75,6 +75,7 @@ export function RegionMap({
         scrollZoom: false,
       });
       mapRef.current = map;
+      map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
 
       map.on("load", () => {
         setReady(true);
