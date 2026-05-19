@@ -81,7 +81,8 @@ export function SiteNav() {
           <Link
             to="/"
             onClick={handleExplore}
-            search={{ fullscreen: "1" } as never}
+
+
             className="hidden rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground sm:inline-flex"
           >
             Explore Living Globe
