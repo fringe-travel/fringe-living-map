@@ -222,10 +222,68 @@ function AccountPage() {
         )}
       </div>
 
+      <div>
+        <div className="flex items-end justify-between gap-3">
+          <h2 className="text-xs font-mono uppercase tracking-[0.2em] text-foreground/50">Shakas 🤙</h2>
+          <button
+            onClick={() => setShakaOpen(true)}
+            className="text-xs font-mono uppercase tracking-[0.18em] text-sunset hover:underline"
+          >
+            Buy more
+          </button>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Stat label="Balance" value={wallet.data?.balance ?? 0} />
+          <Stat label="Purchased" value={wallet.data?.lifetime_purchased ?? 0} />
+          <Stat label="Sent" value={wallet.data?.lifetime_sent ?? 0} />
+          <Stat label="Received" value={wallet.data?.lifetime_received ?? 0} />
+        </div>
+
+        <h3 className="mt-6 text-xs font-mono uppercase tracking-[0.2em] text-foreground/50">Recent activity</h3>
+        {txs.length === 0 ? (
+          <p className="mt-3 text-sm text-foreground/60">No Shaka activity yet.</p>
+        ) : (
+          <ul className="mt-3 space-y-2">
+            {txs.map((tx) => {
+              const sign = tx.kind === "send" ? "−" : "+";
+              const label =
+                tx.kind === "purchase" ? "Purchased"
+                : tx.kind === "send" ? "Sent"
+                : tx.kind === "receive" ? "Received"
+                : tx.kind;
+              return (
+                <li key={tx.id} className="flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold">{label}</p>
+                    {tx.note && <p className="truncate text-xs text-foreground/60">"{tx.note}"</p>}
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
+                      {formatDate(tx.created_at)}
+                    </p>
+                  </div>
+                  <span className={`font-mono text-sm font-bold ${tx.kind === "send" ? "text-foreground/60" : "text-sunset"}`}>
+                    {sign}{tx.amount} 🤙
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+
       <Link to="/" className="inline-block text-xs font-mono uppercase tracking-[0.18em] text-foreground/50 hover:text-foreground">
         ← Back to the globe
       </Link>
+      <ShakaPacksDialog open={shakaOpen} onClose={() => setShakaOpen(false)} />
     </section>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-xl border border-border bg-surface p-4">
+      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">{label}</p>
+      <p className="mt-1 text-2xl font-extrabold tracking-tight">{value}</p>
+    </div>
   );
 }
 
