@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getRegion, type SignalDrop } from "@/lib/regions";
+import { getRegion, DEMO_VIBER_USER_ID, type SignalDrop } from "@/lib/regions";
 import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
 
