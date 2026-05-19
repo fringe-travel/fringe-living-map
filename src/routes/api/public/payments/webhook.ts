@@ -67,6 +67,17 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     return;
   }
 
+  // Founding Member Pass: record membership + credit 5 welcome Shakas
+  if (priceLookup === "founding_member_pass") {
+    const { error } = await getSupabase().rpc("claim_founding_member", {
+      p_user: userId,
+      p_price_id: priceLookup,
+      p_session_id: session.id,
+    });
+    if (error) console.error("claim_founding_member failed", error);
+    return;
+  }
+
   const regionSlug = session.metadata?.regionSlug || DAY_PASS_TO_REGION[priceLookup];
   if (!regionSlug) {
     console.log("checkout.session.completed: non-region purchase", priceLookup);
