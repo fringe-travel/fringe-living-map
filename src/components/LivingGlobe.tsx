@@ -68,6 +68,7 @@ type Pin = {
   lastUpdatedMin?: number;
   tags?: string;
   image?: string;
+  video?: string;
 };
 
 function buildPins(): Pin[] {
