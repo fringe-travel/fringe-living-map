@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
+import { useAuth } from "@/hooks/useAuth";
 
 type Props = {
   open: boolean;
@@ -12,11 +13,21 @@ type Props = {
 };
 
 export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
+  const { user } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Auto-close if the user becomes authenticated (e.g. via Google redirect or any other path)
+  useEffect(() => {
+    if (open && user) {
+      onAuthed?.();
+      onClose();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, user?.id]);
 
   if (!open || typeof document === "undefined") return null;
 
