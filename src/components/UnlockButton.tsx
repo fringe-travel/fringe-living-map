@@ -65,7 +65,7 @@ export function UnlockButton({ priceId, className, children, reason, regionSlug 
         }}
       />
       <Dialog open={isOpen} onOpenChange={(o) => !o && closeCheckout()}>
-        <DialogContent className="max-w-2xl p-0 overflow-hidden">
+        <DialogContent className="max-w-md p-0 overflow-hidden max-h-[85vh] overflow-y-auto">
           {checkoutElement}
         </DialogContent>
       </Dialog>
