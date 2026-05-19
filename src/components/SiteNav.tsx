@@ -8,8 +8,8 @@ import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
 const links = [
   { to: "/signal-regions", label: "Regions" },
   { to: "/vibers", label: "Become a Viber" },
-  { to: "/pricing", label: "Founding Members" },
 ] as const;
+
 
 export function SiteNav() {
   const { user } = useAuth();
@@ -79,12 +79,22 @@ export function SiteNav() {
             </button>
           )}
           <Link
+            to="/"
+            onClick={handleExplore}
+
+
+            className="hidden rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground sm:inline-flex"
+          >
+            Explore Living Globe
+          </Link>
+          <Link
             to="/pricing"
             onClick={closeMenu}
-            className="hidden rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:inline-flex"
+            className="hidden rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:scale-105 sm:inline-flex"
           >
-            Claim Founding Pass
+            Founding Members
           </Link>
+
 
           <button
             type="button"
@@ -124,12 +134,21 @@ export function SiteNav() {
               </Link>
             ))}
             <Link
+              to="/"
+              onClick={handleExplore}
+              
+              className="mt-2 rounded-full border border-border px-4 py-3 text-center text-sm font-semibold text-foreground/80 sm:hidden"
+            >
+              Explore Living Globe
+            </Link>
+            <Link
               to="/pricing"
               onClick={closeMenu}
               className="mt-2 rounded-full bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground sm:hidden"
             >
-              Claim Founding Pass
+              Founding Members
             </Link>
+
             <div className="mt-2 border-t border-border pt-3">
               {user ? (
                 <>
