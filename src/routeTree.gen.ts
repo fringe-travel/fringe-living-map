@@ -18,6 +18,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RegionsSlugRouteImport } from './routes/regions.$slug'
+import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const VibersRoute = VibersRouteImport.update({
@@ -65,6 +66,11 @@ const RegionsSlugRoute = RegionsSlugRouteImport.update({
   path: '/regions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
+  id: '/checkout/return',
+  path: '/checkout/return',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/vibers'
+    | '/checkout/return'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/vibers'
+    | '/checkout/return'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
   id:
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/vibers'
+    | '/checkout/return'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   VibersRoute: typeof VibersRoute
+  CheckoutReturnRoute: typeof CheckoutReturnRoute
   RegionsSlugRoute: typeof RegionsSlugRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/return': {
+      id: '/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof CheckoutReturnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   VibersRoute: VibersRoute,
+  CheckoutReturnRoute: CheckoutReturnRoute,
   RegionsSlugRoute: RegionsSlugRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }

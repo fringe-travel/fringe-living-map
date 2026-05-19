@@ -1,56 +1,74 @@
-import { useState } from "react";
-import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { useEffect, useState } from "react";
+import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthDialog } from "@/components/AuthDialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type Props = {
   priceId: string;
   className?: string;
   children: React.ReactNode;
   reason?: string;
+  regionSlug?: string;
 };
 
-export function UnlockButton({ priceId, className, children, reason }: Props) {
-  const { open, loading, pendingAuth, continueAfterAuth, clearPending } = usePaddleCheckout();
+export function UnlockButton({ priceId, className, children, reason, regionSlug }: Props) {
   const { user } = useAuth();
+  const { openCheckout, closeCheckout, isOpen, checkoutElement } = useStripeCheckout();
   const [authOpen, setAuthOpen] = useState(false);
+  const [pending, setPending] = useState(false);
 
-  const handleClick = async () => {
+  const launch = (uid: string, email?: string) => {
+    openCheckout({
+      priceId,
+      quantity: 1,
+      userId: uid,
+      customerEmail: email,
+      regionSlug,
+      returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+    });
+  };
+
+  const handleClick = () => {
     if (!user) {
+      setPending(true);
       setAuthOpen(true);
-      // Stash the priceId so the auth dialog can continue after success
-      // by calling open() with a fresh user. We use the pendingAuth state in
-      // the hook itself so we just call open() — it will set pendingAuth.
-      await open({ priceId });
       return;
     }
-    await open({ priceId });
+    launch(user.id, user.email ?? undefined);
   };
+
+  // Once user becomes available after auth, launch.
+  useEffect(() => {
+    if (pending && user) {
+      setPending(false);
+      setAuthOpen(false);
+      launch(user.id, user.email ?? undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pending, user?.id]);
 
   return (
     <>
-      <button onClick={handleClick} disabled={loading} className={className}>
-        {loading ? "Loading..." : children}
+      <button onClick={handleClick} className={className}>
+        {children}
       </button>
       <AuthDialog
-        open={authOpen || !!pendingAuth}
+        open={authOpen}
         reason={reason || "Sign in to unlock"}
         onClose={() => {
           setAuthOpen(false);
-          clearPending();
+          setPending(false);
         }}
-        onAuthed={async () => {
-          setAuthOpen(false);
-          // After auth, the auth provider updates `user`, but we need to
-          // trigger checkout with fresh session info immediately.
-          const { data } = await import("@/integrations/supabase/client").then((m) =>
-            m.supabase.auth.getUser()
-          );
-          if (data.user) {
-            await continueAfterAuth(data.user.id, data.user.email ?? undefined);
-          }
+        onAuthed={() => {
+          // user state will update via useAuth; effect above launches checkout
         }}
       />
+      <Dialog open={isOpen} onOpenChange={(o) => !o && closeCheckout()}>
+        <DialogContent className="max-w-2xl p-0 overflow-hidden">
+          {checkoutElement}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
