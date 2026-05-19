@@ -62,6 +62,7 @@ export const regions: Region[] = [
     country: "Brazil",
     tags: "Kite · Surf · Beach · Nightlife · Local movement",
     image: rioImg,
+    video: DEFAULT_VIBE_VIDEO,
     freshVibes: 24,
     activeSpots: 11,
     lastUpdatedMin: 4,
