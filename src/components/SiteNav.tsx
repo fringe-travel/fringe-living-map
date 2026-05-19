@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
 
 const links = [
+  { to: "/", label: "Explore" },
   { to: "/signal-regions", label: "Regions" },
   { to: "/vibers", label: "Become a Viber" },
 ] as const;
@@ -45,6 +46,7 @@ export function SiteNav() {
             <Link
               key={l.to}
               to={l.to}
+              onClick={l.to === "/" ? handleExplore : closeMenu}
               className="text-sm font-medium text-foreground/60 transition-colors hover:text-foreground"
               activeProps={{ className: "text-foreground" }}
             >
@@ -78,15 +80,6 @@ export function SiteNav() {
               Sign in
             </button>
           )}
-          <Link
-            to="/"
-            onClick={handleExplore}
-
-
-            className="hidden rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground sm:inline-flex"
-          >
-            Explore Living Globe
-          </Link>
           <Link
             to="/pricing"
             onClick={closeMenu}
@@ -126,21 +119,13 @@ export function SiteNav() {
               <Link
                 key={l.to}
                 to={l.to}
-                onClick={closeMenu}
+                onClick={l.to === "/" ? handleExplore : closeMenu}
                 className="rounded-xl px-3 py-3 text-base font-semibold text-foreground/80 hover:bg-surface hover:text-foreground"
                 activeProps={{ className: "text-foreground bg-surface" }}
               >
                 {l.label}
               </Link>
             ))}
-            <Link
-              to="/"
-              onClick={handleExplore}
-              
-              className="mt-2 rounded-full border border-border px-4 py-3 text-center text-sm font-semibold text-foreground/80 sm:hidden"
-            >
-              Explore Living Globe
-            </Link>
             <Link
               to="/pricing"
               onClick={closeMenu}
