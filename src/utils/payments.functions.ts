@@ -93,8 +93,10 @@ export const createPortalSession = createServerFn({ method: "POST" })
   .inputValidator((data: { returnUrl?: string; environment: StripeEnv }) => data)
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+    const stripe = createStripeClient(data.environment);
 
-    const { data: sub, error: subError } = await supabase
+    // 1. Prefer a customer id we already saved from a subscription.
+    const { data: sub } = await supabase
       .from("subscriptions")
       .select("paddle_customer_id")
       .eq("user_id", userId)
@@ -102,11 +104,23 @@ export const createPortalSession = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (subError || !sub?.paddle_customer_id) throw new Error("No billing customer found");
 
-    const stripe = createStripeClient(data.environment);
+    let customerId = sub?.paddle_customer_id as string | undefined;
+
+    // 2. Fall back to Stripe customer search by userId metadata
+    //    (covers one-time buyers like Founding Members & day passes).
+    if (!customerId && /^[a-zA-Z0-9_-]+$/.test(userId)) {
+      const found = await stripe.customers.search({
+        query: `metadata['userId']:'${userId}'`,
+        limit: 1,
+      });
+      if (found.data.length) customerId = found.data[0].id;
+    }
+
+    if (!customerId) throw new Error("No billing customer found");
+
     const portal = await stripe.billingPortal.sessions.create({
-      customer: sub.paddle_customer_id,
+      customer: customerId,
       ...(data.returnUrl && { return_url: data.returnUrl }),
     });
     return portal.url;
