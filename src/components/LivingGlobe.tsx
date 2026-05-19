@@ -109,6 +109,9 @@ export function LivingGlobe() {
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = paused; }, [paused]);
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const pins = useMemo(buildPins, []);
 
