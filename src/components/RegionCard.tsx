@@ -1,15 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import type { Region } from "@/lib/regions";
 
-
-const statusBadge: Record<Region["status"], { label: string; cls: string }> = {
-  signal: { label: "Fresh Signal", cls: "bg-signal text-primary-foreground" },
-  high: { label: "High Activity", cls: "bg-sunset text-primary-foreground" },
-  quiet: { label: "Quiet Hour", cls: "bg-foreground/20 text-foreground" },
-};
-
 export function RegionCard({ region }: { region: Region }) {
-  const badge = statusBadge[region.status];
   const recent = [...region.previewFeed]
     .sort((a, b) => a.minutesAgo - b.minutesAgo)
     .slice(0, 3);
