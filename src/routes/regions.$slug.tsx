@@ -139,7 +139,46 @@ function Page() {
           </div>
         </div>
       </section>
+
+      <SponsorRegionCTA slug={region.slug} regionName={shortName} />
     </>
+  );
+}
+
+const SPONSOR_URLS: Record<string, string> = {
+  rio: "https://fringe.travel/sponsor/rio",
+  "hood-river": "https://fringe.travel/sponsor/hood-river",
+  boracay: "https://fringe.travel/sponsor/boracay",
+};
+
+function SponsorRegionCTA({ slug, regionName }: { slug: string; regionName: string }) {
+  const url = SPONSOR_URLS[slug];
+  if (!url) return null;
+  return (
+    <section className="border-b border-border py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl border border-border bg-surface p-8 md:flex-row md:items-center md:p-10">
+          <div className="max-w-xl">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">For Brands</p>
+            <h3 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
+              Sponsor {regionName}.
+            </h3>
+            <p className="mt-3 text-foreground/60">
+              Put your brand in front of every traveler tuning into {regionName}. Local placement,
+              real signal, real eyes on the ground.
+            </p>
+          </div>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded-xl bg-primary px-7 py-4 font-bold text-primary-foreground transition-transform hover:scale-105"
+          >
+            Sponsor this region →
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }
 
