@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getRegion, type SignalDrop } from "@/lib/regions";
+import { getRegion, DEMO_VIBER_USER_ID, type SignalDrop } from "@/lib/regions";
 import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
 
@@ -102,7 +102,7 @@ function Page() {
                     </div>
                     <p className="mt-3 text-base font-medium text-foreground/90">{d.vibe}</p>
                     <div className="mt-5 flex flex-wrap items-center gap-2">
-                      <ShakaButton viberName={d.by} />
+                      <ShakaButton viberName={d.by} viberUserId={DEMO_VIBER_USER_ID} />
                     </div>
                   </div>
                 </li>

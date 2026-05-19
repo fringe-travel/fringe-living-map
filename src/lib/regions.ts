@@ -3,6 +3,9 @@ import rioImg from "@/assets/region-rio.jpg";
 import hoodRiverImg from "@/assets/region-hood-river.jpg";
 import vibeVideo from "@/assets/fringe-app-preview.mp4?url";
 
+/** Shared demo viber account — all demo dispatches credit this UUID. */
+export const DEMO_VIBER_USER_ID = "de70de70-de70-de70-de70-de70de70de70";
+
 export type SignalDrop = {
   minutesAgo: number;
   spot: string;
