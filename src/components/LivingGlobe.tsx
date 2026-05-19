@@ -268,7 +268,7 @@ export function LivingGlobe() {
                 <span class="fringe-beacon-ring r3"></span>
               </span>
               <span class="fringe-beacon-core">
-                ${p.image ? `<img class="fringe-beacon-thumb" src="${escapeHtml(p.image)}" alt="" loading="lazy" />` : ""}
+                ${p.video ? `<video class="fringe-beacon-thumb" src="${escapeHtml(p.video)}" autoplay loop muted playsinline${p.image ? ` poster="${escapeHtml(p.image)}"` : ""}></video>` : p.image ? `<img class="fringe-beacon-thumb" src="${escapeHtml(p.image)}" alt="" loading="lazy" />` : ""}
               </span>
               <span class="fringe-beacon-chip">
                 <span class="fringe-beacon-chip-dot"></span>
