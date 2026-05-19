@@ -113,13 +113,6 @@ export function SiteNav() {
                 {l.label}
               </Link>
             ))}
-            <Link
-              to="/pricing"
-              onClick={closeMenu}
-              className="mt-2 rounded-full bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground sm:hidden"
-            >
-              Founding Members
-            </Link>
 
             <div className="mt-2 border-t border-border pt-3">
               {user ? (
