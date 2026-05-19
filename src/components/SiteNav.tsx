@@ -54,12 +54,20 @@ export function SiteNav() {
 
         <div className="flex items-center gap-3">
           {user ? (
-            <button
-              onClick={() => supabase.auth.signOut()}
-              className="hidden text-xs font-mono uppercase tracking-[0.18em] text-foreground/60 hover:text-foreground md:inline"
-            >
-              Sign out
-            </button>
+            <>
+              <Link
+                to="/account"
+                className="hidden text-sm font-medium text-foreground/60 hover:text-foreground md:inline"
+              >
+                Account
+              </Link>
+              <button
+                onClick={() => supabase.auth.signOut()}
+                className="hidden text-xs font-mono uppercase tracking-[0.18em] text-foreground/60 hover:text-foreground md:inline"
+              >
+                Sign out
+              </button>
+            </>
           ) : (
             <button
               onClick={() => setAuthOpen(true)}
@@ -124,15 +132,24 @@ export function SiteNav() {
             </Link>
             <div className="mt-2 border-t border-border pt-3">
               {user ? (
-                <button
-                  onClick={() => {
-                    supabase.auth.signOut();
-                    closeMenu();
-                  }}
-                  className="w-full rounded-xl px-3 py-3 text-left text-sm font-mono uppercase tracking-[0.18em] text-foreground/60 hover:bg-surface hover:text-foreground"
-                >
-                  Sign out
-                </button>
+                <>
+                  <Link
+                    to="/account"
+                    onClick={closeMenu}
+                    className="block rounded-xl px-3 py-3 text-sm font-semibold text-foreground/80 hover:bg-surface hover:text-foreground"
+                  >
+                    Account
+                  </Link>
+                  <button
+                    onClick={() => {
+                      supabase.auth.signOut();
+                      closeMenu();
+                    }}
+                    className="w-full rounded-xl px-3 py-3 text-left text-sm font-mono uppercase tracking-[0.18em] text-foreground/60 hover:bg-surface hover:text-foreground"
+                  >
+                    Sign out
+                  </button>
+                </>
               ) : (
                 <button
                   onClick={() => {
