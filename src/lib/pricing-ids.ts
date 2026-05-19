@@ -12,8 +12,18 @@ export function getRegionPriceIds(slug: string) {
 export const GLOBAL_MONTH_PRICE_ID = "global_month";
 
 // ── New launch monetization ─────────────────────────────────────────────────
-// Send a Shaka, tip a viber (kept contextual; no public pricing surface)
-export const SHAKA_PRICE_ID = "shaka_tip";
+// Shaka tipping, fixed $2/Shaka headline, sold in packs that top up a wallet.
+// Buyers send Shakas one tap at a time from their balance, no Stripe fee per tip.
+export const SHAKA_PACKS = [
+  { priceId: "shaka_pack_5", shakas: 5, priceCents: 1000, label: "5 Shakas", tagline: "$2.00 each" },
+  { priceId: "shaka_pack_15", shakas: 15, priceCents: 2500, label: "15 Shakas", tagline: "$1.67 each" },
+  { priceId: "shaka_pack_50", shakas: 50, priceCents: 7500, label: "50 Shakas", tagline: "$1.50 each, best value" },
+] as const;
+
+export type ShakaPack = (typeof SHAKA_PACKS)[number];
+
+// Legacy export, no longer the single tip price. Kept so old imports don't break.
+export const SHAKA_PRICE_ID = SHAKA_PACKS[0].priceId;
 
 // Founding Member Pass, one-time $100, limited to first 2,000
 export const FOUNDING_MEMBER_PRICE_ID = "founding_member_pass";
