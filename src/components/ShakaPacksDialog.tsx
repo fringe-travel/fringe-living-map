@@ -131,7 +131,7 @@ export function ShakaPacksDialog({ open, onClose, recipientUserId, recipientName
       </Dialog>
 
       <Dialog open={checkoutOpen} onOpenChange={(o) => !o && closeCheckout()}>
-        <DialogContent className="max-w-2xl p-0 overflow-hidden">{checkoutElement}</DialogContent>
+        <DialogContent className="max-w-md p-0 overflow-hidden max-h-[85vh] overflow-y-auto">{checkoutElement}</DialogContent>
       </Dialog>
     </>
   );
