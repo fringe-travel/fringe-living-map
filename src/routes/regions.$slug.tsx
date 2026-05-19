@@ -2,12 +2,6 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getRegion, type SignalDrop } from "@/lib/regions";
 import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
-import { RequestVibeBlock } from "@/components/RequestVibeBlock";
-import { SupportRegionBlock } from "@/components/SupportRegionBlock";
-
-import { UnlockButton } from "@/components/UnlockButton";
-import { VIBE_REQUEST_PRICE_IDS } from "@/lib/pricing-ids";
-import { RegionAccessGate } from "@/components/RegionAccessGate";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
@@ -37,28 +31,6 @@ function Page() {
   const { region } = Route.useLoaderData();
   const shortName = region.name.replace(" Signal", "");
 
-  const requestExamples =
-    region.slug === "boracay"
-      ? [
-          "Capture the Station 1 sunset right now",
-          "Check the crowd at D'Mall",
-          "Show the wind at Bulabog",
-          "Capture the beach energy near Station 2",
-        ]
-      : region.slug === "rio"
-      ? [
-          "Show the Arpoador sunset clap",
-          "Check the swell at Barra",
-          "Capture the samba near Ipanema Posto 9",
-          "Show the line at Lapa right now",
-        ]
-      : [
-          "Check the wind at The Hook",
-          "Show what's launching at Event Site",
-          "Capture sunset at the Spit",
-          "Check the line at pFriem",
-        ];
-
   return (
     <>
       {/* Map header */}
@@ -74,20 +46,12 @@ function Page() {
         </div>
       </section>
 
-
       {/* Live stats */}
       <section className="border-b border-border bg-surface/30 py-16">
         <div className="mx-auto grid max-w-7xl gap-6 px-6 md:grid-cols-3">
           <Stat big={String(region.freshVibes)} label="Fresh signals today" />
           <Stat big={String(region.activeSpots)} label="Active spots right now" highlight />
           <Stat big={`${region.lastUpdatedMin}m`} label="Since last vibe" />
-        </div>
-      </section>
-
-      {/* Access gate */}
-      <section className="border-b border-border bg-background py-12">
-        <div className="mx-auto max-w-7xl px-6">
-          <RegionAccessGate regionSlug={region.slug} regionName={shortName} />
         </div>
       </section>
 
@@ -139,13 +103,6 @@ function Page() {
                     <p className="mt-3 text-base font-medium text-foreground/90">{d.vibe}</p>
                     <div className="mt-5 flex flex-wrap items-center gap-2">
                       <ShakaButton viberName={d.by} />
-                      <UnlockButton
-                        priceId={VIBE_REQUEST_PRICE_IDS.basic}
-                        reason={`Request a vibe similar to @${d.by}'s drop`}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-bold text-foreground/70 transition-colors hover:bg-surface-2 disabled:opacity-60"
-                      >
-                        Request similar
-                      </UnlockButton>
                     </div>
                   </div>
                 </li>
@@ -154,7 +111,7 @@ function Page() {
         </div>
       </section>
 
-      {/* Popular spots, with empty-spot CTAs */}
+      {/* Popular spots */}
       <section className="border-b border-border bg-surface/30 py-20">
         <div className="mx-auto max-w-7xl px-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Popular spots</p>
@@ -176,53 +133,9 @@ function Page() {
                       {hasFresh ? "Fresh signal in feed" : "No fresh signal yet"}
                     </p>
                   </div>
-                  {!hasFresh && (
-                    <UnlockButton
-                      priceId={VIBE_REQUEST_PRICE_IDS.basic}
-                      reason={`Request a vibe from ${s}`}
-                      className="rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-bold text-primary transition-colors hover:bg-primary/20 disabled:opacity-60"
-                    >
-                      Request
-                    </UnlockButton>
-                  )}
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* Request a Vibe */}
-      <section className="border-b border-border py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <RequestVibeBlock regionName={shortName} examples={requestExamples} />
-        </div>
-      </section>
-
-      {/* Support */}
-      <section id="support" className="border-b border-border bg-surface/30 py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <SupportRegionBlock regionName={shortName} />
-        </div>
-      </section>
-
-      {/* Footer line */}
-      <section className="py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="text-balance text-4xl font-extrabold tracking-tighter md:text-5xl">
-            Help keep {shortName} fresh.
-          </h2>
-          <p className="mt-4 text-foreground/60">
-            Support local vibers capturing real signals from beaches, food spots, sunsets,
-            nightlife, and adventure areas.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              href="#support"
-              className="rounded-xl bg-primary px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-primary-foreground transition-transform hover:scale-105"
-            >
-              Support {shortName}
-            </a>
           </div>
         </div>
       </section>
