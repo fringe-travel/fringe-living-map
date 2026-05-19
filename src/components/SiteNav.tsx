@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
 
 const links = [
+  { to: "/", label: "Explore" },
   { to: "/signal-regions", label: "Regions" },
   { to: "/vibers", label: "Become a Viber" },
 ] as const;
