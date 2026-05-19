@@ -39,6 +39,25 @@ function AccountPage() {
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [shakaOpen, setShakaOpen] = useState(false);
+
+  const fetchWallet = useServerFn(getShakaWallet);
+  const wallet = useQuery({
+    queryKey: ["shaka-wallet", user?.id],
+    queryFn: () => fetchWallet({}),
+    enabled: !!user,
+  });
+
+  type ShakaTx = {
+    id: string;
+    kind: string;
+    amount: number;
+    note: string | null;
+    counterparty_user_id: string | null;
+    price_id: string | null;
+    created_at: string;
+  };
+  const [txs, setTxs] = useState<ShakaTx[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) navigate({ to: "/" });
