@@ -128,7 +128,7 @@ function AccountPage() {
         <div className="mt-4 flex flex-wrap gap-3">
           <button
             onClick={openPortal}
-            disabled={portalLoading || activeSubs.length === 0}
+            disabled={portalLoading}
             className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition-transform hover:scale-[1.02] disabled:opacity-50"
           >
             {portalLoading ? "Opening…" : "Manage billing"}
