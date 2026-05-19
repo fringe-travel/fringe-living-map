@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      founding_members: {
+        Row: {
+          claimed_at: string
+          founding_number: number
+          id: string
+          price_id: string
+          stripe_session_id: string | null
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string
+          founding_number?: never
+          id?: string
+          price_id: string
+          stripe_session_id?: string | null
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string
+          founding_number?: never
+          id?: string
+          price_id?: string
+          stripe_session_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       region_access: {
         Row: {
           created_at: string | null
@@ -166,6 +193,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_founding_member: {
+        Args: { p_price_id: string; p_session_id: string; p_user: string }
+        Returns: undefined
+      }
       credit_shaka_purchase: {
         Args: {
           p_amount: number
