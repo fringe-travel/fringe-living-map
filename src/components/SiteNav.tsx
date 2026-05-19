@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 const links = [
   { to: "/signal-regions", label: "Regions" },
   { to: "/vibers", label: "Become a Viber" },
-  { to: "/pricing", label: "Support" },
+  { to: "/pricing", label: "Founding Members" },
 ] as const;
 
 export function SiteNav() {

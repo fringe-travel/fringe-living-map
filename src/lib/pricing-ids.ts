@@ -12,8 +12,11 @@ export function getRegionPriceIds(slug: string) {
 export const GLOBAL_MONTH_PRICE_ID = "global_month";
 
 // ── New launch monetization ─────────────────────────────────────────────────
-// Send a Shaka — tip a viber
+// Send a Shaka — tip a viber (kept contextual; no public pricing surface)
 export const SHAKA_PRICE_ID = "shaka_tip";
+
+// Founding Member Pass — one-time $100, limited to first 2,000
+export const FOUNDING_MEMBER_PRICE_ID = "founding_member_pass";
 
 // Request a Vibe — ask for a fresh signal from a spot
 export const VIBE_REQUEST_PRICE_IDS = {
