@@ -101,7 +101,7 @@ export function RegionMap({
         for (const s of spots) {
           const coords = SPOT_COORDS[s];
           if (!coords) continue;
-          const drop = feed.find((d) => d.spot.includes(s)) ?? null;
+          const drops = feed.filter((d) => d.spot.includes(s));
           const el = document.createElement("div");
           el.className = "region-pin";
           const videoHtml = video
@@ -118,29 +118,39 @@ export function RegionMap({
           el.addEventListener("click", (e) => {
             e.stopPropagation();
             if (activePopup) { try { activePopup.remove(); } catch {} }
-            const tagEmoji = drop ? TAG_EMOJI[drop.tag] ?? "✨" : "✨";
-            const videoHtml = video
-              ? `<video class="region-popup-video" src="${video}" autoplay loop muted playsinline></video>`
-              : "";
+            const vibesHtml = drops.length
+              ? `<div class="region-popup-vibes">${drops
+                  .map((d) => {
+                    const tagEmoji = TAG_EMOJI[d.tag] ?? "✨";
+                    const vid = video
+                      ? `<video class="region-popup-vibe-video" src="${video}" autoplay loop muted playsinline></video>`
+                      : `<div class="region-popup-vibe-video"></div>`;
+                    return `
+                      <div class="region-popup-vibe">
+                        ${vid}
+                        <div class="region-popup-vibe-meta">
+                          <div class="region-popup-vibe-top">
+                            <span class="region-popup-vibe-tag">${tagEmoji}</span>
+                            <span class="region-popup-vibe-time">${d.minutesAgo}m ago</span>
+                          </div>
+                          <div class="region-popup-vibe-text">"${escapeHtml(d.vibe)}"</div>
+                          <div class="region-popup-vibe-by">@${escapeHtml(d.by)}</div>
+                        </div>
+                      </div>
+                    `;
+                  })
+                  .join("")}</div>`
+              : `<div class="region-popup-empty">No fresh vibes here yet. Be the first to drop one.</div>`;
             const html = `
               <div class="region-popup">
-                ${videoHtml}
                 <div class="region-popup-body">
                   <div class="region-popup-head">
                     <span class="region-popup-live"><span class="region-popup-live-dot"></span>LIVE</span>
-                    ${drop ? `<span class="region-popup-time">${drop.minutesAgo}m ago</span>` : `<span class="region-popup-time region-popup-time-quiet">No fresh signal</span>`}
+                    <span class="region-popup-time">${drops.length} ${drops.length === 1 ? "vibe" : "vibes"}</span>
                   </div>
                   <div class="region-popup-title">${escapeHtml(s)}</div>
                   <div class="region-popup-sub">${escapeHtml(label)}</div>
-                  ${drop ? `
-                    <div class="region-popup-quote">
-                      <span class="region-popup-quote-tag">${tagEmoji}</span>
-                      <span class="region-popup-quote-text">"${escapeHtml(drop.vibe)}"</span>
-                    </div>
-                    <div class="region-popup-by">@${escapeHtml(drop.by)}</div>
-                  ` : `
-                    <div class="region-popup-empty">Be the first to drop a vibe here.</div>
-                  `}
+                  ${vibesHtml}
                 </div>
               </div>
             `;
@@ -276,15 +286,52 @@ export function RegionMap({
           box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 22px rgba(80,255,160,0.25);
           backdrop-filter: blur(8px);
         }
-        .region-popup-video {
-          display: block;
-          width: 100%;
-          height: 140px;
+        .region-mapbox-popup .mapboxgl-popup-content { max-width: 300px; }
+        .region-popup-body { padding: 14px 14px 12px; width: 280px; }
+        .region-popup-vibes {
+          margin-top: 10px;
+          display: flex; flex-direction: column; gap: 8px;
+          max-height: 320px; overflow-y: auto;
+          padding-right: 2px;
+        }
+        .region-popup-vibes::-webkit-scrollbar { width: 4px; }
+        .region-popup-vibes::-webkit-scrollbar-thumb { background: rgba(80,255,160,0.4); border-radius: 2px; }
+        .region-popup-vibe {
+          display: flex; gap: 8px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 10px;
+          padding: 6px;
+        }
+        .region-popup-vibe-video {
+          width: 64px; height: 64px;
+          flex-shrink: 0;
           object-fit: cover;
           background: #000;
-          border-bottom: 1px solid rgba(80,255,160,0.35);
+          border-radius: 6px;
+          border: 1px solid rgba(80,255,160,0.35);
         }
-        .region-popup-body { padding: 14px 14px 12px; }
+        .region-popup-vibe-meta {
+          flex: 1; min-width: 0;
+          display: flex; flex-direction: column; gap: 2px;
+        }
+        .region-popup-vibe-top {
+          display: flex; align-items: center; justify-content: space-between; gap: 6px;
+        }
+        .region-popup-vibe-tag { font-size: 13px; line-height: 1; }
+        .region-popup-vibe-time {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+          color: rgba(255,255,255,0.55);
+        }
+        .region-popup-vibe-text {
+          font-size: 11.5px; line-height: 1.3;
+          color: rgba(255,255,255,0.9);
+        }
+        .region-popup-vibe-by {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9.5px; color: rgb(80,255,160);
+        }
         .region-mapbox-popup .mapboxgl-popup-tip {
           border-top-color: rgba(80,255,160,0.55) !important;
           border-bottom-color: rgba(80,255,160,0.55) !important;
