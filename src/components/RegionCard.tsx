@@ -24,15 +24,28 @@ export function RegionCard({ region }: { region: Region }) {
         aria-label={`Open ${shortName}`}
         className="absolute inset-0 z-10"
       />
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <img
-          src={region.image}
-          alt={`${shortName} — ${region.country}`}
-          loading="lazy"
-          width={1024}
-          height={768}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+      <div className="relative aspect-[4/3] overflow-hidden bg-black">
+        {region.video ? (
+          <video
+            src={region.video}
+            poster={region.image}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <img
+            src={region.image}
+            alt={`${shortName} — ${region.country}`}
+            loading="lazy"
+            width={1024}
+            height={768}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent" />
         <span
           className={`absolute right-4 top-4 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em] ${badge.cls}`}
@@ -46,6 +59,7 @@ export function RegionCard({ region }: { region: Region }) {
           {region.country}
         </div>
       </div>
+
 
       <div className="flex flex-1 flex-col p-7">
         <div className="mb-5">
