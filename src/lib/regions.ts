@@ -16,6 +16,7 @@ export type Region = {
   country: string;
   tags: string;
   image: string;
+  video?: string;
   freshVibes: number;
   activeSpots: number;
   lastUpdatedMin: number;
@@ -27,6 +28,9 @@ export type Region = {
   previewFeed: SignalDrop[];
 };
 
+const DEFAULT_VIBE_VIDEO = "/fringe-app-preview.mp4";
+
+
 export const regions: Region[] = [
   {
     slug: "boracay",
@@ -34,6 +38,7 @@ export const regions: Region[] = [
     country: "Philippines",
     tags: "Beach · Sunset · Nightlife · Island energy",
     image: boracayImg,
+    video: DEFAULT_VIBE_VIDEO,
     freshVibes: 18,
     activeSpots: 7,
     lastUpdatedMin: 8,
@@ -57,6 +62,7 @@ export const regions: Region[] = [
     country: "Brazil",
     tags: "Kite · Surf · Beach · Nightlife · Local movement",
     image: rioImg,
+    video: DEFAULT_VIBE_VIDEO,
     freshVibes: 24,
     activeSpots: 11,
     lastUpdatedMin: 4,
@@ -80,6 +86,7 @@ export const regions: Region[] = [
     country: "Oregon, USA",
     tags: "Wind · Kite · River · Gorge conditions",
     image: hoodRiverImg,
+    video: DEFAULT_VIBE_VIDEO,
     freshVibes: 12,
     activeSpots: 5,
     lastUpdatedMin: 15,
