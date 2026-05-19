@@ -1,6 +1,7 @@
 import boracayImg from "@/assets/region-boracay.jpg";
 import rioImg from "@/assets/region-rio.jpg";
 import hoodRiverImg from "@/assets/region-hood-river.jpg";
+import vibeVideo from "@/assets/fringe-app-preview.mp4?url";
 
 export type SignalDrop = {
   minutesAgo: number;
