@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { Region } from "@/lib/regions";
-import { UnlockButton } from "@/components/UnlockButton";
-import { REGION_SUPPORT_PRICE_IDS, VIBE_REQUEST_PRICE_IDS } from "@/lib/pricing-ids";
+
 
 const statusBadge: Record<Region["status"], { label: string; cls: string }> = {
   signal: { label: "Fresh Signal", cls: "bg-signal text-primary-foreground" },
