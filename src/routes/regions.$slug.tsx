@@ -55,6 +55,9 @@ function Page() {
         </div>
       </section>
 
+      <SponsorRegionCTA slug={region.slug} regionName={shortName} />
+
+
       {/* Recent vibes feed */}
       <section className="border-b border-border py-20">
         <div className="mx-auto max-w-7xl px-6">
