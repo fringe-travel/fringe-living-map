@@ -115,9 +115,9 @@ function Page() {
               .map((d: SignalDrop, i: number) => (
                 <li
                   key={i}
-                  className="flex flex-col overflow-hidden rounded-3xl border border-border bg-background"
+                  className="flex flex-row overflow-hidden rounded-3xl border border-border bg-background"
                 >
-                  <div className="relative aspect-video w-full overflow-hidden bg-surface-2">
+                  <div className="relative aspect-[9/16] w-40 shrink-0 overflow-hidden bg-surface-2 sm:w-48">
                     <video
                       src="/fringe-app-preview.mp4"
                       autoPlay
@@ -127,7 +127,7 @@ function Page() {
                       className="absolute inset-0 h-full w-full object-cover"
                     />
                   </div>
-                  <div className="flex flex-col p-6">
+                  <div className="flex flex-1 flex-col p-6">
                     <div className="flex items-center justify-between">
                       <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
                         {d.spot} · @{d.by}
