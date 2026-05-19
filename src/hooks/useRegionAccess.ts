@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { getPaddleEnvironment } from "@/lib/paddle";
+import { getStripeEnvironment } from "@/lib/stripe";
 import { useAuth } from "@/hooks/useAuth";
 
 type AccessState = {
@@ -19,7 +19,7 @@ export function useRegionAccess(regionSlug: string): AccessState {
     refetch: () => {},
   });
 
-  const env = getPaddleEnvironment();
+  const env = getStripeEnvironment();
 
   const fetchAccess = async () => {
     if (!user) {
