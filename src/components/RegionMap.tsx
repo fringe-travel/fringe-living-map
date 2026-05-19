@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { SignalDrop } from "@/lib/regions";
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmdhbGxhZ3NkIiwiYSI6ImNtYnR5cTc0cTA4Z2gycXBxNDR3dXdkencifQ.gKQH6ihL3rMHiTkdmyjoBg";
@@ -37,16 +38,32 @@ const REGION_ZOOM: Record<string, number> = {
   "hood-river": 11,
 };
 
+const TAG_EMOJI: Record<string, string> = {
+  crowd: "👥",
+  wind: "💨",
+  sunset: "🌅",
+  food: "🍽️",
+  music: "🎶",
+  surf: "🏄",
+  vibe: "✨",
+};
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
+}
+
 export function RegionMap({
   slug,
   spots,
   label,
   video,
+  feed = [],
 }: {
   slug: string;
   spots: string[];
   label: string;
   video?: string;
+  feed?: SignalDrop[];
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -56,6 +73,7 @@ export function RegionMap({
     if (typeof window === "undefined" || !containerRef.current) return;
     let cancelled = false;
     const markers: any[] = [];
+    let activePopup: any = null;
 
     (async () => {
       const mapboxgl = (await import("mapbox-gl")).default;
@@ -83,16 +101,54 @@ export function RegionMap({
         for (const s of spots) {
           const coords = SPOT_COORDS[s];
           if (!coords) continue;
+          const drop = feed.find((d) => d.spot.includes(s)) ?? null;
           const el = document.createElement("div");
           el.className = "region-pin";
           const videoHtml = video
             ? `<video class="region-pin-video" src="${video}" autoplay loop muted playsinline></video>`
             : "";
           el.innerHTML = `<div class="region-pin-card">${videoHtml}<span class="region-pin-label">${s}</span></div><span class="region-pin-dot"></span>`;
+          el.style.cursor = "pointer";
+
           const m = new mapboxgl.Marker({ element: el, anchor: "center" })
             .setLngLat(coords)
             .addTo(map);
           markers.push(m);
+
+          el.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (activePopup) { try { activePopup.remove(); } catch {} }
+            const tagEmoji = drop ? TAG_EMOJI[drop.tag] ?? "✨" : "✨";
+            const html = `
+              <div class="region-popup">
+                <div class="region-popup-head">
+                  <span class="region-popup-live"><span class="region-popup-live-dot"></span>LIVE</span>
+                  ${drop ? `<span class="region-popup-time">${drop.minutesAgo}m ago</span>` : `<span class="region-popup-time region-popup-time-quiet">No fresh signal</span>`}
+                </div>
+                <div class="region-popup-title">${escapeHtml(s)}</div>
+                <div class="region-popup-sub">${escapeHtml(label)}</div>
+                ${drop ? `
+                  <div class="region-popup-quote">
+                    <span class="region-popup-quote-tag">${tagEmoji}</span>
+                    <span class="region-popup-quote-text">"${escapeHtml(drop.vibe)}"</span>
+                  </div>
+                  <div class="region-popup-by">@${escapeHtml(drop.by)}</div>
+                ` : `
+                  <div class="region-popup-empty">Be the first to drop a vibe here.</div>
+                `}
+              </div>
+            `;
+            activePopup = new mapboxgl.Popup({
+              offset: 18,
+              closeButton: true,
+              closeOnClick: true,
+              className: "region-mapbox-popup",
+              maxWidth: "260px",
+            })
+              .setLngLat(coords)
+              .setHTML(html)
+              .addTo(map);
+          });
         }
       });
       map.once("idle", () => map.resize());
@@ -108,6 +164,7 @@ export function RegionMap({
 
     return () => {
       cancelled = true;
+      if (activePopup) { try { activePopup.remove(); } catch {} }
       for (const m of markers) m.remove();
       if (mapRef.current) {
         try { (mapRef.current as any).__cleanup?.(); } catch {}
@@ -115,7 +172,7 @@ export function RegionMap({
         mapRef.current = null;
       }
     };
-  }, [slug, spots, video]);
+  }, [slug, spots, video, feed, label]);
 
   return (
     <div className="region-map-shell relative h-[calc(100vh-65px)] min-h-[620px] w-full overflow-hidden bg-surface">
@@ -200,6 +257,80 @@ export function RegionMap({
         }
         .region-map-shell .mapboxgl-canvas {
           outline: none;
+        }
+
+        /* Popup */
+        .region-mapbox-popup .mapboxgl-popup-content {
+          background: rgba(8, 10, 14, 0.92);
+          color: #fff;
+          border: 1px solid rgba(80,255,160,0.45);
+          border-radius: 14px;
+          padding: 14px 14px 12px;
+          box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 22px rgba(80,255,160,0.25);
+          backdrop-filter: blur(8px);
+        }
+        .region-mapbox-popup .mapboxgl-popup-tip {
+          border-top-color: rgba(80,255,160,0.55) !important;
+          border-bottom-color: rgba(80,255,160,0.55) !important;
+        }
+        .region-mapbox-popup .mapboxgl-popup-close-button {
+          color: rgba(255,255,255,0.7);
+          font-size: 18px;
+          padding: 2px 8px;
+        }
+        .region-popup-head {
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 8px; margin-bottom: 8px;
+        }
+        .region-popup-live {
+          display: inline-flex; align-items: center; gap: 5px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+          color: rgb(80,255,160);
+        }
+        .region-popup-live-dot {
+          width: 6px; height: 6px; border-radius: 9999px;
+          background: rgb(80,255,160);
+          box-shadow: 0 0 8px rgba(80,255,160,0.9);
+          animation: region-pin-glow 1.6s ease-in-out infinite;
+        }
+        .region-popup-time {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+          color: rgba(255,255,255,0.7);
+        }
+        .region-popup-time-quiet { color: rgba(255,255,255,0.35); }
+        .region-popup-title {
+          font-size: 15px; font-weight: 800; letter-spacing: -0.01em;
+          color: #fff;
+        }
+        .region-popup-sub {
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+          color: rgba(255,255,255,0.5);
+          margin-top: 2px;
+        }
+        .region-popup-quote {
+          display: flex; gap: 8px; align-items: flex-start;
+          margin-top: 10px; padding: 8px 10px;
+          background: rgba(255,255,255,0.06);
+          border-radius: 10px;
+          border: 1px solid rgba(255,255,255,0.08);
+        }
+        .region-popup-quote-tag { font-size: 14px; line-height: 1; }
+        .region-popup-quote-text {
+          font-size: 12.5px; line-height: 1.35;
+          color: rgba(255,255,255,0.92);
+        }
+        .region-popup-by {
+          margin-top: 6px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 10px; color: rgb(80,255,160);
+        }
+        .region-popup-empty {
+          margin-top: 10px;
+          font-size: 12px; color: rgba(255,255,255,0.55);
+          font-style: italic;
         }
       `}</style>
     </div>
