@@ -8,7 +8,7 @@ type Props = {
 };
 
 /**
- * Send a Shaka — small tip to support a viber for capturing a real-time vibe.
+ * Send a Shaka, small tip to support a viber for capturing a real-time vibe.
  * Defaults to $3 (configured on the `shaka_tip` Paddle price).
  */
 export function ShakaButton({ viberName, className, children }: Props) {

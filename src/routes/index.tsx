@@ -6,13 +6,13 @@ import { FOUNDING_MEMBER_PRICE_ID } from "@/lib/pricing-ids";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "FRiNGE — The Living Globe of real-time vibes." },
+      { title: "FRiNGE, The Living Globe of real-time vibes." },
       {
         name: "description",
         content:
           "Discover adventure through real people around the world. Fresh vibes captured by people on the ground. No uploads. No edits. No filters.",
       },
-      { property: "og:title", content: "FRiNGE — The Living Globe" },
+      { property: "og:title", content: "FRiNGE, The Living Globe" },
       {
         property: "og:description",
         content: "A real-time window into the physical world.",
@@ -57,7 +57,7 @@ function HomePage() {
               to="/pricing"
               className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:w-auto"
             >
-              Claim Founding Member Pass — $100
+              Claim Founding Member Pass, $100
             </Link>
           </div>
 
@@ -137,7 +137,7 @@ function FoundingMemberSection() {
             Become one of the first 2,000.
           </h2>
           <p className="mt-5 max-w-2xl text-foreground/70">
-            FRiNGE is building the Living Globe — fresh vibes from real people in
+            FRiNGE is building the Living Globe, fresh vibes from real people in
             real places around the world. Founding Members help shape the
             community from the beginning and get lifetime founding status.
           </p>

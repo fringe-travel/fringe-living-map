@@ -23,7 +23,7 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Signal lost</h1>
-        <p className="mt-3 text-4xl font-extrabold tracking-tighter">404 — Off the map</p>
+        <p className="mt-3 text-4xl font-extrabold tracking-tighter">404, Off the map</p>
         <p className="mt-3 text-sm text-foreground/60">
           That region isn't broadcasting. Try another signal zone.
         </p>
@@ -71,22 +71,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "FRiNGE — See what's happening there right now." },
+      { title: "FRiNGE, See what's happening there right now." },
       {
         name: "description",
         content:
           "FRiNGE is a signal map of real places. Unlock real-time vibes, active spots, and what's happening now from beaches, cities, and adventure spots around the world.",
       },
-      { property: "og:title", content: "FRiNGE — See what's happening there right now." },
+      { property: "og:title", content: "FRiNGE, See what's happening there right now." },
       { property: "og:description", content: "Unlock real-time access to live places and see what's happening now." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "FRiNGE — See what's happening there right now." },
+      { name: "twitter:title", content: "FRiNGE, See what's happening there right now." },
       { name: "twitter:description", content: "Unlock real-time access to live places and see what's happening now." },
       { property: "og:image", content: OG_IMAGE_URL },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "640" },
-      { property: "og:image:alt", content: "The FRiNGE Living Globe — live signals from real places around the world." },
+      { property: "og:image:alt", content: "The FRiNGE Living Globe, live signals from real places around the world." },
       { name: "twitter:image", content: OG_IMAGE_URL },
     ],
     links: [

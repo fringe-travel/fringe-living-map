@@ -3,9 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "Terms of Service — FRiNGE" },
+      { title: "Terms of Service, FRiNGE" },
       { name: "description", content: "Terms and conditions governing use of the FRiNGE Signal Network." },
-      { property: "og:title", content: "Terms of Service — FRiNGE" },
+      { property: "og:title", content: "Terms of Service, FRiNGE" },
       { property: "og:description", content: "Terms and conditions governing use of the FRiNGE Signal Network." },
     ],
     links: [{ rel: "canonical", href: "/terms" }],
@@ -36,8 +36,8 @@ function TermsPage() {
       </Section>
 
       <Section title="3. The Service">
-        FRiNGE provides real-time "signal" data about places — including activity
-        levels, vibes, and what's happening now — sourced from people on the ground
+        FRiNGE provides real-time "signal" data about places, including activity
+        levels, vibes, and what's happening now, sourced from people on the ground
         and aggregated data. Access to live signal data is gated by region passes
         (24-hour day passes), monthly region subscriptions, or a Global Pass.
       </Section>
@@ -101,7 +101,7 @@ function TermsPage() {
 
       <Section title="10. Disclaimers">
         To the fullest extent permitted by law, the Service is provided "as is" and "as
-        available", without warranties of any kind — express or implied — including
+        available", without warranties of any kind, express or implied, including
         implied warranties of merchantability, fitness for a particular purpose, and
         non-infringement.
       </Section>

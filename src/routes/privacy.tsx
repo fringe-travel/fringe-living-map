@@ -3,9 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Notice — FRiNGE" },
+      { title: "Privacy Notice, FRiNGE" },
       { name: "description", content: "How FRiNGE, Inc. collects, uses, and protects your personal data." },
-      { property: "og:title", content: "Privacy Notice — FRiNGE" },
+      { property: "og:title", content: "Privacy Notice, FRiNGE" },
       { property: "og:description", content: "How FRiNGE, Inc. collects, uses, and protects your personal data." },
     ],
     links: [{ rel: "canonical", href: "/privacy" }],
@@ -29,13 +29,13 @@ function PrivacyPage() {
 
       <Section title="2. Data we collect">
         <ul>
-          <li><strong>Account data</strong> — name, email address, password hash, sign-in provider (e.g. Google).</li>
-          <li><strong>Profile & preferences</strong> — favorite regions, notification settings.</li>
-          <li><strong>Usage data</strong> — pages viewed, features used, region access events, approximate location derived from IP.</li>
-          <li><strong>Device & technical data</strong> — IP address, browser, operating system, device identifiers, cookies.</li>
-          <li><strong>Support communications</strong> — messages you send us and our responses.</li>
-          <li><strong>Order data</strong> — limited to confirmation that a purchase took place; payment card details are collected by Paddle, not by us.</li>
-          <li><strong>User-contributed signals</strong> — content you choose to submit (vibes, photos, comments).</li>
+          <li><strong>Account data</strong>, name, email address, password hash, sign-in provider (e.g. Google).</li>
+          <li><strong>Profile & preferences</strong>, favorite regions, notification settings.</li>
+          <li><strong>Usage data</strong>, pages viewed, features used, region access events, approximate location derived from IP.</li>
+          <li><strong>Device & technical data</strong>, IP address, browser, operating system, device identifiers, cookies.</li>
+          <li><strong>Support communications</strong>, messages you send us and our responses.</li>
+          <li><strong>Order data</strong>, limited to confirmation that a purchase took place; payment card details are collected by Paddle, not by us.</li>
+          <li><strong>User-contributed signals</strong>, content you choose to submit (vibes, photos, comments).</li>
         </ul>
       </Section>
 
@@ -62,11 +62,11 @@ function PrivacyPage() {
 
       <Section title="5. Who we share data with">
         <ul>
-          <li><strong>Service providers / subprocessors</strong> — hosting and infrastructure providers, authentication, email delivery, analytics, and customer-support tooling, all bound by data-processing terms.</li>
-          <li><strong>Merchant of Record — Paddle</strong> — Paddle.com Market Limited acts as Merchant of Record for our sales. Paddle independently collects and processes the personal and payment data needed to take payment, manage subscriptions, calculate tax, and issue invoices, under its own privacy notice.</li>
-          <li><strong>Professional advisers</strong> — lawyers, accountants, and auditors, where reasonably necessary.</li>
-          <li><strong>Authorities</strong> — where required by law, court order, or to protect rights, safety, or the integrity of the Service.</li>
-          <li><strong>Successors</strong> — in connection with a merger, acquisition, or sale of assets, subject to customary confidentiality.</li>
+          <li><strong>Service providers / subprocessors</strong>, hosting and infrastructure providers, authentication, email delivery, analytics, and customer-support tooling, all bound by data-processing terms.</li>
+          <li><strong>Merchant of Record, Paddle</strong>, Paddle.com Market Limited acts as Merchant of Record for our sales. Paddle independently collects and processes the personal and payment data needed to take payment, manage subscriptions, calculate tax, and issue invoices, under its own privacy notice.</li>
+          <li><strong>Professional advisers</strong>, lawyers, accountants, and auditors, where reasonably necessary.</li>
+          <li><strong>Authorities</strong>, where required by law, court order, or to protect rights, safety, or the integrity of the Service.</li>
+          <li><strong>Successors</strong>, in connection with a merger, acquisition, or sale of assets, subject to customary confidentiality.</li>
         </ul>
         We do not sell personal data.
       </Section>
@@ -81,10 +81,10 @@ function PrivacyPage() {
       <Section title="7. Retention">
         We keep personal data only as long as we need it:
         <ul>
-          <li><strong>Account data</strong> (profile, preferences, sign-in records, user-contributed signals tied to your account) — retained while your account is active and deleted within <strong>30 days</strong> after you delete your account or it becomes permanently inactive.</li>
-          <li><strong>Billing and tax records</strong> (order confirmations, invoices, transaction history) — retained for <strong>7 years</strong> to satisfy US IRS and other tax/accounting obligations, even after account deletion.</li>
-          <li><strong>Support communications</strong> — retained for up to <strong>2 years</strong> after the ticket is closed.</li>
-          <li><strong>Security logs</strong> (authentication, fraud, abuse signals) — retained for up to <strong>12 months</strong>.</li>
+          <li><strong>Account data</strong> (profile, preferences, sign-in records, user-contributed signals tied to your account), retained while your account is active and deleted within <strong>30 days</strong> after you delete your account or it becomes permanently inactive.</li>
+          <li><strong>Billing and tax records</strong> (order confirmations, invoices, transaction history), retained for <strong>7 years</strong> to satisfy US IRS and other tax/accounting obligations, even after account deletion.</li>
+          <li><strong>Support communications</strong>, retained for up to <strong>2 years</strong> after the ticket is closed.</li>
+          <li><strong>Security logs</strong> (authentication, fraud, abuse signals), retained for up to <strong>12 months</strong>.</li>
         </ul>
         After these periods we delete or irreversibly anonymize the data. Backups
         containing residual copies are overwritten on our standard backup rotation
@@ -101,8 +101,8 @@ function PrivacyPage() {
       </Section>
 
       <Section title="9. Security">
-        We use appropriate technical and organizational measures — including encryption
-        in transit, access controls, and least-privilege practices — to protect
+        We use appropriate technical and organizational measures, including encryption
+        in transit, access controls, and least-privilege practices, to protect
         personal data. No system is perfectly secure; please use a strong, unique
         password.
       </Section>

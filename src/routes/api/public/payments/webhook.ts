@@ -49,7 +49,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
 
   const regionSlug = session.metadata?.regionSlug || DAY_PASS_TO_REGION[priceLookup];
   if (!regionSlug) {
-    // Could be a Shaka tip or another non-region purchase — nothing to record.
+    // Could be a Shaka tip or another non-region purchase, nothing to record.
     console.log("checkout.session.completed: non-region purchase", priceLookup);
     return;
   }

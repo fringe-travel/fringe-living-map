@@ -28,7 +28,7 @@ export function useRegionAccess(regionSlug: string): AccessState {
     }
     setState((s) => ({ ...s, loading: true }));
 
-    // Active subscriptions — key off stable price_id (lookup_key), not Stripe's internal prod_xxx product_id.
+    // Active subscriptions, key off stable price_id (lookup_key), not Stripe's internal prod_xxx product_id.
     const { data: subs } = await supabase
       .from("subscriptions")
       .select("price_id, status, current_period_end")

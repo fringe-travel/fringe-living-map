@@ -18,7 +18,7 @@ export const Route = createFileRoute("/regions/$slug")({
   head: ({ loaderData }) => {
     const r = loaderData?.region;
     const shortName = r ? r.name.replace(" Signal", "") : "Region";
-    const title = r ? `${shortName} — Live on FRiNGE` : "Region — FRiNGE";
+    const title = r ? `${shortName}, Live on FRiNGE` : "Region, FRiNGE";
     const desc = r ? r.description : "A live region on FRiNGE.";
     return {
       meta: [
@@ -154,7 +154,7 @@ function Page() {
         </div>
       </section>
 
-      {/* Popular spots — with empty-spot CTAs */}
+      {/* Popular spots, with empty-spot CTAs */}
       <section className="border-b border-border bg-surface/30 py-20">
         <div className="mx-auto max-w-7xl px-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Popular spots</p>

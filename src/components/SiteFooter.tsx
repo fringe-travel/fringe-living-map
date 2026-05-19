@@ -50,7 +50,7 @@ export function SiteFooter() {
 
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 px-6 py-6 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40 md:flex-row md:items-center">
-          <span>© 2026 FRiNGE — The Living Globe</span>
+          <span>© 2026 FRiNGE, The Living Globe</span>
           <span>Real people. Real places. Fresh signals.</span>
         </div>
       </div>

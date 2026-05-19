@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { Region } from "@/lib/regions";
-import { UnlockButton } from "@/components/UnlockButton";
-import { REGION_SUPPORT_PRICE_IDS, VIBE_REQUEST_PRICE_IDS } from "@/lib/pricing-ids";
+
 
 const statusBadge: Record<Region["status"], { label: string; cls: string }> = {
   signal: { label: "Fresh Signal", cls: "bg-signal text-primary-foreground" },
@@ -39,7 +38,7 @@ export function RegionCard({ region }: { region: Region }) {
         ) : (
           <img
             src={region.image}
-            alt={`${shortName} — ${region.country}`}
+            alt={`${shortName}, ${region.country}`}
             loading="lazy"
             width={1024}
             height={768}
@@ -86,29 +85,16 @@ export function RegionCard({ region }: { region: Region }) {
           ))}
         </ul>
 
-        <div className="relative z-20 mt-auto grid grid-cols-3 gap-2">
+        <div className="relative z-20 mt-auto">
           <Link
             to="/regions/$slug"
             params={{ slug: region.slug }}
-            className="rounded-xl bg-foreground px-3 py-3 text-center text-xs font-bold text-background transition-colors hover:bg-primary"
+            className="block rounded-xl bg-foreground px-3 py-3 text-center text-xs font-bold text-background transition-colors hover:bg-primary"
           >
             Explore
           </Link>
-          <UnlockButton
-            priceId={VIBE_REQUEST_PRICE_IDS.basic}
-            reason={`Request a vibe from ${shortName}`}
-            className="rounded-xl border border-border bg-background px-3 py-3 text-center text-xs font-bold text-foreground transition-colors hover:bg-surface-2 disabled:opacity-60"
-          >
-            Request
-          </UnlockButton>
-          <UnlockButton
-            priceId={REGION_SUPPORT_PRICE_IDS.supporter}
-            reason={`Support ${shortName}`}
-            className="rounded-xl border border-signal/40 bg-signal/10 px-3 py-3 text-center text-xs font-bold text-signal transition-colors hover:bg-signal/20 disabled:opacity-60"
-          >
-            Support
-          </UnlockButton>
         </div>
+
       </div>
     </div>
   );

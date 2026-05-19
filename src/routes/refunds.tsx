@@ -3,9 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/refunds")({
   head: () => ({
     meta: [
-      { title: "Refund Policy — FRiNGE" },
+      { title: "Refund Policy, FRiNGE" },
       { name: "description", content: "FRiNGE's 30-day refund policy and how to request a refund through Paddle." },
-      { property: "og:title", content: "Refund Policy — FRiNGE" },
+      { property: "og:title", content: "Refund Policy, FRiNGE" },
       { property: "og:description", content: "FRiNGE's 30-day refund policy and how to request a refund through Paddle." },
     ],
     links: [{ rel: "canonical", href: "/refunds" }],
@@ -22,7 +22,7 @@ function RefundsPage() {
 
       <Section title="30-day money-back guarantee">
         FRiNGE, Inc. offers a <strong>30-day money-back guarantee</strong> on all
-        purchases — day passes, monthly region subscriptions, and the Global Pass. If
+        purchases, day passes, monthly region subscriptions, and the Global Pass. If
         you're not satisfied with your purchase, you may request a full refund within
         30 days of the order date.
       </Section>
@@ -47,7 +47,7 @@ function RefundsPage() {
 
       <Section title="Subscription cancellations">
         You can cancel a monthly Region Pass or Global Pass at any time from your
-        account. Cancellation stops the next renewal — you'll keep access through the
+        account. Cancellation stops the next renewal, you'll keep access through the
         end of the current billing period. Cancellation alone is not a refund request;
         if you also want a refund for the most recent charge, follow the steps above.
       </Section>

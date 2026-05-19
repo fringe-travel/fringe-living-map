@@ -73,7 +73,7 @@ export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
       redirect_uri: window.location.origin,
     });
     if (result.error) setError((result.error as any).message ?? "Google sign-in failed.");
-    // If redirected, the page navigates away — nothing else to do.
+    // If redirected, the page navigates away, nothing else to do.
   };
 
   return createPortal(

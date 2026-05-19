@@ -4,9 +4,9 @@ import appPreview from "@/assets/fringe-app-preview.jpeg";
 export const Route = createFileRoute("/vibers")({
   head: () => ({
     meta: [
-      { title: "For Vibers — FRiNGE" },
+      { title: "For Vibers, FRiNGE" },
       { name: "description", content: "Tune in and FRiNGE maps the moment. Become a Viber and put your region on the signal map." },
-      { property: "og:title", content: "For Vibers — FRiNGE" },
+      { property: "og:title", content: "For Vibers, FRiNGE" },
       { property: "og:description", content: "Share real-time vibes. Build status in your region. Earn from coverage." },
     ],
   }),
@@ -80,7 +80,7 @@ function Page() {
             Discover Your Adventure.
           </h2>
           <p className="mt-5 text-lg text-foreground/60">
-            FRiNGE lets travelers post live, location-tagged "vibes" from anywhere on earth — surf
+            FRiNGE lets travelers post live, location-tagged "vibes" from anywhere on earth, surf
             spots, hidden parks, sunset bars. A real-time map of what's actually happening, right
             now.
           </p>

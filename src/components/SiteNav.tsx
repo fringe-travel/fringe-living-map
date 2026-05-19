@@ -26,7 +26,7 @@ export function SiteNav() {
       el.scrollIntoView({ behavior: "smooth" });
       el.requestFullscreen?.().catch(() => {});
     }
-    // else: let the Link navigate to "/?fullscreen=1" — LivingGlobe's mount effect handles it
+    // else: let the Link navigate to "/?fullscreen=1", LivingGlobe's mount effect handles it
   };
 
   return (

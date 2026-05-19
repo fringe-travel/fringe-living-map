@@ -5,7 +5,7 @@ import { FOUNDING_MEMBER_PRICE_ID } from "@/lib/pricing-ids";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "FRiNGE Founding Members — Claim your place on the Living Globe." },
+      { title: "FRiNGE Founding Members, Claim your place on the Living Globe." },
       {
         name: "description",
         content:
@@ -35,7 +35,7 @@ function Page() {
         </h1>
         <p className="mt-5 text-pretty text-lg text-foreground/60">
           FRiNGE is built by the people who capture the world as it is. Founding
-          Members fund that mission — and get first access to everything we build
+          Members fund that mission, and get first access to everything we build
           for the community.
         </p>
       </header>
@@ -61,7 +61,7 @@ function Page() {
               "Permanent Founding Member badge on your profile.",
               "First access to Shakas, Vibe Requests, and Region Support as each launches.",
               "Priority invites to Partner Regions and new viber programs.",
-              "Direct line to the team — your feedback shapes what ships first.",
+              "Direct line to the team, your feedback shapes what ships first.",
               "Your name on the Founding Wall when the Globe goes wide.",
             ].map((line) => (
               <li key={line} className="flex gap-3">
@@ -78,7 +78,7 @@ function Page() {
             reason="Claim your Founding Member Pass"
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground transition-all hover:brightness-110 disabled:opacity-60 sm:w-auto"
           >
-            Claim Founding Member Pass — $100
+            Claim Founding Member Pass, $100
           </UnlockButton>
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
             Only 2,000 seats · Once they're gone, they're gone
@@ -103,7 +103,7 @@ function Page() {
             },
             {
               title: "📡 Vibe Requests",
-              body: "Ask for a fresh signal from a specific spot — surf, wind, crowd, sunset.",
+              body: "Ask for a fresh signal from a specific spot, surf, wind, crowd, sunset.",
             },
             {
               title: "🌎 Region Support",
@@ -111,7 +111,7 @@ function Page() {
             },
             {
               title: "🤝 Partner Regions",
-              body: "Local businesses and brands sponsoring the Globe — first dibs go to Founders.",
+              body: "Local businesses and brands sponsoring the Globe, first dibs go to Founders.",
             },
           ].map((f) => (
             <div
@@ -125,7 +125,7 @@ function Page() {
         </div>
 
         <p className="mt-10 border-t border-border pt-8 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/40">
-          No subscriptions to watch fake content — just real ways to back the
+          No subscriptions to watch fake content, just real ways to back the
           people, regions, and signals you care about.
         </p>
       </div>
