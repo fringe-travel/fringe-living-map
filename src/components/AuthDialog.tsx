@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 
@@ -16,7 +17,7 @@ export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
   const handleEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,8 +47,8 @@ export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
     // If redirected, the page navigates away — nothing else to do.
   };
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16 sm:items-center sm:pt-4" onClick={onClose}>
+  return createPortal(
+    <div className="fixed inset-0 z-[2147483647] flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16 sm:items-center sm:pt-4" onClick={onClose}>
       <div
         className="relative my-auto w-full max-w-md rounded-3xl border border-border bg-background p-8"
         onClick={(e) => e.stopPropagation()}
@@ -116,6 +117,7 @@ export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
           {mode === "signin" ? "Need an account? Sign up" : "Already have an account? Sign in"}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
