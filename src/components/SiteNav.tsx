@@ -46,6 +46,7 @@ export function SiteNav() {
             <Link
               key={l.to}
               to={l.to}
+              onClick={l.to === "/" ? handleExplore : closeMenu}
               className="text-sm font-medium text-foreground/60 transition-colors hover:text-foreground"
               activeProps={{ className: "text-foreground" }}
             >
