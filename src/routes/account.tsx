@@ -68,7 +68,7 @@ function AccountPage() {
     let cancelled = false;
     const load = async () => {
       setLoading(true);
-      const [{ data: s }, { data: p }, { data: f }] = await Promise.all([
+      const [{ data: s }, { data: p }, { data: f }, { data: t }] = await Promise.all([
         supabase
           .from("subscriptions")
           .select("paddle_subscription_id, price_id, status, current_period_end, cancel_at_period_end")
@@ -87,11 +87,18 @@ function AccountPage() {
           .select("founding_number, claimed_at")
           .eq("user_id", user.id)
           .maybeSingle(),
+        supabase
+          .from("shaka_transactions")
+          .select("id, kind, amount, note, counterparty_user_id, price_id, created_at")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(50),
       ]);
       if (!cancelled) {
         setSubs((s as SubRow[]) || []);
         setPasses((p as AccessRow[]) || []);
         setFounding((f as FoundingRow) || null);
+        setTxs((t as ShakaTx[]) || []);
         setLoading(false);
       }
     };
