@@ -74,13 +74,6 @@ export function SiteNav() {
               Sign in
             </button>
           )}
-          <Link
-            to="/pricing"
-            onClick={closeMenu}
-            className="hidden rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:scale-105 sm:inline-flex"
-          >
-            Founding Members
-          </Link>
 
 
           <button
