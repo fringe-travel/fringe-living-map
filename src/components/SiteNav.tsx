@@ -56,6 +56,7 @@ export function SiteNav() {
         <div className="flex items-center gap-3">
           {user ? (
             <>
+              <ShakaWalletBadge />
               <Link
                 to="/account"
                 className="hidden text-sm font-medium text-foreground/60 hover:text-foreground md:inline"
