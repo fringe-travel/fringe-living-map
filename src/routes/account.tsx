@@ -4,6 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { createPortalSession } from "@/utils/payments.functions";
+import { getShakaWallet } from "@/utils/shaka.functions";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { ShakaPacksDialog } from "@/components/ShakaPacksDialog";
 
 export const Route = createFileRoute("/account")({
   head: () => ({
@@ -35,6 +39,25 @@ function AccountPage() {
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [shakaOpen, setShakaOpen] = useState(false);
+
+  const fetchWallet = useServerFn(getShakaWallet);
+  const wallet = useQuery({
+    queryKey: ["shaka-wallet", user?.id],
+    queryFn: () => fetchWallet({}),
+    enabled: !!user,
+  });
+
+  type ShakaTx = {
+    id: string;
+    kind: string;
+    amount: number;
+    note: string | null;
+    counterparty_user_id: string | null;
+    price_id: string | null;
+    created_at: string;
+  };
+  const [txs, setTxs] = useState<ShakaTx[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) navigate({ to: "/" });
@@ -45,7 +68,7 @@ function AccountPage() {
     let cancelled = false;
     const load = async () => {
       setLoading(true);
-      const [{ data: s }, { data: p }, { data: f }] = await Promise.all([
+      const [{ data: s }, { data: p }, { data: f }, { data: t }] = await Promise.all([
         supabase
           .from("subscriptions")
           .select("paddle_subscription_id, price_id, status, current_period_end, cancel_at_period_end")
@@ -64,11 +87,18 @@ function AccountPage() {
           .select("founding_number, claimed_at")
           .eq("user_id", user.id)
           .maybeSingle(),
+        supabase
+          .from("shaka_transactions")
+          .select("id, kind, amount, note, counterparty_user_id, price_id, created_at")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(50),
       ]);
       if (!cancelled) {
         setSubs((s as SubRow[]) || []);
         setPasses((p as AccessRow[]) || []);
         setFounding((f as FoundingRow) || null);
+        setTxs((t as ShakaTx[]) || []);
         setLoading(false);
       }
     };
@@ -78,6 +108,8 @@ function AccountPage() {
       .on("postgres_changes", { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${user.id}` }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "region_access", filter: `user_id=eq.${user.id}` }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "founding_members", filter: `user_id=eq.${user.id}` }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "shaka_wallets", filter: `user_id=eq.${user.id}` }, () => { load(); wallet.refetch(); })
+      .on("postgres_changes", { event: "*", schema: "public", table: "shaka_transactions", filter: `user_id=eq.${user.id}` }, () => { load(); wallet.refetch(); })
       .subscribe();
     return () => {
       cancelled = true;
@@ -190,10 +222,68 @@ function AccountPage() {
         )}
       </div>
 
+      <div>
+        <div className="flex items-end justify-between gap-3">
+          <h2 className="text-xs font-mono uppercase tracking-[0.2em] text-foreground/50">Shakas 🤙</h2>
+          <button
+            onClick={() => setShakaOpen(true)}
+            className="text-xs font-mono uppercase tracking-[0.18em] text-sunset hover:underline"
+          >
+            Buy more
+          </button>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Stat label="Balance" value={wallet.data?.balance ?? 0} />
+          <Stat label="Purchased" value={wallet.data?.lifetime_purchased ?? 0} />
+          <Stat label="Sent" value={wallet.data?.lifetime_sent ?? 0} />
+          <Stat label="Received" value={wallet.data?.lifetime_received ?? 0} />
+        </div>
+
+        <h3 className="mt-6 text-xs font-mono uppercase tracking-[0.2em] text-foreground/50">Recent activity</h3>
+        {txs.length === 0 ? (
+          <p className="mt-3 text-sm text-foreground/60">No Shaka activity yet.</p>
+        ) : (
+          <ul className="mt-3 space-y-2">
+            {txs.map((tx) => {
+              const sign = tx.kind === "send" ? "−" : "+";
+              const label =
+                tx.kind === "purchase" ? "Purchased"
+                : tx.kind === "send" ? "Sent"
+                : tx.kind === "receive" ? "Received"
+                : tx.kind;
+              return (
+                <li key={tx.id} className="flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold">{label}</p>
+                    {tx.note && <p className="truncate text-xs text-foreground/60">"{tx.note}"</p>}
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
+                      {formatDate(tx.created_at)}
+                    </p>
+                  </div>
+                  <span className={`font-mono text-sm font-bold ${tx.kind === "send" ? "text-foreground/60" : "text-sunset"}`}>
+                    {sign}{tx.amount} 🤙
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+
       <Link to="/" className="inline-block text-xs font-mono uppercase tracking-[0.18em] text-foreground/50 hover:text-foreground">
         ← Back to the globe
       </Link>
+      <ShakaPacksDialog open={shakaOpen} onClose={() => setShakaOpen(false)} />
     </section>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-xl border border-border bg-surface p-4">
+      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">{label}</p>
+      <p className="mt-1 text-2xl font-extrabold tracking-tight">{value}</p>
+    </div>
   );
 }
 
