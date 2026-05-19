@@ -54,9 +54,21 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     return;
   }
 
+  // Shaka pack purchase, credit the buyer's wallet
+  const shakaAmount = SHAKA_PACK_AMOUNTS[priceLookup];
+  if (shakaAmount) {
+    const { error } = await getSupabase().rpc("credit_shaka_purchase", {
+      p_user: userId,
+      p_amount: shakaAmount,
+      p_price_id: priceLookup,
+      p_session_id: session.id,
+    });
+    if (error) console.error("credit_shaka_purchase failed", error);
+    return;
+  }
+
   const regionSlug = session.metadata?.regionSlug || DAY_PASS_TO_REGION[priceLookup];
   if (!regionSlug) {
-    // Could be a Shaka tip or another non-region purchase, nothing to record.
     console.log("checkout.session.completed: non-region purchase", priceLookup);
     return;
   }
