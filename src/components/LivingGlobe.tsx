@@ -331,7 +331,7 @@ export function LivingGlobe() {
       const spin = () => {
         if (!mapRef.current) return;
         const z = mapRef.current.getZoom();
-        if (!userInteracting && z < maxSpinZoom) {
+        if (!userInteracting && !pausedRef.current && z < maxSpinZoom) {
           const distancePerSecond = 360 / secondsPerRevolution;
           const c = mapRef.current.getCenter();
           c.lng -= distancePerSecond;
