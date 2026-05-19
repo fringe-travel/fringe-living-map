@@ -41,10 +41,12 @@ export function RegionMap({
   slug,
   spots,
   label,
+  video,
 }: {
   slug: string;
   spots: string[];
   label: string;
+  video?: string;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -82,7 +84,10 @@ export function RegionMap({
           if (!coords) continue;
           const el = document.createElement("div");
           el.className = "region-pin";
-          el.innerHTML = `<span class="region-pin-dot"></span><span class="region-pin-label">${s}</span>`;
+          const videoHtml = video
+            ? `<video class="region-pin-video" src="${video}" autoplay loop muted playsinline></video>`
+            : "";
+          el.innerHTML = `<div class="region-pin-card">${videoHtml}<span class="region-pin-label">${s}</span></div><span class="region-pin-dot"></span>`;
           const m = new mapboxgl.Marker({ element: el, anchor: "center" })
             .setLngLat(coords)
             .addTo(map);
@@ -109,7 +114,7 @@ export function RegionMap({
         mapRef.current = null;
       }
     };
-  }, [slug, spots]);
+  }, [slug, spots, video]);
 
   return (
     <div className="region-map-shell relative h-[calc(100vh-65px)] min-h-[620px] w-full overflow-hidden bg-surface">
@@ -138,34 +143,51 @@ export function RegionMap({
           align-items: center;
           transform: translate(-50%, -50%);
         }
+        .region-pin-card {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          width: 96px;
+          border-radius: 8px;
+          overflow: hidden;
+          background: rgba(0,0,0,0.65);
+          border: 1px solid rgba(80,255,160,0.55);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.5), 0 0 14px rgba(80,255,160,0.35);
+          backdrop-filter: blur(4px);
+          animation: region-pin-glow 2.2s ease-in-out infinite;
+        }
+        .region-pin-video {
+          width: 100%;
+          height: 56px;
+          object-fit: cover;
+          display: block;
+          background: #000;
+        }
         .region-pin-dot {
-          width: 12px; height: 12px; border-radius: 9999px;
+          margin-top: 4px;
+          width: 10px; height: 10px; border-radius: 9999px;
           background: hsl(var(--signal, 142 76% 55%));
-          box-shadow: 0 0 0 2px rgba(0,0,0,0.7), 0 0 18px rgba(80,255,160,0.85);
+          box-shadow: 0 0 0 2px rgba(0,0,0,0.7), 0 0 14px rgba(80,255,160,0.85);
         }
         .region-pin-label {
-          margin-top: 6px;
           font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
           font-size: 9px;
           letter-spacing: 0.18em;
           text-transform: uppercase;
           color: rgba(255,255,255,0.98);
-          background: rgba(0,0,0,0.65);
-          padding: 3px 7px;
-          border-radius: 4px;
+          padding: 4px 7px;
           white-space: nowrap;
-          backdrop-filter: blur(4px);
-          border: 1px solid rgba(80,255,160,0.55);
+          text-align: center;
           text-shadow: 0 0 6px rgba(80,255,160,0.9);
-          animation: region-pin-glow 2.2s ease-in-out infinite;
         }
         @keyframes region-pin-glow {
           0%, 100% {
-            box-shadow: 0 0 6px rgba(80,255,160,0.45), 0 0 14px rgba(80,255,160,0.25);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5), 0 0 10px rgba(80,255,160,0.35);
             border-color: rgba(80,255,160,0.45);
           }
           50% {
-            box-shadow: 0 0 12px rgba(80,255,160,0.9), 0 0 26px rgba(80,255,160,0.55);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5), 0 0 22px rgba(80,255,160,0.75);
             border-color: rgba(80,255,160,0.9);
           }
         }
