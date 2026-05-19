@@ -6,7 +6,7 @@ import { AuthDialog } from "@/components/AuthDialog";
 import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
 
 const links = [
-  { to: "/", label: "Explore Living Map" },
+  { to: "/", label: "Explore The Globe" },
   { to: "/signal-regions", label: "Regions" },
   { to: "/vibers", label: "Become a Viber" },
 ] as const;
