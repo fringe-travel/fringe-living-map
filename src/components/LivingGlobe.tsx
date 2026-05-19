@@ -68,6 +68,7 @@ type Pin = {
   lastUpdatedMin?: number;
   tags?: string;
   image?: string;
+  video?: string;
 };
 
 function buildPins(): Pin[] {
@@ -91,6 +92,7 @@ function buildPins(): Pin[] {
       lastUpdatedMin: r.lastUpdatedMin,
       tags: r.tags,
       image: r.image,
+      video: r.video,
     });
   }
   return pts;
@@ -266,7 +268,7 @@ export function LivingGlobe() {
                 <span class="fringe-beacon-ring r3"></span>
               </span>
               <span class="fringe-beacon-core">
-                ${p.image ? `<img class="fringe-beacon-thumb" src="${escapeHtml(p.image)}" alt="" loading="lazy" />` : ""}
+                ${p.video ? `<video class="fringe-beacon-thumb" src="${escapeHtml(p.video)}" autoplay loop muted playsinline${p.image ? ` poster="${escapeHtml(p.image)}"` : ""}></video>` : p.image ? `<img class="fringe-beacon-thumb" src="${escapeHtml(p.image)}" alt="" loading="lazy" />` : ""}
               </span>
               <span class="fringe-beacon-chip">
                 <span class="fringe-beacon-chip-dot"></span>
@@ -744,8 +746,7 @@ export function LivingGlobe() {
           height: 100%;
           object-fit: cover;
           border-radius: 9999px;
-          opacity: 0;
-          transition: opacity 0.25s ease;
+          opacity: 1;
           pointer-events: none;
         }
         .fringe-beacon:hover .fringe-beacon-core {
