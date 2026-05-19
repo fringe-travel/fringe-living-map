@@ -34,7 +34,7 @@ export function ShakaPacksDialog({ open, onClose, recipientUserId, recipientName
   }, [open]);
 
   const balance = wallet.data?.balance ?? 0;
-  const canSend = !!recipientUserId && balance > 0 && !sending && !sent;
+  const canSend = !!recipientUserId && balance > 0 && !sending;
 
   const handleSend = async () => {
     if (!recipientUserId) return;
@@ -43,6 +43,8 @@ export function ShakaPacksDialog({ open, onClose, recipientUserId, recipientName
       await sendOne({ data: { recipientUserId, amount: 1 } });
       setSent(true);
       qc.invalidateQueries({ queryKey: ["shaka-wallet", user?.id] });
+      // Re-enable the button after a brief confirmation flash so users can send more
+      setTimeout(() => setSent(false), 1200);
     } catch (e) {
       console.error(e);
     } finally {
