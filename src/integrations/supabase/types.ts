@@ -47,6 +47,72 @@ export type Database = {
         }
         Relationships: []
       }
+      shaka_transactions: {
+        Row: {
+          amount: number
+          counterparty_user_id: string | null
+          created_at: string
+          id: string
+          kind: string
+          note: string | null
+          price_id: string | null
+          stripe_session_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          counterparty_user_id?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          note?: string | null
+          price_id?: string | null
+          stripe_session_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          counterparty_user_id?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          price_id?: string | null
+          stripe_session_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shaka_wallets: {
+        Row: {
+          balance: number
+          created_at: string
+          lifetime_purchased: number
+          lifetime_received: number
+          lifetime_sent: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          lifetime_purchased?: number
+          lifetime_received?: number
+          lifetime_sent?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          lifetime_purchased?: number
+          lifetime_received?: number
+          lifetime_sent?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -100,6 +166,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      credit_shaka_purchase: {
+        Args: {
+          p_amount: number
+          p_price_id: string
+          p_session_id: string
+          p_user: string
+        }
+        Returns: undefined
+      }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
@@ -107,6 +182,15 @@ export type Database = {
       has_region_access: {
         Args: { check_env?: string; region: string; user_uuid: string }
         Returns: boolean
+      }
+      send_shakas: {
+        Args: {
+          p_amount: number
+          p_note?: string
+          p_recipient: string
+          p_sender: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
