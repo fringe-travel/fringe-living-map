@@ -108,6 +108,8 @@ function AccountPage() {
       .on("postgres_changes", { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${user.id}` }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "region_access", filter: `user_id=eq.${user.id}` }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "founding_members", filter: `user_id=eq.${user.id}` }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "shaka_wallets", filter: `user_id=eq.${user.id}` }, () => { load(); wallet.refetch(); })
+      .on("postgres_changes", { event: "*", schema: "public", table: "shaka_transactions", filter: `user_id=eq.${user.id}` }, () => { load(); wallet.refetch(); })
       .subscribe();
     return () => {
       cancelled = true;
