@@ -1,111 +1,73 @@
+## What's broken today
 
-# FRiNGE Redesign Plan
+1. `AuthProvider` is never mounted, so `useAuth()` is permanently `{ user: null }`. Every checkout fires without a `userId` → webhook can't link the purchase → entitlement never unlocks.
+2. Most products referenced in code don't exist in Stripe (vibe requests, region support tiers, region monthly passes, global pass). Clicking those buttons throws "Price not found".
+3. No UI sells the region day pass even though `useRegionAccess` checks for one.
+4. `useRegionAccess` and `has_region_access` key entitlement off `product_id`, which the webhook stores as Stripe's internal `prod_xxx` — different in sandbox vs live, so even after products exist, gating would silently break after publish.
+5. No `/account` page, no Stripe Customer Portal, so users can't cancel or update card.
+6. Email signup uses Google OAuth via Lovable Cloud, but Google provider hasn't been confirmed enabled on Supabase.
 
-A complete repositioning of the site around the "Living Globe" of real-time human signals, with community-driven monetization replacing the current paywall model.
+## Plan
 
-## New product vocabulary (used everywhere)
+### 1. Create missing Stripe products
+One-time:
+- `vibe_request_basic` $1, `vibe_request_priority` $3, `vibe_request_custom` $5
 
-- **Vibe** — a real-time human signal from a place
-- **Viber** — a person sharing what's happening where they are
-- **Living Globe** — the global map of live vibes
-- **Fresh Signal** — a recent vibe
-- **Adventure Feed** — stream of fresh vibes from followed places
-- **Regions** — clusters of vibes around meaningful places
+Monthly recurring (digital service tax code):
+- `region_support_supporter` $5, `region_support_backer` $10, `region_support_patron` $25 (no access grant, supporter perks only)
+- `boracay_pass` $5/mo, `rio_pass` $5/mo, `hood_river_pass` $5/mo (region monthly access)
+- `global_pass` $20/mo (all regions)
 
-Replace existing "Unlock", "Monthly access", "Region Pass", "Global Pass" language across all pages.
+All tagged with tax code `txcd_10000000` so end-to-end compliance handling (Stripe Tax + filing + fraud + disputes) works.
 
-## Homepage structure (rewrite `src/routes/index.tsx`)
+### 2. Mount `AuthProvider`
+Wrap `<Outlet />` in `__root.tsx` inside `<AuthProvider>` (inside the QueryClientProvider).
 
-1. **Globe Hero**
-   - Headline: "Discover adventure through real people around the world."
-   - Sub: "Fresh vibes captured by people on the ground — no uploads, no edits, no filters."
-   - Buttons: `Explore the Globe`, `Capture a Vibe`
-   - Micro line: "Real people. Real places. Fresh signals."
-   - Keep existing globe/signal visual; relabel pulses as Fresh Signals.
+### 3. Confirm Google OAuth is enabled
+Call `configure_social_auth` for Google so the AuthDialog button works.
 
-2. **Featured Regions strip** — Boracay, Rio, Hood River as the three Living Globe access points. Each card shows: fresh signals today, featured spots, 3 recent vibes (mins ago), and soft actions: `Explore Region`, `Request a Vibe`, `Support Region`.
+### 4. Gate region pages with a "Get access" CTA
+On each `/regions/$slug`, when `useRegionAccess(slug).hasAccess === false`, show an inline gate above the "Recent vibes" feed with three buttons:
+- 24-hour pass — $3 (`<slug>_day`)
+- Region monthly — $5/mo (`<slug>_pass`)
+- Global pass — $20/mo (`global_pass`)
 
-3. **"What makes FRiNGE different" comparison section**
-   - Headline: "Social media shows what people want you to see. FRiNGE shows what is actually happening."
-   - 4-column comparison: Instagram/TikTok • Google Maps • Weather apps • FRiNGE
-   - Closer line: "FRiNGE is not another content app. It is a real-time window into the physical world."
+When `hasAccess === true`, show a small "Access active · expires …" badge instead.
 
-4. **Adventure Feed preview** — repurpose existing signal cards as Fresh Signals with viber name + minutes ago. Each card gets a `Send a Shaka` action and `Request Similar`.
+### 5. Fix entitlement to use `price_id`, not `product_id`
+- Update `useRegionAccess` to match on `price_id === 'global_pass'` and `price_id === '<slug>_pass'`.
+- Migrate `has_region_access` SQL function to do the same.
+- This makes entitlement stable across sandbox → live.
 
-5. **Mission section**
-   - "No uploads. No edits. No filters. Only delete."
-   - "You can remove a moment, but you can't manufacture one."
+### 6. Add `/account` page + Stripe Customer Portal
+- New server fn `createPortalSession` (protected by `requireSupabaseAuth`) that loads the latest `stripe_customer_id` for this user/env and returns `billingPortal.sessions.create({ customer, return_url }).url`.
+- Wire `attachSupabaseAuth` into `src/start.ts` `functionMiddleware` so the Supabase access token is attached.
+- `/account` route shows email, active subscriptions (with renewal date / cancel-at-period-end banner), active day passes, and a "Manage billing" button that opens the portal URL in a new tab.
+- Add an "Account" link in `SiteNav` when signed in.
 
-6. **Monetization statement** (lower on page)
-   - "FRiNGE is powered by the people who capture the world as it is. Support vibers, request fresh signals, or help keep a region active. Businesses and communities can partner with FRiNGE to support real-world discovery without controlling the vibe."
+### 7. Webhook polish
+- Keep `paddle_*` column names (table compatibility) but ensure subscription rows record `price_id` from `lookup_key` (already correct).
+- Continue inserting `region_access` rows for known day-pass priceIds (already correct).
+- No new event types needed.
 
-7. **Four-CTA footer band**: Send a Shaka • Request a Vibe • Support a Region • Partner Here
+### 8. Test-mode banner
+Add `<PaymentTestModeBanner />` at the top of the layout so the preview clearly shows test mode.
 
-## Region pages (rewrite `src/routes/regions.$slug.tsx`)
+## Test plan (in preview)
 
-Replace "Unlock" gating with:
-- Region header with fresh signal count, active spots, last updated
-- Recent vibes feed (existing `previewFeed` data, relabeled), each card: `View`, `Send Shaka`, `Request Similar`
-- **Request a Vibe** block — examples ("Capture Station 1 sunset", "Check the crowd at D'Mall"), pricing: $1 basic / $3 priority / $5 custom
-- **Support [Region]** block — $5 Supporter / $10 Regional Backer / $25 Signal Patron, with perks list
-- **Partner Here** block — Spot Supporter $100–300/mo, Region Supporter $500–1,500/mo, Adventure Partner $2,500+/mo, with the trust line: "Partners support the signal. They do not control what people capture."
-- Empty-spot CTA pattern: "No fresh signal from {spot} yet today. → Request a Vibe"
-- Region footer: "Help keep {region} fresh." → `Support {region}`, `Partner Here`
+1. **Sign up flow** — Open the site → click any "Request" / "Support" / "Get pass" button → `AuthDialog` opens → create account with email/password → dialog closes → embedded Stripe checkout opens automatically.
+2. **Successful payment** — Use card `4242 4242 4242 4242`, any future expiry, any CVC, any ZIP. Checkout completes → return page shows "You're in 🤙".
+3. **One-time purchase (day pass)** — Buy `boracay_day` → navigate to `/regions/boracay` → access badge appears within ~2 seconds (realtime subscription on `region_access`).
+4. **Subscription** — Buy `global_pass` → all three region pages show access immediately.
+5. **Decline** — Use `4000 0000 0000 0002` to confirm error UX inside the checkout iframe.
+6. **3D-Secure** — Use `4000 0025 0000 3155`, complete the challenge, verify access still unlocks.
+7. **Account page** — `/account` shows active subscription → "Manage billing" opens Stripe portal in new tab → cancel-at-period-end → returns → `/account` shows the cancellation banner; access remains until `current_period_end`.
+8. **Shaka tip + Vibe requests** — Buy each tier; no entitlement is granted (intentional) but a successful return page confirms payment.
 
-## Pricing page (rewrite `src/routes/pricing.tsx`)
+## Technical notes
 
-Replace tiers with the four launch CTAs as explained sections:
-1. Send a Shaka — support a viber
-2. Request a Vibe — $1 / $3 / $5 tiers
-3. Support a Region — $5 / $10 / $25 monthly
-4. Partner Here — Spot / Region / Adventure tiers
-
-Note at top: subscriptions come later; today FRiNGE is community-supported.
-
-## Components
-
-- New `src/components/ShakaButton.tsx` — wraps `UnlockButton` with shaka emoji + "Send a Shaka" copy, uses a `shaka_tip` price.
-- New `src/components/RequestVibeButton.tsx` — opens checkout for `vibe_request_basic|priority|custom`.
-- New `src/components/SupportRegionCard.tsx` — three-tier support block per region.
-- New `src/components/PartnerHereCard.tsx` — three-tier partner block (links to mailto for now).
-- New `src/components/ComparisonSection.tsx` — the 4-column "What makes FRiNGE different".
-- Update `src/components/RegionCard.tsx` to show fresh signals + 3 recent vibes + soft actions (Explore / Request / Support) — drop the Unlock button.
-- Update `src/components/SiteNav.tsx` and `SiteFooter.tsx` for new vocabulary.
-
-## Payments (Paddle)
-
-Create a new product catalog matching the launch monetization. Keep existing region/global products in place but they're no longer surfaced in UI.
-
-New products (one-time unless noted):
-- `shaka_tip` — $3 one-time (single Send-a-Shaka default amount)
-- `vibe_request_basic` — $1
-- `vibe_request_priority` — $3
-- `vibe_request_custom` — $5
-- `support_region_supporter` — $5/month subscription
-- `support_region_backer` — $10/month subscription
-- `support_region_patron` — $25/month subscription
-
-Partner tiers handled via `mailto:admin@fringe.travel` for now (high-touch sales, not self-serve).
-
-Update `src/lib/pricing-ids.ts` to export these new IDs alongside region/global (kept for backward compat). All new buttons reuse the existing `UnlockButton` → Paddle flow (rename internally or just relabel — keep the component, just change copy where used).
-
-## Removed / deprecated
-
-- "Unlock" copy everywhere → replaced with Support / Request / Shaka
-- Per-region day/month paywall framing on `RegionCard`
-- "Region Pass" and "Global Pass" tiers from pricing page
-- Locked-content gating on region pages (content was already preview-only; we keep showing it openly)
-
-## Files to touch
-
-- rewrite: `src/routes/index.tsx`, `src/routes/regions.$slug.tsx`, `src/routes/pricing.tsx`
-- update: `src/components/RegionCard.tsx`, `src/components/SiteNav.tsx`, `src/components/SiteFooter.tsx`, `src/lib/pricing-ids.ts`
-- new: `src/components/ShakaButton.tsx`, `RequestVibeButton.tsx`, `SupportRegionCard.tsx`, `PartnerHereCard.tsx`, `ComparisonSection.tsx`
-- payments: create 7 new products via `payments--batch_create_product`
-
-## Out of scope for this pass
-
-- Backend logic to actually route Shakas to vibers (treat as a tip pool for now)
-- Vibe request fulfillment flow (capture intent + payment; fulfillment is manual)
-- Subscription gating logic changes (no features are gated anymore on the new homepage)
-- Premium "FRiNGE Explorer / Global" tiers — deferred per your Phase 5 note
+- Server functions: `createPortalSession` lives in `src/utils/payments.functions.ts`, uses `requireSupabaseAuth` middleware; portal URLs are short-lived so generated per click.
+- `attachSupabaseAuth` must be added to `functionMiddleware` in `src/start.ts` or the portal call returns 401.
+- Realtime channels already watch `subscriptions` and `region_access` per user, so the gate flips without a page refresh.
+- Tax codes are required for managed_payments eligibility on all products — set at creation time for the new products; existing four (Shaka + day passes) already have `txcd_10000000`.
+- The `subscriptions.product_id` column will still receive `prod_xxx` from Stripe — we just stop reading from it. No schema change needed.
