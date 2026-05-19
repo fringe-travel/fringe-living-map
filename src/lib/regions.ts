@@ -29,7 +29,7 @@ export type Region = {
   previewFeed: SignalDrop[];
 };
 
-const DEFAULT_VIBE_VIDEO = "/fringe-app-preview.mp4";
+const DEFAULT_VIBE_VIDEO = vibeVideo;
 
 
 export const regions: Region[] = [
