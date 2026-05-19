@@ -42,7 +42,7 @@ export const sendShaka = createServerFn({ method: "POST" })
       p_sender: userId,
       p_recipient: data.recipientUserId,
       p_amount: data.amount,
-      p_note: data.note ?? null,
+      p_note: data.note,
     });
     if (error) throw new Error(error.message);
     return { ok: true };
