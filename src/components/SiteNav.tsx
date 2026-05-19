@@ -122,12 +122,11 @@ export function SiteNav() {
               </Link>
             ))}
             <Link
-              to="/"
-              search={{ fullscreen: 1 } as any}
-              onClick={handleExplore}
+              to="/pricing"
+              onClick={closeMenu}
               className="mt-2 rounded-full bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground sm:hidden"
             >
-              Explore the Globe
+              Claim Founding Pass
             </Link>
             <div className="mt-2 border-t border-border pt-3">
               {user ? (
