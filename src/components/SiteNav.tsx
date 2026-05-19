@@ -119,21 +119,13 @@ export function SiteNav() {
               <Link
                 key={l.to}
                 to={l.to}
-                onClick={closeMenu}
+                onClick={l.to === "/" ? handleExplore : closeMenu}
                 className="rounded-xl px-3 py-3 text-base font-semibold text-foreground/80 hover:bg-surface hover:text-foreground"
                 activeProps={{ className: "text-foreground bg-surface" }}
               >
                 {l.label}
               </Link>
             ))}
-            <Link
-              to="/"
-              onClick={handleExplore}
-              
-              className="mt-2 rounded-full border border-border px-4 py-3 text-center text-sm font-semibold text-foreground/80 sm:hidden"
-            >
-              Explore Living Globe
-            </Link>
             <Link
               to="/pricing"
               onClick={closeMenu}
