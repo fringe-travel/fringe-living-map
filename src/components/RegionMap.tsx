@@ -101,7 +101,7 @@ export function RegionMap({
         for (const s of spots) {
           const coords = SPOT_COORDS[s];
           if (!coords) continue;
-          const drop = feed.find((d) => d.spot.includes(s)) ?? null;
+          const drops = feed.filter((d) => d.spot.includes(s));
           const el = document.createElement("div");
           el.className = "region-pin";
           const videoHtml = video
@@ -118,29 +118,39 @@ export function RegionMap({
           el.addEventListener("click", (e) => {
             e.stopPropagation();
             if (activePopup) { try { activePopup.remove(); } catch {} }
-            const tagEmoji = drop ? TAG_EMOJI[drop.tag] ?? "✨" : "✨";
-            const videoHtml = video
-              ? `<video class="region-popup-video" src="${video}" autoplay loop muted playsinline></video>`
-              : "";
+            const vibesHtml = drops.length
+              ? `<div class="region-popup-vibes">${drops
+                  .map((d) => {
+                    const tagEmoji = TAG_EMOJI[d.tag] ?? "✨";
+                    const vid = video
+                      ? `<video class="region-popup-vibe-video" src="${video}" autoplay loop muted playsinline></video>`
+                      : `<div class="region-popup-vibe-video"></div>`;
+                    return `
+                      <div class="region-popup-vibe">
+                        ${vid}
+                        <div class="region-popup-vibe-meta">
+                          <div class="region-popup-vibe-top">
+                            <span class="region-popup-vibe-tag">${tagEmoji}</span>
+                            <span class="region-popup-vibe-time">${d.minutesAgo}m ago</span>
+                          </div>
+                          <div class="region-popup-vibe-text">"${escapeHtml(d.vibe)}"</div>
+                          <div class="region-popup-vibe-by">@${escapeHtml(d.by)}</div>
+                        </div>
+                      </div>
+                    `;
+                  })
+                  .join("")}</div>`
+              : `<div class="region-popup-empty">No fresh vibes here yet. Be the first to drop one.</div>`;
             const html = `
               <div class="region-popup">
-                ${videoHtml}
                 <div class="region-popup-body">
                   <div class="region-popup-head">
                     <span class="region-popup-live"><span class="region-popup-live-dot"></span>LIVE</span>
-                    ${drop ? `<span class="region-popup-time">${drop.minutesAgo}m ago</span>` : `<span class="region-popup-time region-popup-time-quiet">No fresh signal</span>`}
+                    <span class="region-popup-time">${drops.length} ${drops.length === 1 ? "vibe" : "vibes"}</span>
                   </div>
                   <div class="region-popup-title">${escapeHtml(s)}</div>
                   <div class="region-popup-sub">${escapeHtml(label)}</div>
-                  ${drop ? `
-                    <div class="region-popup-quote">
-                      <span class="region-popup-quote-tag">${tagEmoji}</span>
-                      <span class="region-popup-quote-text">"${escapeHtml(drop.vibe)}"</span>
-                    </div>
-                    <div class="region-popup-by">@${escapeHtml(drop.by)}</div>
-                  ` : `
-                    <div class="region-popup-empty">Be the first to drop a vibe here.</div>
-                  `}
+                  ${vibesHtml}
                 </div>
               </div>
             `;
