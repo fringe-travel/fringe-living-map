@@ -75,12 +75,14 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       mode: isRecurring ? "subscription" : "payment",
       ui_mode: "embedded_page",
       return_url: data.returnUrl,
-      managed_payments: { enabled: true },
       ...(customerId && { customer: customerId }),
       metadata: sessionMetadata,
       ...(isRecurring &&
         data.userId && { subscription_data: { metadata: { userId: data.userId } } }),
-    });
+      // Full compliance handling — Stripe handles tax, fraud, disputes, and support
+      // for buyers in ~80 supported countries.
+      managed_payments: { enabled: true },
+    } as any);
 
     return session.client_secret;
   });
