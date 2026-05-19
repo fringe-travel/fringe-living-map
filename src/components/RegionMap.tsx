@@ -271,10 +271,20 @@ export function RegionMap({
           color: #fff;
           border: 1px solid rgba(80,255,160,0.45);
           border-radius: 14px;
-          padding: 14px 14px 12px;
+          padding: 0;
+          overflow: hidden;
           box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 22px rgba(80,255,160,0.25);
           backdrop-filter: blur(8px);
         }
+        .region-popup-video {
+          display: block;
+          width: 100%;
+          height: 140px;
+          object-fit: cover;
+          background: #000;
+          border-bottom: 1px solid rgba(80,255,160,0.35);
+        }
+        .region-popup-body { padding: 14px 14px 12px; }
         .region-mapbox-popup .mapboxgl-popup-tip {
           border-top-color: rgba(80,255,160,0.55) !important;
           border-bottom-color: rgba(80,255,160,0.55) !important;
