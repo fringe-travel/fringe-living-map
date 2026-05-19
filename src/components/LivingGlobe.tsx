@@ -746,8 +746,7 @@ export function LivingGlobe() {
           height: 100%;
           object-fit: cover;
           border-radius: 9999px;
-          opacity: 0;
-          transition: opacity 0.25s ease;
+          opacity: 1;
           pointer-events: none;
         }
         .fringe-beacon:hover .fringe-beacon-core {
