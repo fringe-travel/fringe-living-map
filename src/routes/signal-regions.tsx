@@ -5,9 +5,9 @@ import { regions } from "@/lib/regions";
 export const Route = createFileRoute("/signal-regions")({
   head: () => ({
     meta: [
-      { title: "Signal Regions — FRiNGE" },
+      { title: "Signal Regions, FRiNGE" },
       { name: "description", content: "Browse every signal region. Unlock real-time access to places around the world." },
-      { property: "og:title", content: "Signal Regions — FRiNGE" },
+      { property: "og:title", content: "Signal Regions, FRiNGE" },
       { property: "og:description", content: "Browse and unlock real-time access to places around the world." },
     ],
   }),
@@ -41,7 +41,7 @@ function Page() {
               Next signal regions
             </h2>
             <p className="mt-4 text-foreground/60">
-              New regions go live as vibers on the ground join the network. These are next up — request
+              New regions go live as vibers on the ground join the network. These are next up, request
               one to push it to the top of the queue.
             </p>
           </div>

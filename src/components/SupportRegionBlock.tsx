@@ -33,7 +33,7 @@ export function SupportRegionBlock({ regionName }: Props) {
         Help keep {regionName} live.
       </h3>
       <p className="mt-3 max-w-xl text-foreground/60">
-        Your monthly support goes to the local vibers capturing fresh signals from {regionName} — beaches,
+        Your monthly support goes to the local vibers capturing fresh signals from {regionName}, beaches,
         food spots, sunsets, nightlife, and adventure areas.
       </p>
 

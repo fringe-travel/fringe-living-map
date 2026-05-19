@@ -39,7 +39,7 @@ export function RegionCard({ region }: { region: Region }) {
         ) : (
           <img
             src={region.image}
-            alt={`${shortName} — ${region.country}`}
+            alt={`${shortName}, ${region.country}`}
             loading="lazy"
             width={1024}
             height={768}

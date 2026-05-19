@@ -121,7 +121,7 @@ export function LivingGlobe() {
     return { totalVibes, totalSpots };
   }, []);
 
-  // Simulated current-viewer ticker — derived from totals with gentle drift.
+  // Simulated current-viewer ticker, derived from totals with gentle drift.
   const [viewers, setViewers] = useState(() => totals.totalVibes * 347 + 11820);
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -616,7 +616,7 @@ export function LivingGlobe() {
           backdrop-filter: blur(4px);
         }
 
-        /* Anchor dot — sits exactly on the lng/lat */
+        /* Anchor dot, sits exactly on the lng/lat */
         .fringe-anchor {
           position: relative;
           display: inline-flex;
@@ -656,7 +656,7 @@ export function LivingGlobe() {
           80%, 100% { transform: scale(2.2); opacity: 0; }
         }
 
-        /* Compact spot pin — icon centered exactly on coord, label floats below without affecting anchor */
+        /* Compact spot pin, icon centered exactly on coord, label floats below without affecting anchor */
         .fringe-spot {
           position: relative;
           width: 0;
@@ -707,7 +707,7 @@ export function LivingGlobe() {
           letter-spacing: 0.02em;
         }
 
-        /* Radiant pulse beacon — for live regions.
+        /* Radiant pulse beacon, for live regions.
            Zero-size container so the geographic coord stays the exact
            anchor at every zoom level, regardless of chip/card layout. */
         .fringe-beacon {
@@ -790,7 +790,7 @@ export function LivingGlobe() {
           70%  { opacity: 0.15; }
           100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
-        /* Compact always-visible chip — bigger, easier to read */
+        /* Compact always-visible chip, bigger, easier to read */
         .fringe-beacon-chip {
           position: absolute;
           top: 50%;

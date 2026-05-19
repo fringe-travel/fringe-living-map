@@ -41,7 +41,7 @@
 :root {
   --radius: 0.875rem;
 
-  /* FRiNGE — Kinetic Intelligence */
+  /* FRiNGE, Kinetic Intelligence */
   --background: oklch(0.14 0.015 240);
   --foreground: oklch(0.98 0.005 240);
   --surface: oklch(0.18 0.018 240);

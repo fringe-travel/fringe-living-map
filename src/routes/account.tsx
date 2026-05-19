@@ -8,7 +8,7 @@ import { createPortalSession } from "@/utils/payments.functions";
 export const Route = createFileRoute("/account")({
   head: () => ({
     meta: [
-      { title: "Your Account — FRiNGE" },
+      { title: "Your Account, FRiNGE" },
       { name: "description", content: "Manage your FRiNGE passes, subscriptions, and billing." },
     ],
   }),
@@ -186,9 +186,9 @@ function prettyPrice(id: string) {
     boracay_pass: "Boracay Monthly · $5/mo",
     rio_pass: "Rio Monthly · $5/mo",
     hood_river_pass: "Hood River Monthly · $5/mo",
-    region_support_supporter: "Region Support — Supporter · $5/mo",
-    region_support_backer: "Region Support — Backer · $10/mo",
-    region_support_patron: "Region Support — Patron · $25/mo",
+    region_support_supporter: "Region Support, Supporter · $5/mo",
+    region_support_backer: "Region Support, Backer · $10/mo",
+    region_support_patron: "Region Support, Patron · $25/mo",
   };
   return map[id] ?? id;
 }

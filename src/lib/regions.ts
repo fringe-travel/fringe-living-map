@@ -94,7 +94,7 @@ export const regions: Region[] = [
     pricePerDay: 2.99,
     pricePerMonth: 6.99,
     status: "quiet",
-    description: "Gorge wind, kite and windsurf conditions, river sessions, and golden hour — straight from the people already out there.",
+    description: "Gorge wind, kite and windsurf conditions, river sessions, and golden hour, straight from the people already out there.",
     previewFeed: [
       { minutesAgo: 4, spot: "The Hook", vibe: "22kt steady west, beginners happy.", by: "sam.w", tag: "wind" },
       { minutesAgo: 9, spot: "Event Site", vibe: "Launch packed, rigging 9m kites.", by: "jules", tag: "crowd" },
