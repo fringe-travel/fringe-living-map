@@ -23,6 +23,7 @@ type SubRow = {
   cancel_at_period_end: boolean | null;
 };
 type AccessRow = { region_slug: string; price_id: string; expires_at: string };
+type FoundingRow = { founding_number: number; claimed_at: string };
 
 function AccountPage() {
   const { user, loading: authLoading } = useAuth();
