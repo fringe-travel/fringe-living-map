@@ -1,6 +1,7 @@
 import boracayImg from "@/assets/region-boracay.jpg";
 import rioImg from "@/assets/region-rio.jpg";
 import hoodRiverImg from "@/assets/region-hood-river.jpg";
+import vibeVideo from "@/assets/fringe-app-preview.mp4?url";
 
 export type SignalDrop = {
   minutesAgo: number;
@@ -28,7 +29,7 @@ export type Region = {
   previewFeed: SignalDrop[];
 };
 
-const DEFAULT_VIBE_VIDEO = "/fringe-app-preview.mp4";
+const DEFAULT_VIBE_VIDEO = vibeVideo;
 
 
 export const regions: Region[] = [
