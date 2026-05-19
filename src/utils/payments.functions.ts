@@ -1,6 +1,30 @@
 import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Database } from "@/integrations/supabase/types";
+import {
+  SHAKA_VALUE_CENTS,
+  isShakaRedeemable,
+  isShakaFullUnlockable,
+} from "@/lib/shaka-redemption";
+
+let _admin: ReturnType<typeof createClient<Database>> | null = null;
+function admin() {
+  if (!_admin) {
+    _admin = createClient<Database>(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _admin;
+}
+
+const DAY_PASS_TO_REGION: Record<string, string> = {
+  boracay_day: "boracay",
+  rio_day: "rio",
+  hood_river_day: "hood-river",
+};
 
 async function resolveOrCreateCustomer(
   stripe: ReturnType<typeof createStripeClient>,
