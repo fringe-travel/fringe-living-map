@@ -119,23 +119,29 @@ export function RegionMap({
             e.stopPropagation();
             if (activePopup) { try { activePopup.remove(); } catch {} }
             const tagEmoji = drop ? TAG_EMOJI[drop.tag] ?? "✨" : "✨";
+            const videoHtml = video
+              ? `<video class="region-popup-video" src="${video}" autoplay loop muted playsinline></video>`
+              : "";
             const html = `
               <div class="region-popup">
-                <div class="region-popup-head">
-                  <span class="region-popup-live"><span class="region-popup-live-dot"></span>LIVE</span>
-                  ${drop ? `<span class="region-popup-time">${drop.minutesAgo}m ago</span>` : `<span class="region-popup-time region-popup-time-quiet">No fresh signal</span>`}
-                </div>
-                <div class="region-popup-title">${escapeHtml(s)}</div>
-                <div class="region-popup-sub">${escapeHtml(label)}</div>
-                ${drop ? `
-                  <div class="region-popup-quote">
-                    <span class="region-popup-quote-tag">${tagEmoji}</span>
-                    <span class="region-popup-quote-text">"${escapeHtml(drop.vibe)}"</span>
+                ${videoHtml}
+                <div class="region-popup-body">
+                  <div class="region-popup-head">
+                    <span class="region-popup-live"><span class="region-popup-live-dot"></span>LIVE</span>
+                    ${drop ? `<span class="region-popup-time">${drop.minutesAgo}m ago</span>` : `<span class="region-popup-time region-popup-time-quiet">No fresh signal</span>`}
                   </div>
-                  <div class="region-popup-by">@${escapeHtml(drop.by)}</div>
-                ` : `
-                  <div class="region-popup-empty">Be the first to drop a vibe here.</div>
-                `}
+                  <div class="region-popup-title">${escapeHtml(s)}</div>
+                  <div class="region-popup-sub">${escapeHtml(label)}</div>
+                  ${drop ? `
+                    <div class="region-popup-quote">
+                      <span class="region-popup-quote-tag">${tagEmoji}</span>
+                      <span class="region-popup-quote-text">"${escapeHtml(drop.vibe)}"</span>
+                    </div>
+                    <div class="region-popup-by">@${escapeHtml(drop.by)}</div>
+                  ` : `
+                    <div class="region-popup-empty">Be the first to drop a vibe here.</div>
+                  `}
+                </div>
               </div>
             `;
             activePopup = new mapboxgl.Popup({
@@ -265,10 +271,20 @@ export function RegionMap({
           color: #fff;
           border: 1px solid rgba(80,255,160,0.45);
           border-radius: 14px;
-          padding: 14px 14px 12px;
+          padding: 0;
+          overflow: hidden;
           box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 22px rgba(80,255,160,0.25);
           backdrop-filter: blur(8px);
         }
+        .region-popup-video {
+          display: block;
+          width: 100%;
+          height: 140px;
+          object-fit: cover;
+          background: #000;
+          border-bottom: 1px solid rgba(80,255,160,0.35);
+        }
+        .region-popup-body { padding: 14px 14px 12px; }
         .region-mapbox-popup .mapboxgl-popup-tip {
           border-top-color: rgba(80,255,160,0.55) !important;
           border-bottom-color: rgba(80,255,160,0.55) !important;
