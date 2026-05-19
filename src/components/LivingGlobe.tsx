@@ -556,7 +556,7 @@ export function LivingGlobe() {
                       key={i}
                       className="overflow-hidden rounded-xl border border-border bg-background"
                     >
-                      <div className="relative aspect-video w-full overflow-hidden bg-surface-2">
+                      <div className="relative aspect-[9/16] w-full overflow-hidden bg-surface-2">
                         <video
                           src="/fringe-app-preview.mp4"
                           autoPlay
