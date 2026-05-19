@@ -2,7 +2,7 @@
 // Imported by both the server (validation, coupon amount, webhook crediting)
 // and the client (slider math, eligibility check).
 
-export const SHAKA_VALUE_CENTS = 50; // 1 Shaka = $0.50 of credit
+export const SHAKA_VALUE_CENTS = 25; // 1 Shaka = $0.25 of credit
 
 // Price IDs that accept Shakas. Founding Member is excluded — it's the entry
 // point that earns Shakas. Shaka packs are excluded — can't pay for Shakas
