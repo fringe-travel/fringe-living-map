@@ -117,6 +117,7 @@ export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
           {mode === "signin" ? "Need an account? Sign up" : "Already have an account? Sign in"}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
