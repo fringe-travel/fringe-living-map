@@ -86,6 +86,7 @@ export const regions: Region[] = [
     country: "Oregon, USA",
     tags: "Wind · Kite · River · Gorge conditions",
     image: hoodRiverImg,
+    video: DEFAULT_VIBE_VIDEO,
     freshVibes: 12,
     activeSpots: 5,
     lastUpdatedMin: 15,
