@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthDialog } from "@/components/AuthDialog";
-import { supabase } from "@/integrations/supabase/client";
+
 import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
 
 const links = [
