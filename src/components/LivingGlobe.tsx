@@ -412,7 +412,7 @@ export function LivingGlobe() {
             </span>
           </div>
         </div>
-        <div className="pointer-events-auto flex flex-wrap items-center justify-end gap-2">
+        <div className="pointer-events-auto flex flex-col items-end gap-2">
           <div className="inline-flex overflow-hidden rounded-full border border-foreground/20 bg-background/60 backdrop-blur-md">
             <button
               type="button"
