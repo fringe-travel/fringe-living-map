@@ -17,7 +17,7 @@ export function AuthDialog({ open, onClose, onAuthed, reason }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
   const handleEmail = async (e: React.FormEvent) => {
     e.preventDefault();
