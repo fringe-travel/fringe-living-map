@@ -29,14 +29,7 @@ const SHAKA_PACK_AMOUNTS: Record<string, number> = {
 };
 
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
-  // Subscriptions are handled via customer.subscription.* events.
-  if (session.mode !== "payment") return;
-
   const userId = session.metadata?.userId;
-  if (!userId) {
-    console.warn("checkout.session.completed: no userId in metadata");
-    return;
-  }
 
   // Resolve the human-readable priceId. Prefer metadata, fall back to expanding line items.
   let priceLookup: string | undefined = session.metadata?.priceId;
@@ -48,6 +41,27 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     });
     const price = lineItems.data[0]?.price as any;
     priceLookup = price?.lookup_key || price?.metadata?.lovable_external_id || price?.id;
+  }
+
+  // Shaka redemption: debit the wallet for the redeemed amount (idempotent on session id).
+  // Runs for both one-time and subscription sessions — the discount applies once either way.
+  const shakasRedeemed = Number(session.metadata?.shakasRedeemed || 0);
+  if (shakasRedeemed > 0 && userId && priceLookup) {
+    const { error } = await getSupabase().rpc("redeem_shakas_for_purchase", {
+      p_user: userId,
+      p_amount: shakasRedeemed,
+      p_price_id: priceLookup,
+      p_session_id: session.id,
+    });
+    if (error) console.error("redeem_shakas_for_purchase failed", error);
+  }
+
+  // Subscriptions are otherwise handled via customer.subscription.* events.
+  if (session.mode !== "payment") return;
+
+  if (!userId) {
+    console.warn("checkout.session.completed: no userId in metadata");
+    return;
   }
   if (!priceLookup) {
     console.warn("checkout.session.completed: cannot resolve price lookup key");

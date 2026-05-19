@@ -214,12 +214,30 @@ export type Database = {
         Args: { check_env?: string; region: string; user_uuid: string }
         Returns: boolean
       }
+      redeem_shakas_for_purchase: {
+        Args: {
+          p_amount: number
+          p_price_id: string
+          p_session_id: string
+          p_user: string
+        }
+        Returns: undefined
+      }
       send_shakas: {
         Args: {
           p_amount: number
           p_note?: string
           p_recipient: string
           p_sender: string
+        }
+        Returns: undefined
+      }
+      unlock_with_shakas: {
+        Args: {
+          p_amount: number
+          p_external_id: string
+          p_price_id: string
+          p_user: string
         }
         Returns: undefined
       }

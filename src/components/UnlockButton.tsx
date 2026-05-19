@@ -10,9 +10,10 @@ type Props = {
   children: React.ReactNode;
   reason?: string;
   regionSlug?: string;
+  priceCents?: number;
 };
 
-export function UnlockButton({ priceId, className, children, reason, regionSlug }: Props) {
+export function UnlockButton({ priceId, className, children, reason, regionSlug, priceCents }: Props) {
   const { user } = useAuth();
   const { openCheckout, closeCheckout, isOpen, checkoutElement } = useStripeCheckout();
   const [authOpen, setAuthOpen] = useState(false);
@@ -25,6 +26,7 @@ export function UnlockButton({ priceId, className, children, reason, regionSlug 
       userId: uid,
       customerEmail: email,
       regionSlug,
+      priceCents,
       returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
     });
   };

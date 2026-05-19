@@ -8,6 +8,8 @@ interface CheckoutOptions {
   userId?: string;
   returnUrl?: string;
   regionSlug?: string;
+  priceCents?: number;
+  onUnlocked?: () => void;
 }
 
 export function useStripeCheckout() {
@@ -25,7 +27,15 @@ export function useStripeCheckout() {
   }, []);
 
   const checkoutElement =
-    isOpen && options ? <StripeEmbeddedCheckout {...options} /> : null;
+    isOpen && options ? (
+      <StripeEmbeddedCheckout
+        {...options}
+        onUnlocked={() => {
+          options.onUnlocked?.();
+          closeCheckout();
+        }}
+      />
+    ) : null;
 
   return { openCheckout, closeCheckout, isOpen, checkoutElement };
 }
