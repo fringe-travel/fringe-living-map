@@ -23,6 +23,7 @@ type SubRow = {
   cancel_at_period_end: boolean | null;
 };
 type AccessRow = { region_slug: string; price_id: string; expires_at: string };
+type FoundingRow = { founding_number: number; claimed_at: string };
 
 function AccountPage() {
   const { user, loading: authLoading } = useAuth();
@@ -30,6 +31,7 @@ function AccountPage() {
   const env = getStripeEnvironment();
   const [subs, setSubs] = useState<SubRow[]>([]);
   const [passes, setPasses] = useState<AccessRow[]>([]);
+  const [founding, setFounding] = useState<FoundingRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +45,7 @@ function AccountPage() {
     let cancelled = false;
     const load = async () => {
       setLoading(true);
-      const [{ data: s }, { data: p }] = await Promise.all([
+      const [{ data: s }, { data: p }, { data: f }] = await Promise.all([
         supabase
           .from("subscriptions")
           .select("paddle_subscription_id, price_id, status, current_period_end, cancel_at_period_end")
@@ -57,10 +59,16 @@ function AccountPage() {
           .eq("environment", env)
           .gt("expires_at", new Date().toISOString())
           .order("expires_at", { ascending: false }),
+        supabase
+          .from("founding_members")
+          .select("founding_number, claimed_at")
+          .eq("user_id", user.id)
+          .maybeSingle(),
       ]);
       if (!cancelled) {
         setSubs((s as SubRow[]) || []);
         setPasses((p as AccessRow[]) || []);
+        setFounding((f as FoundingRow) || null);
         setLoading(false);
       }
     };
@@ -69,6 +77,7 @@ function AccountPage() {
       .channel(`account-${user.id}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${user.id}` }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "region_access", filter: `user_id=eq.${user.id}` }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "founding_members", filter: `user_id=eq.${user.id}` }, load)
       .subscribe();
     return () => {
       cancelled = true;
@@ -105,6 +114,17 @@ function AccountPage() {
       <header>
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Your account</p>
         <h1 className="mt-2 text-4xl font-extrabold tracking-tighter">{user.email}</h1>
+        {founding && (
+          <div className="mt-4 inline-flex items-center gap-3 rounded-full border border-sunset/40 bg-gradient-to-r from-primary/15 via-sunset/10 to-transparent px-4 py-2">
+            <span className="text-lg">🏝️</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">
+              Founding Member
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/60">
+              #{String(founding.founding_number).padStart(4, "0")} / 2000
+            </span>
+          </div>
+        )}
         <div className="mt-4 flex flex-wrap gap-3">
           <button
             onClick={openPortal}
