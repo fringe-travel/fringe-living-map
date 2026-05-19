@@ -81,15 +81,6 @@ export function SiteNav() {
             </button>
           )}
           <Link
-            to="/"
-            onClick={handleExplore}
-
-
-            className="hidden rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground sm:inline-flex"
-          >
-            Explore Living Globe
-          </Link>
-          <Link
             to="/pricing"
             onClick={closeMenu}
             className="hidden rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:scale-105 sm:inline-flex"
