@@ -85,7 +85,7 @@ function HomePage() {
               to="/pricing"
               className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:w-auto"
             >
-              Claim Founding Member Pass, $100
+              Claim Founding Member Pass, $200
             </Link>
           </div>
 
@@ -173,7 +173,7 @@ function FoundingMemberSection() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <span className="text-5xl font-extrabold tracking-tighter">$100</span>
+            <span className="text-5xl font-extrabold tracking-tighter">$200</span>
             <span className="text-sm text-foreground/60">one-time</span>
             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
               · Limited to 2,000 members
