@@ -49,10 +49,10 @@ function Page() {
             </p>
             <div className="mt-3 flex items-baseline gap-2">
               <span className="text-6xl font-extrabold tracking-tighter">$100</span>
-              <span className="text-sm text-foreground/50">one-time · lifetime</span>
+              <span className="text-sm text-foreground/50">one-time</span>
             </div>
             <p className="mt-4 text-foreground/70">
-              A single, honest offer. No subscription. No tiers. You're in for life.
+              A single, honest offer. No subscription. No tiers. Founding Member status, kept forever.
             </p>
           </div>
 
