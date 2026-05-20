@@ -81,6 +81,7 @@ export function SiteFooter() {
             <li><Link to="/terms" className="text-foreground/70 hover:text-foreground">Terms of Service</Link></li>
             <li><Link to="/refunds" className="text-foreground/70 hover:text-foreground">Refund Policy</Link></li>
             <li><Link to="/privacy" className="text-foreground/70 hover:text-foreground">Privacy Notice</Link></li>
+            <li><Link to="/investors" className="text-foreground/50 hover:text-foreground">Investors</Link></li>
           </ul>
         </div>
       </div>
