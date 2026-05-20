@@ -9,7 +9,7 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "Become one of the first 2,000 FRiNGE Founding Members. One-time $100. First access to Shakas, Vibe Requests, Region Support, and Partner Regions as they launch.",
+          "Become one of the first 2,000 FRiNGE Founding Members. One-time $100. Founder status forever, plus first access to Shakas, Vibe Requests, Region Support, and Partner Regions as they launch.",
       },
       { property: "og:title", content: "FRiNGE Founding Members" },
       {
