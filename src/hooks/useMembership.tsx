@@ -43,8 +43,8 @@ export function useMembership(): State {
     };
 
     check();
-    const channel = supabase
-      .channel(`membership-${user.id}`)
+    const channel = supabase.channel(`membership-${user.id}`);
+    channel
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${user.id}` },
