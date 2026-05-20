@@ -9,19 +9,39 @@ export const Route = createFileRoute("/regions/$slug")({
     if (!region) throw notFound();
     return { region };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     const r = loaderData?.region;
     const shortName = r ? r.name.replace(" Signal", "") : "Region";
     const title = r ? `${shortName}, Live on FRiNGE` : "Region, FRiNGE";
     const desc = r ? r.description : "A live region on FRiNGE.";
+    const url = `https://fringe-living-map.lovable.app/regions/${params.slug}`;
     return {
       meta: [
         { title },
         { name: "description", content: desc },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
+        { property: "og:url", content: url },
         ...(r ? [{ property: "og:image", content: r.image }] : []),
       ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: r
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: `${shortName} fresh vibes`,
+                itemListElement: r.previewFeed.map((v, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  name: `${v.spot} — ${v.vibe}`,
+                })),
+              }),
+            },
+          ]
+        : [],
     };
   },
   component: Page,
