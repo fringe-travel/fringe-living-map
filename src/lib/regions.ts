@@ -85,11 +85,18 @@ export const regions: Region[] = [
     description: "Track beach energy, kite conditions, nightlife heat, and the real local movement across Rio in real time.",
     previewFeed: [
       { minutesAgo: 2, spot: "Arpoador", vibe: "Sunset clap forming, packed rock.", by: "luca.s", tag: "sunset" },
+      { minutesAgo: 18, spot: "Arpoador", vibe: "Skaters carving the bowl below.", by: "vini", tag: "vibe" },
+      { minutesAgo: 33, spot: "Arpoador", vibe: "Cold beer line short at the kiosk.", by: "pao", tag: "food" },
       { minutesAgo: 6, spot: "Ipanema Posto 9", vibe: "Beach is alive, samba near the kiosk.", by: "bea", tag: "music" },
+      { minutesAgo: 24, spot: "Ipanema Posto 9", vibe: "Volleyball tournament drawing a crowd.", by: "thi", tag: "crowd" },
       { minutesAgo: 11, spot: "Barra", vibe: "Clean 4ft sets, light offshore wind.", by: "rafa", tag: "surf" },
+      { minutesAgo: 29, spot: "Barra", vibe: "Kite school out, steady 18kt.", by: "lara", tag: "wind" },
+      { minutesAgo: 42, spot: "Barra", vibe: "Sunset crowd at Pepe drawing in.", by: "gus", tag: "sunset" },
       { minutesAgo: 19, spot: "Copacabana", vibe: "Pickup futevôlei game, crowd watching.", by: "marina", tag: "crowd" },
+      { minutesAgo: 38, spot: "Copacabana", vibe: "Caipirinha carts everywhere.", by: "duda", tag: "food" },
       { minutesAgo: 28, spot: "Leblon", vibe: "Açaí bar empty, fast service.", by: "diego", tag: "food" },
       { minutesAgo: 44, spot: "Lapa", vibe: "Bars warming up, early arches crowd.", by: "tati", tag: "vibe" },
+      { minutesAgo: 58, spot: "Lapa", vibe: "Live samba starting at Carioca da Gema.", by: "bruno", tag: "music" },
     ],
   },
   {
