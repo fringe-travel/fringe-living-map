@@ -396,7 +396,7 @@ export function LivingGlobe() {
           </span>
           <div className="flex flex-col leading-tight">
             <span className="text-sm font-extrabold tracking-tight text-foreground sm:text-base">
-              FRiNGE Sessions
+              Living Globe
             </span>
             <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/70 sm:text-[11px]">
               {totals.totalVibes} fresh vibes · {viewers.toLocaleString()} viewers
