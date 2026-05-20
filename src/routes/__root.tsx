@@ -76,11 +76,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "FRiNGE is a signal map of real places. Unlock real-time vibes, active spots, and what's happening now from beaches, cities, and adventure spots around the world.",
+          "FRiNGE is a signal map of real places. See real-time vibes and what's happening now in beaches, cities, and adventure spots.",
       },
       { property: "og:title", content: "FRiNGE, See what's happening there right now." },
       { property: "og:description", content: "Unlock real-time access to live places and see what's happening now." },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "FRiNGE" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "FRiNGE, See what's happening there right now." },
       { name: "twitter:description", content: "Unlock real-time access to live places and see what's happening now." },
@@ -89,6 +90,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image:height", content: "640" },
       { property: "og:image:alt", content: "The FRiNGE Living Globe, live signals from real places around the world." },
       { name: "twitter:image", content: OG_IMAGE_URL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "FRiNGE",
+          url: "https://fringe-living-map.lovable.app",
+          logo: OG_IMAGE_URL,
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "FRiNGE",
+          url: "https://fringe-living-map.lovable.app",
+        }),
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
