@@ -56,7 +56,9 @@ export function SiteNav() {
         </div>
 
         <div className="flex items-center gap-3">
-          {user ? (
+          {loading ? (
+            <div className="hidden h-5 w-20 animate-pulse rounded bg-foreground/10 md:block" />
+          ) : user ? (
             <>
               <ShakaWalletBadge />
               <Link
