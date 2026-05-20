@@ -65,7 +65,7 @@ function HomePage() {
             Fresh vibes captured by people on the ground. No uploads. No edits. No filters.
           </p>
 
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-10 flex justify-center">
             <a
               href="#living-globe"
               onClick={(e) => {
@@ -81,12 +81,6 @@ function HomePage() {
             >
               Living Globe
             </a>
-            <Link
-              to="/pricing"
-              className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:w-auto"
-            >
-              Claim Founding Member Pass, $200
-            </Link>
           </div>
 
           <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
