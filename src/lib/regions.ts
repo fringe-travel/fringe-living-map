@@ -116,11 +116,17 @@ export const regions: Region[] = [
     description: "Gorge wind, kite and windsurf conditions, river sessions, and golden hour, straight from the people already out there.",
     previewFeed: [
       { minutesAgo: 4, spot: "The Hook", vibe: "22kt steady west, beginners happy.", by: "sam.w", tag: "wind" },
+      { minutesAgo: 18, spot: "The Hook", vibe: "Glassy inside, perfect for foiling.", by: "mel", tag: "surf" },
+      { minutesAgo: 33, spot: "The Hook", vibe: "Lesson groups wrapping up.", by: "ben.k", tag: "crowd" },
       { minutesAgo: 9, spot: "Event Site", vibe: "Launch packed, rigging 9m kites.", by: "jules", tag: "crowd" },
+      { minutesAgo: 24, spot: "Event Site", vibe: "Gusting 26, big air sending.", by: "dax", tag: "wind" },
       { minutesAgo: 17, spot: "Swell City", vibe: "Gnarly swell, advanced only.", by: "tre", tag: "wind" },
+      { minutesAgo: 35, spot: "Swell City", vibe: "Mast-high sets rolling through.", by: "kira", tag: "surf" },
       { minutesAgo: 26, spot: "Rowena", vibe: "Glassy upriver, paddlers out.", by: "ana", tag: "surf" },
+      { minutesAgo: 49, spot: "Rowena", vibe: "Empty parking lot, peaceful.", by: "owen", tag: "vibe" },
       { minutesAgo: 38, spot: "Waterfront", vibe: "Food trucks open, short line at pFriem.", by: "noah", tag: "food" },
       { minutesAgo: 52, spot: "Spit", vibe: "Golden hour starting, kites silhouetted.", by: "ivy", tag: "sunset" },
+      { minutesAgo: 61, spot: "Spit", vibe: "Wind dropping, last sessions out.", by: "ash", tag: "wind" },
     ],
   },
 ];
