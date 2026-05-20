@@ -85,7 +85,7 @@ function HomePage() {
               to="/pricing"
               className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-transform hover:scale-105 sm:w-auto"
             >
-              Claim Founding Member Pass, $100
+              Claim Founding Member Pass, $200
             </Link>
           </div>
 
