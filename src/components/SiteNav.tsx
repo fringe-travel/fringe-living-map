@@ -8,6 +8,7 @@ import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
 const links = [
   { to: "/", label: "Living Globe" },
   { to: "/signal-regions", label: "Regions" },
+  { to: "/partners", label: "Partners" },
   { to: "/vibers", label: "Become a Viber" },
 ] as const;
 

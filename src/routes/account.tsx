@@ -304,10 +304,8 @@ function Stat({ label, value }: { label: string; value: number }) {
 
 function prettyPrice(id: string) {
   const map: Record<string, string> = {
-    global_pass: "Global Pass · $20/mo",
-    boracay_pass: "Boracay Monthly · $5/mo",
-    rio_pass: "Rio Monthly · $5/mo",
-    hood_river_pass: "Hood River Monthly · $5/mo",
+    fringe_membership_monthly: "FRiNGE Membership · $20/mo",
+    global_pass: "FRiNGE Membership · $20/mo",
     region_support_supporter: "Region Support, Supporter · $5/mo",
     region_support_backer: "Region Support, Backer · $10/mo",
     region_support_patron: "Region Support, Patron · $25/mo",

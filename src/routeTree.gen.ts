@@ -16,9 +16,11 @@ import { Route as SignalRegionsRouteImport } from './routes/signal-regions'
 import { Route as RefundsRouteImport } from './routes/refunds'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RegionsSlugRouteImport } from './routes/regions.$slug'
+import { Route as PartnersSlugRouteImport } from './routes/partners.$slug'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
@@ -57,6 +59,11 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -71,6 +78,11 @@ const RegionsSlugRoute = RegionsSlugRouteImport.update({
   id: '/regions/$slug',
   path: '/regions/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersSlugRoute = PartnersSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PartnersRoute,
 } as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
@@ -87,6 +99,7 @@ const ApiPublicPaymentsWebhookRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/partners': typeof PartnersRouteWithChildren
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
@@ -95,12 +108,14 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/partners/$slug': typeof PartnersSlugRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/partners': typeof PartnersRouteWithChildren
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
@@ -109,6 +124,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/partners/$slug': typeof PartnersSlugRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -116,6 +132,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/partners': typeof PartnersRouteWithChildren
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
@@ -124,6 +141,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/vibers': typeof VibersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/partners/$slug': typeof PartnersSlugRoute
   '/regions/$slug': typeof RegionsSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -132,6 +150,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/partners'
     | '/pricing'
     | '/privacy'
     | '/refunds'
@@ -140,12 +159,14 @@ export interface FileRouteTypes {
     | '/terms'
     | '/vibers'
     | '/checkout/return'
+    | '/partners/$slug'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/account'
+    | '/partners'
     | '/pricing'
     | '/privacy'
     | '/refunds'
@@ -154,12 +175,14 @@ export interface FileRouteTypes {
     | '/terms'
     | '/vibers'
     | '/checkout/return'
+    | '/partners/$slug'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
     | '/account'
+    | '/partners'
     | '/pricing'
     | '/privacy'
     | '/refunds'
@@ -168,6 +191,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/vibers'
     | '/checkout/return'
+    | '/partners/$slug'
     | '/regions/$slug'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -175,6 +199,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
+  PartnersRoute: typeof PartnersRouteWithChildren
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   RefundsRoute: typeof RefundsRoute
@@ -238,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account': {
       id: '/account'
       path: '/account'
@@ -259,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/partners/$slug': {
+      id: '/partners/$slug'
+      path: '/$slug'
+      fullPath: '/partners/$slug'
+      preLoaderRoute: typeof PartnersSlugRouteImport
+      parentRoute: typeof PartnersRoute
+    }
     '/checkout/return': {
       id: '/checkout/return'
       path: '/checkout/return'
@@ -276,9 +315,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface PartnersRouteChildren {
+  PartnersSlugRoute: typeof PartnersSlugRoute
+}
+
+const PartnersRouteChildren: PartnersRouteChildren = {
+  PartnersSlugRoute: PartnersSlugRoute,
+}
+
+const PartnersRouteWithChildren = PartnersRoute._addFileChildren(
+  PartnersRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
+  PartnersRoute: PartnersRouteWithChildren,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   RefundsRoute: RefundsRoute,

@@ -29,7 +29,7 @@ export function FoundingMemberBanner() {
           <span className="font-mono uppercase tracking-[0.18em] text-primary">
             Founding Members ·
           </span>{" "}
-          Only 2,000 seats. $100 one-time. Founding Member status, forever.
+          Only 2,000 seats. $200 one-time. Founding Member status, forever.
         </p>
         <Link
           to="/pricing"

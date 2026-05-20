@@ -82,7 +82,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   }
 
   // Founding Member Pass: record membership + credit 5 welcome Shakas
-  if (priceLookup === "founding_member_pass") {
+  if (priceLookup === "founding_member_pass_200" || priceLookup === "founding_member_pass") {
     const { error } = await getSupabase().rpc("claim_founding_member", {
       p_user: userId,
       p_price_id: priceLookup,
