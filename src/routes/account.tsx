@@ -175,6 +175,21 @@ function AccountPage() {
         {error && <p className="mt-3 text-xs text-red-500">{error}</p>}
       </header>
 
+      <a
+        href="https://invest.fringe.travel"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block rounded-2xl border border-sunset/40 bg-gradient-to-r from-primary/10 via-sunset/10 to-transparent p-5 transition-colors hover:border-sunset/70"
+      >
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">For members</p>
+        <p className="mt-1 text-lg font-extrabold tracking-tight">
+          Interested in backing FRiNGE? →
+        </p>
+        <p className="mt-1 text-xs text-foreground/60">
+          We're raising from a small group of aligned investors. Take a look at the deck.
+        </p>
+      </a>
+
       <div>
         <h2 className="text-xs font-mono uppercase tracking-[0.2em] text-foreground/50">Subscriptions</h2>
         {loading ? (
