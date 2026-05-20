@@ -169,12 +169,42 @@ export function LivingGlobe() {
   const toggleFullscreen = () => {
     const el = sectionRef.current;
     if (!el) return;
+    const supportsNative = typeof el.requestFullscreen === "function";
+    if (pseudoFullscreen) {
+      setPseudoFullscreen(false);
+      return;
+    }
     if (!document.fullscreenElement) {
-      el.requestFullscreen?.().catch(() => {});
+      if (supportsNative) {
+        el.requestFullscreen().catch(() => setPseudoFullscreen(true));
+      } else {
+        setPseudoFullscreen(true);
+      }
     } else {
       document.exitFullscreen?.().catch(() => {});
     }
   };
+
+  // Allow other components (e.g. the homepage CTA) to request fullscreen.
+  useEffect(() => {
+    const onReq = () => toggleFullscreen();
+    window.addEventListener("fringe:request-fullscreen", onReq);
+    return () => window.removeEventListener("fringe:request-fullscreen", onReq);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pseudoFullscreen]);
+
+  // Lock body scroll while in pseudo fullscreen and allow Esc to exit.
+  useEffect(() => {
+    if (!pseudoFullscreen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPseudoFullscreen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [pseudoFullscreen]);
 
   useEffect(() => {
     if (!mapRef.current) return;
