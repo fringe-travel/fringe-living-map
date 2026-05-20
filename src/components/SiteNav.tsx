@@ -13,7 +13,7 @@ const links = [
 
 
 export function SiteNav() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
