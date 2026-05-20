@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { LivingGlobe } from "@/components/LivingGlobe";
 import { UnlockButton } from "@/components/UnlockButton";
 import { FOUNDING_MEMBER_PRICE_ID } from "@/lib/pricing-ids";
