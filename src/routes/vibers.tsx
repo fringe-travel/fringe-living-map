@@ -8,6 +8,10 @@ export const Route = createFileRoute("/vibers")({
       { name: "description", content: "Tune in and FRiNGE maps the moment. Become a Viber and put your region on the signal map." },
       { property: "og:title", content: "For Vibers, FRiNGE" },
       { property: "og:description", content: "Share real-time vibes. Build status in your region. Earn from coverage." },
+      { property: "og:url", content: "https://fringe-living-map.lovable.app/vibers" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://fringe-living-map.lovable.app/vibers" },
     ],
   }),
   component: Page,

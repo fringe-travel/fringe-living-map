@@ -1,0 +1,19 @@
+# FRiNGE
+
+> FRiNGE is a Living Globe of real-time vibes. Real people on the ground capture fresh signals from beaches, cities, and adventure spots around the world. No uploads, no edits, no filters.
+
+## Pages
+
+- [Home](/): The Living Globe and an intro to how FRiNGE works.
+- [Signal Regions](/signal-regions): Browse every region broadcasting on FRiNGE.
+- [For Vibers](/vibers): How people on the ground capture vibes and earn.
+- [Pricing](/pricing): Founding Member Pass — $100 one-time, limited to 2,000 seats.
+- [Boracay](/regions/boracay): Live region page for Boracay.
+- [Rio](/regions/rio): Live region page for Rio.
+- [Hood River](/regions/hood-river): Live region page for Hood River.
+
+## Optional
+
+- [Privacy Notice](/privacy)
+- [Terms of Service](/terms)
+- [Refund Policy](/refunds)

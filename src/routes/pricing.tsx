@@ -5,17 +5,41 @@ import { FOUNDING_MEMBER_PRICE_ID } from "@/lib/pricing-ids";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "FRiNGE Founding Members, Claim your place on the Living Globe." },
+      { title: "FRiNGE Founding Members, Claim your place." },
       {
         name: "description",
         content:
-          "Become one of the first 2,000 FRiNGE Founding Members. One-time $100. Founder status forever, plus first access to Shakas, Vibe Requests, Region Support, and Partner Regions as they launch.",
+          "Join 2,000 FRiNGE Founding Members for $100 one-time. Founder status forever, plus early access to Shakas, Vibe Requests, and Region Support.",
       },
       { property: "og:title", content: "FRiNGE Founding Members" },
       {
         property: "og:description",
         content:
           "2,000 seats. $100 one-time. Power the Living Globe before anyone else.",
+      },
+      { property: "og:url", content: "https://fringe-living-map.lovable.app/pricing" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://fringe-living-map.lovable.app/pricing" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: "FRiNGE Founding Member Pass",
+          description:
+            "One-time community membership granting permanent Founding Member status and early access to Shakas, Vibe Requests, Region Support, and Partner Regions.",
+          brand: { "@type": "Brand", name: "FRiNGE" },
+          offers: {
+            "@type": "Offer",
+            price: "100",
+            priceCurrency: "USD",
+            availability: "https://schema.org/LimitedAvailability",
+            url: "https://fringe-living-map.lovable.app/pricing",
+          },
+        }),
       },
     ],
   }),

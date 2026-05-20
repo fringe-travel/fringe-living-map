@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { regions } from "@/lib/regions";
 
-const BASE_URL = "";
+const BASE_URL = "https://fringe-living-map.lovable.app";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -11,10 +11,11 @@ export const Route = createFileRoute("/sitemap.xml")({
         const paths = [
           "/",
           "/signal-regions",
-          
           "/vibers",
-          "/businesses",
           "/pricing",
+          "/privacy",
+          "/terms",
+          "/refunds",
           ...regions.map((r) => `/regions/${r.slug}`),
         ];
         const urls = paths

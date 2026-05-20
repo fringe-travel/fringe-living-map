@@ -3,6 +3,15 @@ import { LivingGlobe } from "@/components/LivingGlobe";
 import { UnlockButton } from "@/components/UnlockButton";
 import { FOUNDING_MEMBER_PRICE_ID } from "@/lib/pricing-ids";
 
+const GLOSSARY_TERMS = [
+  { term: "Vibe", def: "A real-time human signal from a place." },
+  { term: "Viber", def: "A person who shares what is happening where they are." },
+  { term: "Living Globe", def: "The global map of live vibes." },
+  { term: "Fresh Signal", def: "A recent vibe that helps people understand what is happening now." },
+  { term: "Adventure Feed", def: "A stream of fresh vibes from places you follow." },
+  { term: "Regions", def: "Clusters of vibes around meaningful places." },
+];
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -16,6 +25,24 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content: "A real-time window into the physical world.",
+      },
+      { property: "og:url", content: "https://fringe-living-map.lovable.app/" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://fringe-living-map.lovable.app/" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: GLOSSARY_TERMS.map((t) => ({
+            "@type": "Question",
+            name: t.term,
+            acceptedAnswer: { "@type": "Answer", text: t.def },
+          })),
+        }),
       },
     ],
   }),
@@ -182,14 +209,6 @@ function FoundingMemberSection() {
 
 /* ───────── Glossary ───────── */
 function Glossary() {
-  const terms = [
-    { term: "Vibe", def: "A real-time human signal from a place." },
-    { term: "Viber", def: "A person who shares what is happening where they are." },
-    { term: "Living Globe", def: "The global map of live vibes." },
-    { term: "Fresh Signal", def: "A recent vibe that helps people understand what is happening now." },
-    { term: "Adventure Feed", def: "A stream of fresh vibes from places you follow." },
-    { term: "Regions", def: "Clusters of vibes around meaningful places." },
-  ];
   return (
     <section className="border-t border-border bg-background px-6 py-24">
       <div className="mx-auto max-w-6xl">
@@ -200,7 +219,7 @@ function Glossary() {
           A few words you'll see around the globe.
         </h2>
         <dl className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
-          {terms.map((t) => (
+          {GLOSSARY_TERMS.map((t) => (
             <div key={t.term} className="bg-background p-7">
               <dt className="text-lg font-extrabold tracking-tight text-foreground">{t.term}</dt>
               <dd className="mt-2 text-sm text-foreground/60">{t.def}</dd>

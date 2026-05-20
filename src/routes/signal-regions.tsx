@@ -9,6 +9,10 @@ export const Route = createFileRoute("/signal-regions")({
       { name: "description", content: "Browse every signal region. Unlock real-time access to places around the world." },
       { property: "og:title", content: "Signal Regions, FRiNGE" },
       { property: "og:description", content: "Browse and unlock real-time access to places around the world." },
+      { property: "og:url", content: "https://fringe-living-map.lovable.app/signal-regions" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://fringe-living-map.lovable.app/signal-regions" },
     ],
   }),
   component: Page,
