@@ -41,6 +41,54 @@ export type Database = {
         }
         Relationships: []
       }
+      partners: {
+        Row: {
+          active: boolean
+          blurb: string | null
+          category: string
+          created_at: string
+          discount_label: string
+          id: string
+          logo_url: string | null
+          name: string
+          redemption_code: string
+          region_slug: string
+          slug: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          active?: boolean
+          blurb?: string | null
+          category: string
+          created_at?: string
+          discount_label: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          redemption_code: string
+          region_slug: string
+          slug: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          active?: boolean
+          blurb?: string | null
+          category?: string
+          created_at?: string
+          discount_label?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          redemption_code?: string
+          region_slug?: string
+          slug?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
       region_access: {
         Row: {
           created_at: string | null
