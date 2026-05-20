@@ -406,7 +406,7 @@ export function LivingGlobe() {
   }, [navigate, pins]);
 
   return (
-    <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
+    <section id="living-globe" ref={sectionRef} className={`relative w-full overflow-hidden bg-background ${pseudoFullscreen ? "fixed inset-0 z-[100] h-screen" : "h-[calc(100svh-4rem)]"}`}>
       <div ref={containerRef} className="living-globe-map absolute inset-0" />
 
       {!ready && (
