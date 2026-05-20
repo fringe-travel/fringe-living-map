@@ -43,7 +43,7 @@ export function useMembership(): State {
     };
 
     check();
-    const channel = supabase.channel(`membership-${user.id}`);
+    const channel = supabase.channel(`membership-${user.id}-${Math.random().toString(36).slice(2)}`);
     channel
       .on(
         "postgres_changes",
