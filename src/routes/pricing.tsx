@@ -163,6 +163,27 @@ function Page() {
         </div>
       </div>
 
+      {/* Founding Investor Circle teaser */}
+      <Link
+        to="/invest"
+        className="mt-6 flex flex-col items-start gap-3 rounded-2xl border border-dashed border-sunset/40 bg-surface/20 p-6 transition-colors hover:border-sunset/70 hover:bg-surface/40 md:flex-row md:items-center md:justify-between"
+      >
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">
+            Founding Investor Circle · 100 seats
+          </p>
+          <p className="mt-2 text-base font-semibold tracking-tight md:text-lg">
+            $2,000 — Founding Member status + equity in FRiNGE.
+          </p>
+          <p className="mt-1 text-sm text-foreground/60">
+            Goes beyond the Founding Pass. By application only.
+          </p>
+        </div>
+        <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-sunset">
+          Request an intro →
+        </span>
+      </Link>
+
       {/* What members get, in plain English */}
       <div className="mt-20">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
