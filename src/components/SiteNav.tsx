@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { AuthDialog } from "@/components/AuthDialog";
 
 import { ShakaWalletBadge } from "@/components/ShakaWalletBadge";
+import { MemberBadge } from "@/components/MemberBadge";
 
 const links = [
   { to: "/", label: "Living Globe" },
@@ -61,6 +62,7 @@ export function SiteNav() {
             <div className="hidden h-5 w-20 animate-pulse rounded bg-foreground/10 md:block" />
           ) : user ? (
             <>
+              <MemberBadge />
               <ShakaWalletBadge />
               <Link
                 to="/account"

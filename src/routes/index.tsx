@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { LivingGlobe } from "@/components/LivingGlobe";
 import { UnlockButton } from "@/components/UnlockButton";
 import { FOUNDING_MEMBER_PRICE_ID } from "@/lib/pricing-ids";
+import { PartnerDiscountTeaser } from "@/components/PartnerDiscountTeaser";
 
 const GLOSSARY_TERMS = [
   { term: "Vibe", def: "A real-time human signal from a place." },
@@ -95,6 +96,7 @@ function HomePage() {
       </section>
 
       <WhatMakesDifferent />
+      <PartnerDiscountTeaser />
       <FoundingMemberSection />
       <Glossary />
     </div>
