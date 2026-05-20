@@ -159,7 +159,7 @@ export function RegionMap({
               closeButton: true,
               closeOnClick: true,
               className: "region-mapbox-popup",
-              maxWidth: "260px",
+              maxWidth: "320px",
             })
               .setLngLat(coords)
               .setHTML(html)
