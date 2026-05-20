@@ -51,7 +51,7 @@ function HomePage() {
               }}
               className="inline-flex w-full items-center justify-center rounded-full bg-foreground px-7 py-3.5 text-sm font-bold text-background transition-transform hover:scale-105 sm:w-auto"
             >
-              Explore the Globe
+              Living Globe
             </a>
             <Link
               to="/pricing"
