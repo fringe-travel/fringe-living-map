@@ -9,7 +9,7 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "Become one of the first 2,000 FRiNGE Founding Members. One-time $100. First access to Shakas, Vibe Requests, Region Support, and Partner Regions as they launch.",
+          "Become one of the first 2,000 FRiNGE Founding Members. One-time $100. Founder status forever, plus first access to Shakas, Vibe Requests, Region Support, and Partner Regions as they launch.",
       },
       { property: "og:title", content: "FRiNGE Founding Members" },
       {
@@ -49,10 +49,10 @@ function Page() {
             </p>
             <div className="mt-3 flex items-baseline gap-2">
               <span className="text-6xl font-extrabold tracking-tighter">$100</span>
-              <span className="text-sm text-foreground/50">one-time · lifetime</span>
+              <span className="text-sm text-foreground/50">one-time</span>
             </div>
             <p className="mt-4 text-foreground/70">
-              A single, honest offer. No subscription. No tiers. You're in for life.
+              A single, honest offer. No subscription. No tiers. Founding Member status, kept forever.
             </p>
           </div>
 

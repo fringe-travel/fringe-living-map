@@ -139,12 +139,13 @@ function FoundingMemberSection() {
           <p className="mt-5 max-w-2xl text-foreground/70">
             FRiNGE is building the Living Globe, fresh vibes from real people in
             real places around the world. Founding Members help shape the
-            community from the beginning and get lifetime founding status.
+            community from the beginning and keep Founder status on their
+            profile, forever.
           </p>
 
           <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
             <span className="text-5xl font-extrabold tracking-tighter">$100</span>
-            <span className="text-sm text-foreground/60">one-time · lifetime</span>
+            <span className="text-sm text-foreground/60">one-time</span>
             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
               · Limited to 2,000 members
             </span>
