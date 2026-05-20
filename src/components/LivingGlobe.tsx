@@ -111,6 +111,7 @@ export function LivingGlobe() {
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [pseudoFullscreen, setPseudoFullscreen] = useState(false);
   const [paused, setPaused] = useState(false);
   const pausedRef = useRef(false);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
@@ -168,12 +169,42 @@ export function LivingGlobe() {
   const toggleFullscreen = () => {
     const el = sectionRef.current;
     if (!el) return;
+    const supportsNative = typeof el.requestFullscreen === "function";
+    if (pseudoFullscreen) {
+      setPseudoFullscreen(false);
+      return;
+    }
     if (!document.fullscreenElement) {
-      el.requestFullscreen?.().catch(() => {});
+      if (supportsNative) {
+        el.requestFullscreen().catch(() => setPseudoFullscreen(true));
+      } else {
+        setPseudoFullscreen(true);
+      }
     } else {
       document.exitFullscreen?.().catch(() => {});
     }
   };
+
+  // Allow other components (e.g. the homepage CTA) to request fullscreen.
+  useEffect(() => {
+    const onReq = () => toggleFullscreen();
+    window.addEventListener("fringe:request-fullscreen", onReq);
+    return () => window.removeEventListener("fringe:request-fullscreen", onReq);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pseudoFullscreen]);
+
+  // Lock body scroll while in pseudo fullscreen and allow Esc to exit.
+  useEffect(() => {
+    if (!pseudoFullscreen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPseudoFullscreen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [pseudoFullscreen]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -375,7 +406,7 @@ export function LivingGlobe() {
   }, [navigate, pins]);
 
   return (
-    <section id="living-globe" ref={sectionRef} className="relative h-[calc(100svh-4rem)] w-full overflow-hidden bg-background">
+    <section id="living-globe" ref={sectionRef} className={`relative w-full overflow-hidden bg-background ${pseudoFullscreen ? "fixed inset-0 z-[100] h-screen" : "h-[calc(100svh-4rem)]"}`}>
       <div ref={containerRef} className="living-globe-map absolute inset-0" />
 
       {!ready && (
@@ -453,10 +484,10 @@ export function LivingGlobe() {
             type="button"
             onClick={toggleFullscreen}
             className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/60 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-foreground/80 backdrop-blur-md transition-colors hover:text-foreground sm:px-3 sm:py-1.5 sm:text-[10px] sm:tracking-[0.25em]"
-            aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
+            aria-label={(isFullscreen || pseudoFullscreen) ? "Exit full screen" : "Enter full screen"}
           >
-            {isFullscreen ? "Exit" : "Full"}
-            <span className="hidden sm:inline">{isFullscreen ? " Full" : " Screen"}</span>
+            {(isFullscreen || pseudoFullscreen) ? "Exit" : "Full"}
+            <span className="hidden sm:inline">{(isFullscreen || pseudoFullscreen) ? " Full" : " Screen"}</span>
           </button>
         </div>
       </div>

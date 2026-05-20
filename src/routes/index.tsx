@@ -71,10 +71,16 @@ function HomePage() {
               onClick={(e) => {
                 if (typeof window === "undefined") return;
                 const el = document.getElementById("living-globe");
-                if (el) {
-                  e.preventDefault();
-                  el.scrollIntoView({ behavior: "smooth" });
-                  el.requestFullscreen?.().catch(() => {});
+                if (!el) return;
+                e.preventDefault();
+                el.scrollIntoView({ behavior: "smooth" });
+                const supportsNative = typeof el.requestFullscreen === "function";
+                if (supportsNative) {
+                  el.requestFullscreen().catch(() => {
+                    window.dispatchEvent(new CustomEvent("fringe:request-fullscreen"));
+                  });
+                } else {
+                  window.dispatchEvent(new CustomEvent("fringe:request-fullscreen"));
                 }
               }}
               className="inline-flex w-full items-center justify-center rounded-full bg-foreground px-7 py-3.5 text-sm font-bold text-background transition-transform hover:scale-105 sm:w-auto"
