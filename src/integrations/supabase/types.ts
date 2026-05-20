@@ -41,6 +41,39 @@ export type Database = {
         }
         Relationships: []
       }
+      investor_interest: {
+        Row: {
+          accredited: boolean
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          phone: string | null
+          user_id: string | null
+        }
+        Insert: {
+          accredited?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          phone?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          accredited?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       partners: {
         Row: {
           active: boolean
