@@ -12,7 +12,12 @@ export type ViberProfile = {
   region: string;
   /** Hex pair for avatar gradient (no real photos yet). */
   gradient: [string, string];
+  /** Optional short vertical clip showing the viber on the ground. */
+  clip?: string;
+  /** Optional still photo (poster / fallback). */
+  photo?: string;
 };
+
 
 export const VIBERS: Record<string, ViberProfile> = {
   // Boracay
