@@ -18,7 +18,7 @@ export const Route = createFileRoute("/partners")({
       {
         name: "description",
         content:
-          "FRiNGE Members unlock discounts from partners around the world — kite schools, cafes, surf shops, co-works, and more.",
+          "FRiNGE Members unlock discounts from partners around the world. Kite schools, cafes, surf shops, coworks, and more.",
       },
       { property: "og:title", content: "FRiNGE Partners" },
       {
@@ -59,7 +59,7 @@ function PartnersPage() {
         </h1>
         <p className="mt-5 text-pretty text-lg text-foreground/60">
           The Living Globe is free. FRiNGE Membership unlocks ongoing discounts from
-          partners on the ground — kite schools, cafes, surf shops, co-works — the
+          partners on the ground. Kite schools, cafes, surf shops, coworks. The
           places vibers actually go.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">

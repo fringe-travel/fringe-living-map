@@ -11,13 +11,13 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "FRiNGE Membership unlocks partner discounts worldwide for $20/mo. Founding Members get permanent status and 5 welcome Shakas, $200 one-time, limited to 2,000.",
+          "FRiNGE Membership unlocks partner discounts worldwide for $20/mo. Founding Members get permanent status and 5 welcome Shakas, $200 once, limited to 2,000.",
       },
       { property: "og:title", content: "FRiNGE Membership & Founding Members" },
       {
         property: "og:description",
         content:
-          "Become a Member for partner discounts. Or claim a Founding Member Pass — 2,000 seats, $200 one-time.",
+          "Become a Member for partner discounts. Or claim a Founding Member Pass. 2,000 seats, $200 once.",
       },
       { property: "og:url", content: "https://fringe-living-map.lovable.app/pricing" },
     ],
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/pricing")({
               "@type": "Product",
               name: "FRiNGE Membership",
               description:
-                "Monthly membership that unlocks partner discounts from kite schools, cafes, surf shops, and co-works worldwide.",
+                "Monthly membership that unlocks partner discounts from kite schools, cafes, surf shops, and coworks worldwide.",
               offers: {
                 "@type": "Offer",
                 price: "20",
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/pricing")({
               "@type": "Product",
               name: "FRiNGE Founding Member Pass",
               description:
-                "One-time community membership granting permanent Founding Member status, 5 welcome Shakas, and priority on new programs. Limited to 2,000.",
+                "Single payment community membership granting permanent Founding Member status, 5 welcome Shakas, and priority on new programs. Limited to 2,000.",
               offers: {
                 "@type": "Offer",
                 price: "200",
@@ -77,7 +77,7 @@ function Page() {
         </h1>
         <p className="mt-5 text-pretty text-lg text-foreground/60">
           The Living Map is free for everyone. Membership funds the vibers on
-          the ground — the locals, surfers, travelers, and friends who walk to
+          the ground. The locals, surfers, travelers, and friends who walk to
           the beach, check the wind, and show the sunset before it disappears.
           Members also unlock real discounts from FRiNGE Partners in every region.
         </p>
@@ -107,9 +107,9 @@ function Page() {
           <ul className="mt-6 grid gap-3 text-sm text-foreground/80">
             {[
               "Funds the vibers keeping the Living Map alive.",
-              "Member discounts at every FRiNGE Partner — codes revealed inline.",
+              "Member discounts at every FRiNGE Partner, codes revealed inline.",
               "New regions and new local vibers added every month.",
-              "No ads, no algorithm — your $20 backs the humans, not the feed.",
+              "No ads, no algorithm. Your $20 backs the humans, not the feed.",
             ].map((line) => (
               <li key={line} className="flex gap-3">
                 <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
@@ -134,10 +134,10 @@ function Page() {
           </p>
           <div className="mt-3 flex items-baseline gap-2">
             <span className="text-5xl font-extrabold tracking-tighter">$200</span>
-            <span className="text-sm text-foreground/50">one-time</span>
+            <span className="text-sm text-foreground/50">single payment</span>
           </div>
           <p className="mt-4 text-foreground/70">
-            A one-time pass for the first 2,000 people backing the human
+            A single payment pass for the first 2,000 people backing the human
             network. Permanent Founding status, a seat on the Founding Wall,
             and the perks below.
           </p>
@@ -150,13 +150,13 @@ function Page() {
               The <span className="font-bold text-foreground">$200 Founding Pass</span> is
               for <span className="font-bold text-foreground">status, Shakas, and a seat in the first 2,000</span>.
               The <span className="font-bold text-foreground">$20/mo Membership</span> is
-              what <span className="font-bold text-foreground">actually funds the vibers</span> on the ground and unlocks partner discounts. They're different jobs — Founding Members usually do both.
+              what <span className="font-bold text-foreground">actually funds the vibers</span> on the ground and unlocks partner discounts. They're different jobs, and Founding Members usually do both.
             </p>
           </div>
 
           <ul className="mt-6 grid gap-3 text-sm text-foreground/80">
             {[
-              "Permanent Founding Member badge — you helped start this.",
+              "Permanent Founding Member badge. You helped start this.",
               "5 welcome Shakas to send straight to vibers on day one.",
               "First access to Shakas, Vibe Requests, and new programs.",
               "Direct line to the team. Your feedback shapes what ships next.",
@@ -197,9 +197,9 @@ function Page() {
           <ul className="mt-6 grid gap-3 text-sm text-foreground/80">
             {[
               "100% of every Shaka goes to the viber.",
-              "Buy in packs — 5, 15, or 50. The bigger the pack, the cheaper per Shaka.",
-              "Use anywhere on the map — no region locks, no expiry.",
-              "Stacks on top of Membership — or use Shakas on their own.",
+              "Buy in packs of 5, 15, or 50. The bigger the pack, the cheaper per Shaka.",
+              "Use anywhere on the map. No region locks, no expiry.",
+              "Stacks on top of Membership, or use Shakas on their own.",
             ].map((line) => (
               <li key={line} className="flex gap-3">
                 <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-sunset" />
@@ -215,7 +215,7 @@ function Page() {
             Buy Shakas · from ${(entryPack.priceCents / 100).toFixed(0)}
           </button>
           <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
-            Pay-as-you-go · no subscription
+            Pay as you go · no subscription
           </p>
         </div>
       </div>
@@ -233,7 +233,7 @@ function Page() {
             Founding Investor Circle · 100 seats
           </p>
           <p className="mt-2 text-base font-semibold tracking-tight md:text-lg">
-            $2,000 — fund the human network and own a piece of FRiNGE.
+            $2,000. Fund the human network and own a piece of FRiNGE.
           </p>
           <p className="mt-1 text-sm text-foreground/60">
             Founding Member status plus equity. By application only.
@@ -258,15 +258,15 @@ function Page() {
           {[
             {
               title: "📡 Better Signals",
-              body: "Your $20 funds the vibers capturing real, in-the-moment vibes from every region on the Globe.",
+              body: "Your $20 funds the vibers capturing real, live vibes from every region on the Globe.",
             },
             {
               title: "🤝 Partner Discounts",
-              body: "Member codes from kite schools, surf shops, cafes, co-works, and event organizers in every region.",
+              body: "Member codes from kite schools, surf shops, cafes, coworks, and event organizers in every region.",
             },
             {
               title: "🤙 Shakas, on top",
-              body: "Want to thank a specific viber? Send Shakas straight to them — one wallet, every region, every person.",
+              body: "Want to thank a specific viber? Send Shakas straight to them. One wallet, every region, every person.",
             },
           ].map((f) => (
             <div key={f.title} className="rounded-2xl border border-border bg-surface/30 p-6">

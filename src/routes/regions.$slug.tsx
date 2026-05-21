@@ -40,7 +40,7 @@ export const Route = createFileRoute("/regions/$slug")({
                 itemListElement: r.previewFeed.map((v, i) => ({
                   "@type": "ListItem",
                   position: i + 1,
-                  name: `${v.spot} — ${v.vibe}`,
+                  name: `${v.spot} · ${v.vibe}`,
                 })),
               }),
             },
@@ -322,7 +322,7 @@ function KeepRegionAlive({
               <p className="mt-3 text-sm text-foreground/70">
                 Send a Shaka straight to{" "}
                 <span className="font-bold text-foreground">@{viberHandle}</span>{" "}
-                — or any viber whose drop made your day. One wallet, every region,
+                or any viber whose drop made your day. One wallet, every region,
                 every viber.
               </p>
               <div className="mt-5 flex-1" />
