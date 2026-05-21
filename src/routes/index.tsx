@@ -220,7 +220,7 @@ function FoundingMemberSection() {
     "Founding Member badge and number",
     "Early access to the Living Globe",
     "Early access to Boracay, Rio, and Hood River",
-    "First access to Shakas, Vibe Requests, and Region Support",
+    "First access to Shakas — tip any viber, any region",
     "Private founder updates",
     "Vote on future regions",
     "Invite codes for friends",

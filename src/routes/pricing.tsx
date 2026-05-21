@@ -142,7 +142,7 @@ function Page() {
             {[
               "Permanent Founding Member badge — you helped start this.",
               "5 welcome Shakas to send straight to vibers on day one.",
-              "First access to Vibe Requests, Region Support, and new programs.",
+              "First access to Shakas, Vibe Requests, and new programs.",
               "Direct line to the team. Your feedback shapes what ships next.",
               "Your name on the Founding Wall when the Globe goes wide.",
             ].map((line) => (
@@ -200,16 +200,16 @@ function Page() {
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {[
             {
+              title: "📡 Better Signals",
+              body: "Your $20 funds the vibers capturing real, in-the-moment vibes from every region on the Globe.",
+            },
+            {
               title: "🤝 Partner Discounts",
               body: "Member codes from kite schools, surf shops, cafes, co-works, and event organizers in every region.",
             },
             {
-              title: "📡 Better Signals",
-              body: "Membership funds the vibers capturing real, in-the-moment vibes from every region on the Globe.",
-            },
-            {
-              title: "🌎 New Regions",
-              body: "Membership helps us light up new regions, with new local partners in each.",
+              title: "🤙 Shakas, on top",
+              body: "Want to thank a specific viber? Send Shakas straight to them — one wallet, every region, every person.",
             },
           ].map((f) => (
             <div key={f.title} className="rounded-2xl border border-border bg-surface/30 p-6">

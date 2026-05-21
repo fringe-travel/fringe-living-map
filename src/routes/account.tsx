@@ -307,9 +307,6 @@ function prettyPrice(id: string) {
   const map: Record<string, string> = {
     fringe_membership_monthly: "FRiNGE Membership · $20/mo",
     global_pass: "FRiNGE Membership · $20/mo",
-    region_support_supporter: "Region Support, Supporter · $5/mo",
-    region_support_backer: "Region Support, Backer · $10/mo",
-    region_support_patron: "Region Support, Patron · $25/mo",
   };
   return map[id] ?? id;
 }

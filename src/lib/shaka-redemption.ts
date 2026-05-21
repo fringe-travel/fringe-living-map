@@ -18,10 +18,6 @@ export const SHAKA_REDEEMABLE_PRICE_IDS = new Set<string>([
   "hood_river_month",
   // Global
   "global_month",
-  // Region support tiers
-  "region_support_supporter",
-  "region_support_backer",
-  "region_support_patron",
   // Vibe requests
   "vibe_request_basic",
   "vibe_request_priority",

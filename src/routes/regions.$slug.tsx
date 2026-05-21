@@ -3,7 +3,7 @@ import { getRegion, DEMO_VIBER_USER_ID, type SignalDrop } from "@/lib/regions";
 import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
 import { UnlockButton } from "@/components/UnlockButton";
-import { REGION_SUPPORT_PRICE_IDS } from "@/lib/pricing-ids";
+import { FRINGE_MEMBERSHIP_PRICE_ID } from "@/lib/pricing-ids";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
@@ -213,7 +213,7 @@ function SponsorRegionCTA({ slug, regionName }: { slug: string; regionName: stri
 }
 
 function KeepRegionAlive({
-  slug,
+  slug: _slug,
   regionName,
   feed,
 }: {
@@ -240,63 +240,59 @@ function KeepRegionAlive({
             {regionName} stays live because vibers like{" "}
             <span className="font-bold text-foreground">@{viberHandle}</span>{" "}
             keep showing up — walking to {viberSpot}, checking the conditions,
-            and showing the moment before it disappears. Your monthly support
-            goes straight to them.
+            and showing the moment before it disappears.
           </p>
 
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                key: "supporter" as const,
-                label: "Supporter",
-                price: "$5",
-                line: `Back the vibers in ${regionName}.`,
-              },
-              {
-                key: "backer" as const,
-                label: "Regional Backer",
-                price: "$10",
-                line: "Fund more drops, more often.",
-                highlight: true,
-              },
-              {
-                key: "patron" as const,
-                label: "Signal Patron",
-                price: "$25",
-                line: "Direct line to the people on the ground.",
-              },
-            ].map((t) => (
-              <div
-                key={t.key}
-                className={`rounded-2xl border p-5 ${
-                  t.highlight
-                    ? "border-primary/40 bg-primary/5"
-                    : "border-border bg-background"
-                }`}
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            {/* Membership — the one sub that funds every region */}
+            <div className="flex flex-col rounded-2xl border border-primary/30 bg-background p-6">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                One membership, every region
+              </p>
+              <p className="mt-3 flex items-baseline gap-1 text-4xl font-extrabold tracking-tighter">
+                $20
+                <span className="text-sm font-medium text-foreground/50">/mo</span>
+              </p>
+              <p className="mt-3 text-sm text-foreground/70">
+                Back the vibers in {regionName} and every region on the Globe.
+                Unlocks partner discounts worldwide. Cancel anytime.
+              </p>
+              <div className="mt-5 flex-1" />
+              <UnlockButton
+                priceId={FRINGE_MEMBERSHIP_PRICE_ID}
+                reason={`Support the vibers in ${regionName}`}
+                className="w-full rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110 disabled:opacity-60"
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
-                  {t.label}
-                </p>
-                <p className="mt-2 flex items-baseline gap-1 text-3xl font-extrabold tracking-tighter">
-                  {t.price}
-                  <span className="text-xs font-medium text-foreground/50">
-                    /mo
-                  </span>
-                </p>
-                <p className="mt-3 text-sm text-foreground/70">{t.line}</p>
-                <UnlockButton
-                  priceId={REGION_SUPPORT_PRICE_IDS[t.key]}
-                  reason={`Keep ${regionName} alive`}
-                  className={`mt-5 w-full rounded-xl py-2.5 text-xs font-bold transition-colors disabled:opacity-60 ${
-                    t.highlight
-                      ? "bg-primary text-primary-foreground hover:brightness-110"
-                      : "border border-border bg-surface hover:bg-surface-2"
-                  }`}
-                >
-                  Keep {regionName} alive
-                </UnlockButton>
-              </div>
-            ))}
+                Become a Member · $20/mo
+              </UnlockButton>
+            </div>
+
+            {/* Shakas — per-viber, per-moment tipping */}
+            <div className="flex flex-col rounded-2xl border border-sunset/30 bg-background p-6">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-sunset">
+                Tip the people on the ground
+              </p>
+              <p className="mt-3 flex items-baseline gap-1 text-4xl font-extrabold tracking-tighter">
+                🤙
+                <span className="ml-2 text-base font-medium text-foreground/60">
+                  Send Shakas
+                </span>
+              </p>
+              <p className="mt-3 text-sm text-foreground/70">
+                Send a Shaka straight to{" "}
+                <span className="font-bold text-foreground">@{viberHandle}</span>{" "}
+                — or any viber whose drop made your day. One wallet, every region,
+                every viber.
+              </p>
+              <div className="mt-5 flex-1" />
+              <ShakaButton
+                viberName={`@${viberHandle}`}
+                viberUserId={DEMO_VIBER_USER_ID}
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-sunset/40 bg-sunset/10 px-6 py-3 text-sm font-bold text-sunset transition-colors hover:bg-sunset/20"
+              >
+                🤙 Send a Shaka to @{viberHandle}
+              </ShakaButton>
+            </div>
           </div>
         </div>
       </div>
