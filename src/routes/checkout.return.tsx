@@ -203,7 +203,5 @@ function CheckoutReturn() {
 }
 
 function FeaturedAvatar({ handle }: { handle: string }) {
-  // Inline import to keep checkout.return self-contained.
-  const { ViberAvatar } = require("@/components/ViberAvatar") as typeof import("@/components/ViberAvatar");
   return <ViberAvatar handle={handle} size={44} />;
 }
