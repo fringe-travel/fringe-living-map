@@ -244,22 +244,42 @@ function KeepRegionAlive({
             Keep {regionName} alive on the map.
           </h3>
 
-          {/* Featured viber — real face, real story */}
-          <div className="mt-6 flex items-start gap-4 rounded-2xl border border-border bg-background/60 p-5 backdrop-blur-sm">
-            <ViberAvatar handle={viberHandle} size={56} />
-            <div className="min-w-0 flex-1">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-signal">
-                Meet your viber in {regionName}
-              </p>
-              <p className="mt-1.5 text-lg font-bold tracking-tight">
-                {viberName}{" "}
-                <span className="font-mono text-xs font-normal text-foreground/50">
-                  @{viberHandle}
-                </span>
-              </p>
-              <p className="mt-1 text-sm text-foreground/70">{viberStory}</p>
+          {/* Featured viber — real face, real story, real clip */}
+          <div className="mt-6 flex flex-col gap-5 rounded-2xl border border-border bg-background/60 p-5 backdrop-blur-sm sm:flex-row sm:items-stretch">
+            <div className="relative aspect-[9/16] w-full shrink-0 overflow-hidden rounded-xl bg-surface-2 sm:w-40">
+              <video
+                src={viberProfile?.clip ?? "/fringe-app-preview.mp4"}
+                poster={viberProfile?.photo}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-background/80 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-signal backdrop-blur-sm">
+                <span className="size-1.5 animate-pulse rounded-full bg-signal" />
+                Live from {regionName}
+              </div>
+            </div>
+            <div className="flex min-w-0 flex-1 flex-col">
+              <div className="flex items-start gap-3">
+                <ViberAvatar handle={viberHandle} size={48} />
+                <div className="min-w-0 flex-1">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-signal">
+                    Meet your viber in {regionName}
+                  </p>
+                  <p className="mt-1.5 text-lg font-bold tracking-tight">
+                    {viberName}{" "}
+                    <span className="font-mono text-xs font-normal text-foreground/50">
+                      @{viberHandle}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <p className="mt-3 text-sm text-foreground/70">{viberStory}</p>
             </div>
           </div>
+
 
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             {/* Membership — the one sub that funds every region */}
