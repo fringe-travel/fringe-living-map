@@ -3,6 +3,7 @@ import { LivingGlobe } from "@/components/LivingGlobe";
 import { UnlockButton } from "@/components/UnlockButton";
 import { FOUNDING_MEMBER_PRICE_ID } from "@/lib/pricing-ids";
 import { PartnerDiscountTeaser } from "@/components/PartnerDiscountTeaser";
+import { ShakasTicker } from "@/components/ShakasTicker";
 
 const GLOSSARY_TERMS = [
   { term: "Vibe", def: "A real-time human signal from a place." },
@@ -100,9 +101,20 @@ function HomePage() {
             </a>
           </div>
 
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
-            Real people · Real places · Fresh signals
-          </p>
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/60">
+              <span className="inline-flex items-center gap-2 rounded-full border border-signal/40 bg-signal/5 px-3 py-1.5">
+                <span className="relative inline-flex size-1.5">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
+                  <span className="relative size-1.5 rounded-full bg-signal" />
+                </span>
+                <span className="text-foreground">23</span> vibers active now
+              </span>
+              <span className="text-foreground/40">·</span>
+              <span>54 fresh signals this hour</span>
+            </div>
+            <ShakasTicker />
+          </div>
         </div>
       </section>
 
@@ -163,16 +175,22 @@ function BehindEveryVibe() {
             Support the Vibers
           </a>
           <a
-            href="/signal-regions"
+            href="/vibers"
             className="inline-flex w-full items-center justify-center rounded-full border border-border bg-surface px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-surface-2 sm:w-auto"
           >
-            Fund a Region
+            Become a Viber →
           </a>
         </div>
+        <p className="mt-4 text-sm text-foreground/55">
+          On the ground in a place worth showing? We're recruiting vibers in
+          every region. <a href="/vibers" className="text-primary underline-offset-4 hover:underline">See how it works →</a>
+        </p>
       </div>
     </section>
   );
 }
+
+
 
 /* ───────── What makes FRiNGE different ───────── */
 function WhatMakesDifferent() {

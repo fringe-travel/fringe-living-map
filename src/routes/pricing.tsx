@@ -133,11 +133,23 @@ function Page() {
             <span className="text-sm text-foreground/50">one-time</span>
           </div>
           <p className="mt-4 text-foreground/70">
-            A one-time pass for the people backing the human network from day
-            one. Permanent status, a place on the Founding Wall, and the perks
-            below. Founding Supporters still subscribe for ongoing partner
-            discounts.
+            A one-time pass for the first 2,000 people backing the human
+            network. Permanent Founding status, a seat on the Founding Wall,
+            and the perks below.
           </p>
+
+          <div className="mt-5 rounded-2xl border border-sunset/30 bg-background/60 p-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-sunset">
+              How it fits with Membership
+            </p>
+            <p className="mt-2 text-sm text-foreground/70">
+              The <span className="font-bold text-foreground">$200 Founding Pass</span> is
+              for <span className="font-bold text-foreground">status, Shakas, and a seat in the first 2,000</span>.
+              The <span className="font-bold text-foreground">$20/mo Membership</span> is
+              what <span className="font-bold text-foreground">actually funds the vibers</span> on the ground and unlocks partner discounts. They're different jobs — Founding Members usually do both.
+            </p>
+          </div>
+
           <ul className="mt-6 grid gap-3 text-sm text-foreground/80">
             {[
               "Permanent Founding Member badge — you helped start this.",
