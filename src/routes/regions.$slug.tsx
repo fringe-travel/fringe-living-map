@@ -344,6 +344,38 @@ function KeepRegionAlive({
 
 
 
+function RegionViberChip({ regionName, feed }: { regionName: string; feed: SignalDrop[] }) {
+  const featured = [...feed].sort((a, b) => a.minutesAgo - b.minutesAgo)[0];
+  if (!featured) return null;
+  const handle = featured.by;
+  const profile = getViber(handle);
+  const name = profile?.name ?? `@${handle}`;
+  return (
+    <section className="border-b border-border bg-background">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-6 py-5">
+        <ViberAvatar handle={handle} size={40} />
+        <div className="min-w-0 flex-1">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">
+            Your viber in {regionName}
+          </p>
+          <p className="mt-0.5 truncate text-sm text-foreground/80">
+            <span className="font-bold text-foreground">{name}</span>{" "}
+            <span className="text-foreground/50">@{handle}</span>
+            {profile?.story ? <span className="text-foreground/60"> · {profile.story}</span> : null}
+          </p>
+        </div>
+        <ShakaButton
+          viberName={`@${handle}`}
+          viberUserId={DEMO_VIBER_USER_ID}
+          className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-sunset/40 bg-sunset/10 px-4 py-2 text-xs font-bold text-sunset transition-colors hover:bg-sunset/20"
+        >
+          🤙 Send Shaka
+        </ShakaButton>
+      </div>
+    </section>
+  );
+}
+
 function Stat({ big, label, highlight }: { big: string; label: string; highlight?: boolean }) {
   return (
     <div className="rounded-2xl border border-border bg-background p-8">
