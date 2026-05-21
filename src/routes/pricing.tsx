@@ -66,15 +66,16 @@ function Page() {
       {/* Hero */}
       <header className="max-w-3xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-          Membership · Partner Discounts
+          Support the human signal
         </p>
         <h1 className="mt-3 text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
-          The Living Globe is free. Membership opens doors.
+          Behind every vibe is a human. Help keep them showing up.
         </h1>
         <p className="mt-5 text-pretty text-lg text-foreground/60">
-          Anyone can sign up and use FRiNGE. Members unlock ongoing discounts from
-          partners on the ground — kite schools, cafes, surf shops, co-works — the
-          places vibers actually go.
+          The Living Map is free for everyone. Membership funds the vibers on
+          the ground — the locals, surfers, travelers, and friends who walk to
+          the beach, check the wind, and show the sunset before it disappears.
+          Members also unlock real discounts from FRiNGE Partners in every region.
         </p>
         <Link
           to="/partners"
@@ -89,21 +90,22 @@ function Page() {
         {/* Membership */}
         <div className="flex flex-col rounded-3xl border border-border bg-surface/30 p-8 md:p-10">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-            FRiNGE Membership
+            Support the Vibers
           </p>
           <div className="mt-3 flex items-baseline gap-2">
             <span className="text-5xl font-extrabold tracking-tighter">$20</span>
             <span className="text-sm text-foreground/50">/ month</span>
           </div>
           <p className="mt-4 text-foreground/70">
-            Unlock partner discounts worldwide. Cancel anytime.
+            Keep real people showing up in real places. Unlock partner discounts
+            worldwide on top. Cancel anytime.
           </p>
           <ul className="mt-6 grid gap-3 text-sm text-foreground/80">
             {[
-              "Member discounts at every FRiNGE Partner.",
-              "Codes revealed inline on partner pages.",
-              "Supports the people keeping signals honest.",
-              "New partners added every month.",
+              "Funds the vibers keeping the Living Map alive.",
+              "Member discounts at every FRiNGE Partner — codes revealed inline.",
+              "New regions and new local vibers added every month.",
+              "No ads, no algorithm — your $20 backs the humans, not the feed.",
             ].map((line) => (
               <li key={line} className="flex gap-3">
                 <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
@@ -114,33 +116,34 @@ function Page() {
           <div className="mt-8 flex-1" />
           <UnlockButton
             priceId={FRINGE_MEMBERSHIP_PRICE_ID}
-            reason="Subscribe to FRiNGE Membership"
+            reason="Support the Vibers"
             className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground transition-all hover:brightness-110 disabled:opacity-60"
           >
-            Become a Member · $20/mo
+            Support the Vibers · $20/mo
           </UnlockButton>
         </div>
 
         {/* Founding Member */}
         <div className="flex flex-col overflow-hidden rounded-3xl border border-primary/40 bg-gradient-to-br from-primary/10 via-background to-sunset/10 p-8 md:p-10">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">
-            Founding Member Pass · 2,000 seats
+            Founding Supporter Pass · 2,000 seats
           </p>
           <div className="mt-3 flex items-baseline gap-2">
             <span className="text-5xl font-extrabold tracking-tighter">$200</span>
             <span className="text-sm text-foreground/50">one-time</span>
           </div>
           <p className="mt-4 text-foreground/70">
-            A one-time community pass. Founding Member status, perks, and a permanent
-            place on the wall. Not a subscription, not a free membership — Founding
-            Members still subscribe for partner discounts.
+            A one-time pass for the people backing the human network from day
+            one. Permanent status, a place on the Founding Wall, and the perks
+            below. Founding Supporters still subscribe for ongoing partner
+            discounts.
           </p>
           <ul className="mt-6 grid gap-3 text-sm text-foreground/80">
             {[
-              "Permanent Founding Member badge on your profile.",
-              "5 welcome Shakas to send to vibers on day one.",
+              "Permanent Founding Member badge — you helped start this.",
+              "5 welcome Shakas to send straight to vibers on day one.",
               "First access to Vibe Requests, Region Support, and new programs.",
-              "Direct line to the team. Your feedback shapes what ships first.",
+              "Direct line to the team. Your feedback shapes what ships next.",
               "Your name on the Founding Wall when the Globe goes wide.",
             ].map((line) => (
               <li key={line} className="flex gap-3">
@@ -152,10 +155,10 @@ function Page() {
           <div className="mt-8 flex-1" />
           <UnlockButton
             priceId={FOUNDING_MEMBER_PRICE_ID}
-            reason="Claim your Founding Member Pass"
+            reason="Claim your Founding Supporter Pass"
             className="inline-flex w-full items-center justify-center rounded-xl bg-foreground px-8 py-4 text-base font-bold text-background transition-all hover:brightness-110 disabled:opacity-60"
           >
-            Claim Founding Member Pass · $200
+            Claim Founding Pass · $200
           </UnlockButton>
           <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
             Once they're gone, they're gone
@@ -173,10 +176,10 @@ function Page() {
             Founding Investor Circle · 100 seats
           </p>
           <p className="mt-2 text-base font-semibold tracking-tight md:text-lg">
-            $2,000 — Founding Member status + equity in FRiNGE.
+            $2,000 — fund the human network and own a piece of FRiNGE.
           </p>
           <p className="mt-1 text-sm text-foreground/60">
-            Goes beyond the Founding Pass. By application only.
+            Founding Member status plus equity. By application only.
           </p>
         </div>
         <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-sunset">
@@ -187,11 +190,12 @@ function Page() {
       {/* What members get, in plain English */}
       <div className="mt-20">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-          Why membership exists
+          Where your $20 goes
         </p>
         <h2 className="mt-3 text-3xl font-extrabold tracking-tighter md:text-4xl">
-          Your $20 backs the people on the ground.
+          Straight to the people keeping the map alive.
         </h2>
+
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {[
