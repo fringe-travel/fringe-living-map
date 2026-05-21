@@ -175,16 +175,23 @@ function BehindEveryVibe() {
             Support the Vibers
           </a>
           <a
-            href="/signal-regions"
+            href="/vibers"
             className="inline-flex w-full items-center justify-center rounded-full border border-border bg-surface px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-surface-2 sm:w-auto"
           >
-            Fund a Region
+            Become a Viber →
           </a>
         </div>
+        <p className="mt-4 text-sm text-foreground/55">
+          On the ground in a place worth showing? We're recruiting vibers in
+          every region. <a href="/vibers" className="text-primary underline-offset-4 hover:underline">See how it works →</a>
+        </p>
       </div>
     </section>
   );
 }
+
+/* ───────── What makes FRiNGE different ───────── */
+function _placeholder() { return null; }
 
 /* ───────── What makes FRiNGE different ───────── */
 function WhatMakesDifferent() {
