@@ -4,6 +4,8 @@ import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
 import { UnlockButton } from "@/components/UnlockButton";
 import { FRINGE_MEMBERSHIP_PRICE_ID } from "@/lib/pricing-ids";
+import { ViberAvatar } from "@/components/ViberAvatar";
+import { getViber, viberStoryOrFallback } from "@/lib/vibers";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
@@ -224,7 +226,9 @@ function KeepRegionAlive({
   // Pick the most recent viber as the named face of the region.
   const featured = [...feed].sort((a, b) => a.minutesAgo - b.minutesAgo)[0];
   const viberHandle = featured?.by ?? "the locals";
-  const viberSpot = featured?.spot ?? regionName;
+  const viberProfile = getViber(viberHandle);
+  const viberName = viberProfile?.name ?? `@${viberHandle}`;
+  const viberStory = viberStoryOrFallback(viberHandle, regionName);
 
   return (
     <section className="border-b border-border py-20">
@@ -236,12 +240,23 @@ function KeepRegionAlive({
           <h3 className="mt-3 text-balance text-3xl font-extrabold tracking-tighter md:text-5xl">
             Keep {regionName} alive on the map.
           </h3>
-          <p className="mt-4 max-w-2xl text-foreground/70">
-            {regionName} stays live because vibers like{" "}
-            <span className="font-bold text-foreground">@{viberHandle}</span>{" "}
-            keep showing up — walking to {viberSpot}, checking the conditions,
-            and showing the moment before it disappears.
-          </p>
+
+          {/* Featured viber — real face, real story */}
+          <div className="mt-6 flex items-start gap-4 rounded-2xl border border-border bg-background/60 p-5 backdrop-blur-sm">
+            <ViberAvatar handle={viberHandle} size={56} />
+            <div className="min-w-0 flex-1">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-signal">
+                Meet your viber in {regionName}
+              </p>
+              <p className="mt-1.5 text-lg font-bold tracking-tight">
+                {viberName}{" "}
+                <span className="font-mono text-xs font-normal text-foreground/50">
+                  @{viberHandle}
+                </span>
+              </p>
+              <p className="mt-1 text-sm text-foreground/70">{viberStory}</p>
+            </div>
+          </div>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             {/* Membership — the one sub that funds every region */}
