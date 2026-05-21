@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getRegion, DEMO_VIBER_USER_ID, type SignalDrop } from "@/lib/regions";
 import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
+import { UnlockButton } from "@/components/UnlockButton";
+import { REGION_SUPPORT_PRICE_IDS } from "@/lib/pricing-ids";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
