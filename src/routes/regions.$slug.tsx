@@ -70,6 +70,9 @@ function Page() {
         </div>
       </section>
 
+      {/* Featured viber chip — every region has a face */}
+      <RegionViberChip regionName={shortName} feed={region.previewFeed} />
+
       {/* Live stats */}
       <section className="border-b border-border bg-surface/30 py-16">
         <div className="mx-auto grid max-w-7xl gap-6 px-6 md:grid-cols-3">
