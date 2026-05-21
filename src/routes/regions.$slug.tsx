@@ -304,15 +304,7 @@ function KeepRegionAlive({
   );
 }
 
-// Reference slug so unused-var rules don't fire when imports add features later.
-void ((_: string) => _);
-void (null as unknown as typeof DEMO_VIBER_USER_ID);
-void (null as unknown as { slug: string });
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-true;
 
-// Re-export marker so the file structure stays intact below.
-// (Stat function follows.)
 
 
 function Stat({ big, label, highlight }: { big: string; label: string; highlight?: boolean }) {
