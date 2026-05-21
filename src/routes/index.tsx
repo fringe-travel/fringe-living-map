@@ -16,16 +16,16 @@ const GLOSSARY_TERMS = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "FRiNGE, The Living Globe of real-time vibes." },
+      { title: "FRiNGE — Support the vibers who keep the Living Map alive." },
       {
         name: "description",
         content:
-          "Discover adventure through real people around the world. Fresh vibes captured by people on the ground. No uploads. No edits. No filters.",
+          "FRiNGE is powered by people, not cameras. Real vibers on the ground capture what places feel like right now. Support the humans keeping the Living Map alive.",
       },
-      { property: "og:title", content: "FRiNGE, The Living Globe" },
+      { property: "og:title", content: "FRiNGE — The Living Map, powered by people." },
       {
         property: "og:description",
-        content: "A real-time window into the physical world.",
+        content: "Behind every vibe is a human. Support the vibers who keep the Living Map alive.",
       },
       { property: "og:url", content: "https://fringe-living-map.lovable.app/" },
     ],
