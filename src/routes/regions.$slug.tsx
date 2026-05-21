@@ -75,7 +75,11 @@ function Page() {
         </div>
       </section>
 
+      <KeepRegionAlive slug={region.slug} regionName={shortName} feed={region.previewFeed} />
+
       <SponsorRegionCTA slug={region.slug} regionName={shortName} />
+
+
 
 
       {/* Recent vibes feed */}
