@@ -180,7 +180,48 @@ function Page() {
             Once they're gone, they're gone
           </p>
         </div>
+
+        {/* Shakas — per-viber tipping */}
+        <div className="flex flex-col rounded-3xl border border-sunset/40 bg-gradient-to-br from-sunset/10 via-background to-primary/5 p-8 md:p-10">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">
+            🤙 Tip a Viber
+          </p>
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-5xl font-extrabold tracking-tighter">$2</span>
+            <span className="text-sm text-foreground/50">/ Shaka · from $10</span>
+          </div>
+          <p className="mt-4 text-foreground/70">
+            Saw a drop that made your day? Send a Shaka straight to the human
+            who posted it. One wallet, every region, every viber.
+          </p>
+          <ul className="mt-6 grid gap-3 text-sm text-foreground/80">
+            {[
+              "100% of every Shaka goes to the viber.",
+              "Buy in packs — 5, 15, or 50. The bigger the pack, the cheaper per Shaka.",
+              "Use anywhere on the map — no region locks, no expiry.",
+              "Stacks on top of Membership — or use Shakas on their own.",
+            ].map((line) => (
+              <li key={line} className="flex gap-3">
+                <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-sunset" />
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex-1" />
+          <button
+            onClick={() => setShakasOpen(true)}
+            className="inline-flex w-full items-center justify-center rounded-xl bg-sunset px-8 py-4 text-base font-bold text-primary-foreground transition-all hover:brightness-110"
+          >
+            Buy Shakas · from ${(entryPack.priceCents / 100).toFixed(0)}
+          </button>
+          <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+            Pay-as-you-go · no subscription
+          </p>
+        </div>
       </div>
+
+      <ShakaPacksDialog open={shakasOpen} onClose={() => setShakasOpen(false)} />
+
 
       {/* Founding Investor Circle teaser */}
       <Link
