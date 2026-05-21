@@ -190,8 +190,7 @@ function BehindEveryVibe() {
   );
 }
 
-/* ───────── What makes FRiNGE different ───────── */
-function _placeholder() { return null; }
+
 
 /* ───────── What makes FRiNGE different ───────── */
 function WhatMakesDifferent() {
