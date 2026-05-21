@@ -125,21 +125,84 @@ function CheckoutReturn() {
     );
   }
 
+  // Membership / general checkout payoff — no founding row means a
+  // standard subscription or Shakas top-up. Either way, show the human
+  // result of the spend.
+  const featuredVibers = [
+    { handle: "maya_k", name: "Maya", region: "Boracay" },
+    { handle: "rafa", name: "Rafa", region: "Rio" },
+    { handle: "sam.w", name: "Sam", region: "Hood River" },
+  ];
+
   return (
-    <section className="mx-auto max-w-xl px-6 py-24 text-center">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">FRiNGE</p>
-      <h1 className="mt-4 text-4xl font-extrabold tracking-tighter">You're in. 🤙</h1>
-      <p className="mt-4 text-foreground/60">
-        {checking
-          ? "Confirming your purchase…"
-          : "Your access is unlocking right now. If anything looks off, refresh in a few seconds."}
+    <section className="relative mx-auto max-w-3xl px-6 py-20">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-primary/10 via-sunset/5 to-transparent blur-2xl" />
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+        You're in · Member
       </p>
-      <Link
-        to="/"
-        className="mt-8 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
-      >
-        Back to the Living Globe →
-      </Link>
+      <h1 className="mt-4 text-balance text-5xl font-extrabold tracking-tighter">
+        You just funded the human signal. 🤙
+      </h1>
+      <p className="mt-5 max-w-xl text-foreground/70">
+        {checking
+          ? "Confirming your membership…"
+          : "Your membership is active. Here's where your $20 just landed."}
+      </p>
+
+      <div className="mt-10">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">
+          The vibers you're now backing
+        </p>
+        <ul className="mt-4 grid gap-3 md:grid-cols-3">
+          {featuredVibers.map((v) => (
+            <li
+              key={v.handle}
+              className="flex items-center gap-3 rounded-2xl border border-border bg-background p-4"
+            >
+              <FeaturedAvatar handle={v.handle} />
+              <div className="min-w-0">
+                <p className="truncate font-bold tracking-tight">{v.name}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+                  @{v.handle} · {v.region}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-10 rounded-2xl border border-sunset/30 bg-sunset/5 p-6">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-sunset">
+          Your first move as a Member
+        </p>
+        <p className="mt-2 text-lg font-bold tracking-tight">
+          Send your first Shaka to a viber.
+        </p>
+        <p className="mt-2 text-sm text-foreground/70">
+          Membership funds the network. Shakas land in a specific person's
+          wallet — the one whose drop just made your day.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            to="/signal-regions"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+          >
+            Browse the Globe →
+          </Link>
+          <Link
+            to="/account"
+            className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-bold hover:bg-surface"
+          >
+            See your Shaka wallet
+          </Link>
+        </div>
+      </div>
     </section>
   );
+}
+
+function FeaturedAvatar({ handle }: { handle: string }) {
+  // Inline import to keep checkout.return self-contained.
+  const { ViberAvatar } = require("@/components/ViberAvatar") as typeof import("@/components/ViberAvatar");
+  return <ViberAvatar handle={handle} size={44} />;
 }
