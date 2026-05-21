@@ -16,16 +16,16 @@ const GLOSSARY_TERMS = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "FRiNGE, The Living Globe of real-time vibes." },
+      { title: "FRiNGE — Support the vibers who keep the Living Map alive." },
       {
         name: "description",
         content:
-          "Discover adventure through real people around the world. Fresh vibes captured by people on the ground. No uploads. No edits. No filters.",
+          "FRiNGE is powered by people, not cameras. Real vibers on the ground capture what places feel like right now. Support the humans keeping the Living Map alive.",
       },
-      { property: "og:title", content: "FRiNGE, The Living Globe" },
+      { property: "og:title", content: "FRiNGE — The Living Map, powered by people." },
       {
         property: "og:description",
-        content: "A real-time window into the physical world.",
+        content: "Behind every vibe is a human. Support the vibers who keep the Living Map alive.",
       },
       { property: "og:url", content: "https://fringe-living-map.lovable.app/" },
     ],
@@ -58,14 +58,19 @@ function HomePage() {
       {/* Hero copy + dual CTA */}
       <section className="border-t border-border bg-background px-6 py-20 text-center">
         <div className="mx-auto max-w-3xl">
-          <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-foreground md:text-6xl lg:text-7xl">
-            Discover adventure through real people around the world.
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">
+            Powered by people, not cameras
+          </p>
+          <h1 className="mt-4 text-balance text-4xl font-extrabold tracking-tighter text-foreground md:text-6xl lg:text-7xl">
+            Support the vibers who keep the Living Map alive.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base text-foreground/70 md:text-lg">
-            Fresh vibes captured by people on the ground. No uploads. No edits. No filters.
+            FRiNGE is built by real people showing what places feel like right now —
+            locals, travelers, surfers, kiters, food lovers, sunset chasers. Your
+            support helps the humans on the ground keep showing up.
           </p>
 
-          <div className="mt-10 flex justify-center">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
               href="#living-globe"
               onClick={(e) => {
@@ -85,7 +90,13 @@ function HomePage() {
               }}
               className="inline-flex w-full items-center justify-center rounded-full bg-foreground px-7 py-3.5 text-sm font-bold text-background transition-transform hover:scale-105 sm:w-auto"
             >
-              Living Globe
+              Open the Living Map
+            </a>
+            <a
+              href="/pricing"
+              className="inline-flex w-full items-center justify-center rounded-full border border-border bg-surface px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-surface-2 sm:w-auto"
+            >
+              Support the Vibers
             </a>
           </div>
 
@@ -95,11 +106,70 @@ function HomePage() {
         </div>
       </section>
 
+      <BehindEveryVibe />
       <WhatMakesDifferent />
       <PartnerDiscountTeaser />
       <FoundingMemberSection />
       <Glossary />
     </div>
+  );
+}
+
+/* ───────── Behind Every Vibe Is a Human ───────── */
+function BehindEveryVibe() {
+  const moments = [
+    { who: "A local", does: "walking down to the beach." },
+    { who: "A surfer", does: "checking the break before dawn." },
+    { who: "A traveler", does: "sharing the sunset as it happens." },
+    { who: "A friend", does: "stepping into a cafe to show the energy." },
+    { who: "A viber", does: "capturing the moment before it disappears." },
+  ];
+
+  return (
+    <section className="border-t border-border bg-background px-6 py-24">
+      <div className="mx-auto max-w-5xl">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">
+          Behind every vibe is a human
+        </p>
+        <h2 className="mt-4 max-w-3xl text-balance text-4xl font-extrabold tracking-tighter md:text-5xl">
+          Every dot on the map starts with someone showing up.
+        </h2>
+        <p className="mt-5 max-w-2xl text-foreground/70">
+          FRiNGE is not powered by cameras. It is powered by people. Someone has
+          to go there. Someone has to look around. Someone has to show the
+          moment before it disappears. That person is the viber.
+        </p>
+
+        <ul className="mt-10 grid gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-2">
+          {moments.map((m) => (
+            <li key={m.who} className="flex items-baseline gap-3 bg-background p-6">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">
+                +
+              </span>
+              <p className="text-foreground/85">
+                <span className="font-bold text-foreground">{m.who}</span>{" "}
+                <span className="text-foreground/70">{m.does}</span>
+              </p>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+          <a
+            href="/pricing"
+            className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-all hover:brightness-110 sm:w-auto"
+          >
+            Support the Vibers
+          </a>
+          <a
+            href="/signal-regions"
+            className="inline-flex w-full items-center justify-center rounded-full border border-border bg-surface px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-surface-2 sm:w-auto"
+          >
+            Fund a Region
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }
 
