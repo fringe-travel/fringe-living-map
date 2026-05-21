@@ -142,7 +142,7 @@ function Page() {
             {[
               "Permanent Founding Member badge — you helped start this.",
               "5 welcome Shakas to send straight to vibers on day one.",
-              "First access to Vibe Requests, Region Support, and new programs.",
+              "First access to Shakas, Vibe Requests, and new programs.",
               "Direct line to the team. Your feedback shapes what ships next.",
               "Your name on the Founding Wall when the Globe goes wide.",
             ].map((line) => (
