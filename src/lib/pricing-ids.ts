@@ -28,8 +28,6 @@ export const VIBE_REQUEST_PRICE_IDS = {
 } as const;
 
 // ── Region Support ─────────────────────────────────────────────────────────
-export const REGION_SUPPORT_PRICE_IDS = {
-  supporter: "region_support_supporter",
-  backer: "region_support_backer",
-  patron: "region_support_patron",
-} as const;
+// Removed. Per-region support is now handled by the global $20 membership
+// plus Shakas as the per-viber tipping mechanic. One sub, one wallet,
+// infinite regions.
