@@ -9,9 +9,8 @@ import { MemberBadge } from "@/components/MemberBadge";
 const links = [
   { to: "/", label: "Living Globe" },
   { to: "/signal-regions", label: "Regions" },
-  { to: "/partners", label: "Partners" },
-  { to: "/vibers", label: "Become a Viber" },
   { to: "/pricing", label: "Support" },
+  { to: "/vibers", label: "Become a Viber" },
 ] as const;
 
 
