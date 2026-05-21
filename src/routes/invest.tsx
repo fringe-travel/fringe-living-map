@@ -80,11 +80,13 @@ function InvestPage() {
           Founding Investor Circle · 100 seats
         </p>
         <h1 className="mt-3 text-balance text-5xl font-extrabold tracking-tighter md:text-6xl">
-          Own a piece of the Living Globe.
+          Fund the human network behind the Living Map.
         </h1>
         <p className="mt-5 text-pretty text-lg text-foreground/70">
-          100 people will go beyond Founding Member. $2,000 gets you Founding Member
-          status, 5 welcome Shakas, and equity in FRiNGE itself. By application only.
+          FRiNGE isn't powered by cameras. It's powered by people — the locals,
+          surfers, travelers, kiters, and friends who keep every region alive.
+          100 people will go beyond Founding Member: $2,000 funds the human
+          network and gives you equity in FRiNGE itself. By application only.
         </p>
       </header>
 
@@ -95,9 +97,14 @@ function InvestPage() {
             <span className="text-5xl font-extrabold tracking-tighter">$2,000</span>
             <span className="text-sm text-foreground/50">one-time · 100 seats</span>
           </div>
+          <p className="mt-5 text-sm text-foreground/70">
+            Your $2,000 backs the vibers on the ground and earns you a seat at
+            the table as FRiNGE grows.
+          </p>
           <ul className="mt-6 grid gap-3 text-sm text-foreground/85">
             {[
               "Equity in FRiNGE — final terms confirmed in the closing documents.",
+              "Direct funding for the human network keeping the Living Map alive.",
               "Permanent Founding Member status (badge, perks, Founding Wall).",
               "5 welcome Shakas to send to vibers on day one.",
               "First look at every region, partnership, and program we ship.",
@@ -116,6 +123,7 @@ function InvestPage() {
             eligibility and applicable law.
           </p>
         </div>
+
 
         {/* Application form */}
         <div className="rounded-3xl border border-border bg-surface/30 p-8 md:p-10">

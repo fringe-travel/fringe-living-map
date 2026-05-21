@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getRegion, DEMO_VIBER_USER_ID, type SignalDrop } from "@/lib/regions";
 import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
+import { UnlockButton } from "@/components/UnlockButton";
+import { REGION_SUPPORT_PRICE_IDS } from "@/lib/pricing-ids";
 
 export const Route = createFileRoute("/regions/$slug")({
   loader: ({ params }) => {
@@ -75,7 +77,11 @@ function Page() {
         </div>
       </section>
 
+      <KeepRegionAlive slug={region.slug} regionName={shortName} feed={region.previewFeed} />
+
       <SponsorRegionCTA slug={region.slug} regionName={shortName} />
+
+
 
 
       {/* Recent vibes feed */}
@@ -205,6 +211,101 @@ function SponsorRegionCTA({ slug, regionName }: { slug: string; regionName: stri
     </section>
   );
 }
+
+function KeepRegionAlive({
+  slug,
+  regionName,
+  feed,
+}: {
+  slug: string;
+  regionName: string;
+  feed: SignalDrop[];
+}) {
+  // Pick the most recent viber as the named face of the region.
+  const featured = [...feed].sort((a, b) => a.minutesAgo - b.minutesAgo)[0];
+  const viberHandle = featured?.by ?? "the locals";
+  const viberSpot = featured?.spot ?? regionName;
+
+  return (
+    <section className="border-b border-border py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="overflow-hidden rounded-3xl border border-primary/40 bg-gradient-to-br from-primary/10 via-background to-sunset/10 p-8 md:p-12">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">
+            Behind every vibe is a human
+          </p>
+          <h3 className="mt-3 text-balance text-3xl font-extrabold tracking-tighter md:text-5xl">
+            Keep {regionName} alive on the map.
+          </h3>
+          <p className="mt-4 max-w-2xl text-foreground/70">
+            {regionName} stays live because vibers like{" "}
+            <span className="font-bold text-foreground">@{viberHandle}</span>{" "}
+            keep showing up — walking to {viberSpot}, checking the conditions,
+            and showing the moment before it disappears. Your monthly support
+            goes straight to them.
+          </p>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {[
+              {
+                key: "supporter" as const,
+                label: "Supporter",
+                price: "$5",
+                line: `Back the vibers in ${regionName}.`,
+              },
+              {
+                key: "backer" as const,
+                label: "Regional Backer",
+                price: "$10",
+                line: "Fund more drops, more often.",
+                highlight: true,
+              },
+              {
+                key: "patron" as const,
+                label: "Signal Patron",
+                price: "$25",
+                line: "Direct line to the people on the ground.",
+              },
+            ].map((t) => (
+              <div
+                key={t.key}
+                className={`rounded-2xl border p-5 ${
+                  t.highlight
+                    ? "border-primary/40 bg-primary/5"
+                    : "border-border bg-background"
+                }`}
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+                  {t.label}
+                </p>
+                <p className="mt-2 flex items-baseline gap-1 text-3xl font-extrabold tracking-tighter">
+                  {t.price}
+                  <span className="text-xs font-medium text-foreground/50">
+                    /mo
+                  </span>
+                </p>
+                <p className="mt-3 text-sm text-foreground/70">{t.line}</p>
+                <UnlockButton
+                  priceId={REGION_SUPPORT_PRICE_IDS[t.key]}
+                  reason={`Keep ${regionName} alive`}
+                  className={`mt-5 w-full rounded-xl py-2.5 text-xs font-bold transition-colors disabled:opacity-60 ${
+                    t.highlight
+                      ? "bg-primary text-primary-foreground hover:brightness-110"
+                      : "border border-border bg-surface hover:bg-surface-2"
+                  }`}
+                >
+                  Keep {regionName} alive
+                </UnlockButton>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+
 
 function Stat({ big, label, highlight }: { big: string; label: string; highlight?: boolean }) {
   return (
