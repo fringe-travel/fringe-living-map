@@ -122,6 +122,7 @@ function BehindEveryVibe() {
     { who: "A surfer", does: "checking the break before dawn." },
     { who: "A traveler", does: "sharing the sunset as it happens." },
     { who: "A friend", does: "stepping into a cafe to show the energy." },
+    { who: "A kiter", does: "calling the wind from the water." },
     { who: "A viber", does: "capturing the moment before it disappears." },
   ];
 
