@@ -123,11 +123,14 @@ function Page() {
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-6">
-                    <div className="flex items-center justify-between">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
-                        {d.spot} · @{d.by}
-                      </p>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <ViberAvatar handle={d.by} size={24} />
+                        <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+                          {d.spot} · @{d.by}
+                        </p>
+                      </div>
+                      <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
                         {d.minutesAgo}m ago
                       </span>
                     </div>
