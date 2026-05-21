@@ -115,6 +115,7 @@ function HomePage() {
             </div>
             <ShakasTicker />
           </div>
+        </div>
       </section>
 
       <BehindEveryVibe />
