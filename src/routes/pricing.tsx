@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { UnlockButton } from "@/components/UnlockButton";
-import { FOUNDING_MEMBER_PRICE_ID, FRINGE_MEMBERSHIP_PRICE_ID } from "@/lib/pricing-ids";
+import { ShakaPacksDialog } from "@/components/ShakaPacksDialog";
+import { FOUNDING_MEMBER_PRICE_ID, FRINGE_MEMBERSHIP_PRICE_ID, SHAKA_PACKS } from "@/lib/pricing-ids";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -61,6 +63,8 @@ export const Route = createFileRoute("/pricing")({
 });
 
 function Page() {
+  const [shakasOpen, setShakasOpen] = useState(false);
+  const entryPack = SHAKA_PACKS[0];
   return (
     <section className="mx-auto max-w-6xl px-6 py-24">
       {/* Hero */}
