@@ -7,13 +7,13 @@ import { useAuth } from "@/hooks/useAuth";
 export const Route = createFileRoute("/invest")({
   head: () => ({
     meta: [
-      { title: "Founding Investor Circle — FRiNGE" },
+      { title: "Founding Investor Circle · FRiNGE" },
       {
         name: "description",
         content:
           "100 seats. $2,000 each. Founding Member status plus equity in FRiNGE. By application only.",
       },
-      { property: "og:title", content: "Founding Investor Circle — FRiNGE" },
+      { property: "og:title", content: "Founding Investor Circle · FRiNGE" },
       {
         property: "og:description",
         content:
@@ -83,7 +83,7 @@ function InvestPage() {
           Fund the human network behind the Living Map.
         </h1>
         <p className="mt-5 text-pretty text-lg text-foreground/70">
-          FRiNGE isn't powered by cameras. It's powered by people — the locals,
+          FRiNGE isn't powered by cameras. It's powered by people. The locals,
           surfers, travelers, kiters, and friends who keep every region alive.
           100 people will go beyond Founding Member: $2,000 funds the human
           network and gives you equity in FRiNGE itself. By application only.
@@ -95,7 +95,7 @@ function InvestPage() {
         <div className="rounded-3xl border border-primary/40 bg-gradient-to-br from-primary/10 via-background to-sunset/10 p-8 md:p-10">
           <div className="flex items-baseline gap-2">
             <span className="text-5xl font-extrabold tracking-tighter">$2,000</span>
-            <span className="text-sm text-foreground/50">one-time · 100 seats</span>
+            <span className="text-sm text-foreground/50">single payment · 100 seats</span>
           </div>
           <p className="mt-5 text-sm text-foreground/70">
             Your $2,000 backs the vibers on the ground and earns you a seat at
@@ -103,7 +103,7 @@ function InvestPage() {
           </p>
           <ul className="mt-6 grid gap-3 text-sm text-foreground/85">
             {[
-              "Equity in FRiNGE — final terms confirmed in the closing documents.",
+              "Equity in FRiNGE. Final terms confirmed in the closing documents.",
               "Direct funding for the human network keeping the Living Map alive.",
               "Permanent Founding Member status (badge, perks, Founding Wall).",
               "5 welcome Shakas to send to vibers on day one.",

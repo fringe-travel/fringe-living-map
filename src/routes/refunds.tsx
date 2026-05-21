@@ -4,9 +4,9 @@ export const Route = createFileRoute("/refunds")({
   head: () => ({
     meta: [
       { title: "Refund Policy, FRiNGE" },
-      { name: "description", content: "FRiNGE's 30-day refund policy and how to request a refund through Paddle." },
+      { name: "description", content: "FRiNGE's 30 day refund policy and how to request a refund through Paddle." },
       { property: "og:title", content: "Refund Policy, FRiNGE" },
-      { property: "og:description", content: "FRiNGE's 30-day refund policy and how to request a refund through Paddle." },
+      { property: "og:description", content: "FRiNGE's 30 day refund policy and how to request a refund through Paddle." },
     ],
     links: [{ rel: "canonical", href: "/refunds" }],
   }),
@@ -20,8 +20,8 @@ function RefundsPage() {
       <h1 className="mt-3 text-4xl font-extrabold tracking-tighter">Refund Policy</h1>
       <p className="mt-2 text-sm text-foreground/50">Last updated: May 17, 2026</p>
 
-      <Section title="30-day money-back guarantee">
-        FRiNGE, Inc. offers a <strong>30-day money-back guarantee</strong> on all
+      <Section title="30 day money back guarantee">
+        FRiNGE, Inc. offers a <strong>30 day money back guarantee</strong> on all
         purchases, day passes, monthly region subscriptions, and the Global Pass. If
         you're not satisfied with your purchase, you may request a full refund within
         30 days of the order date.
@@ -41,7 +41,7 @@ function RefundsPage() {
             help coordinate with Paddle.
           </li>
         </ul>
-        Refunds are typically processed within 5–10 business days and returned to the
+        Refunds are typically processed within 5 to 10 business days and returned to the
         original payment method.
       </Section>
 
@@ -54,19 +54,19 @@ function RefundsPage() {
 
       <Section title="Day passes">
         Day passes grant 24 hours of access from the time of purchase. They are
-        eligible for the 30-day money-back guarantee on the same terms above.
+        eligible for the 30 day money back guarantee on the same terms above.
       </Section>
 
       <Section title="Plan changes & upgrades">
-        Upgrading from a Region Pass to the Global Pass is pro-rated against the
+        Upgrading from a Region Pass to the Global Pass is prorated against the
         unused portion of your current period. Downgrades take effect at the next
         renewal.
       </Section>
 
       <Section title="Contact">
         Questions? Email{" "}
-        <a href="mailto:admin@fringe.travel">admin@fringe.travel</a>. For
-        anything billing-related, Paddle's support team can be reached at{" "}
+        <a href="mailto:admin@fringe.travel">admin@fringe.travel</a>. For any
+        billing questions, Paddle's support team can be reached at{" "}
         <a href="https://paddle.net" target="_blank" rel="noopener noreferrer">paddle.net</a>.
       </Section>
     </article>

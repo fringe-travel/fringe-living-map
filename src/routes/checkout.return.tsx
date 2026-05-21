@@ -181,7 +181,7 @@ function CheckoutReturn() {
         </p>
         <p className="mt-2 text-sm text-foreground/70">
           Membership funds the network. Shakas land in a specific person's
-          wallet — the one whose drop just made your day.
+          wallet. The one whose drop just made your day.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link

@@ -17,13 +17,13 @@ const GLOSSARY_TERMS = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "FRiNGE — Support the vibers who keep the Living Map alive." },
+      { title: "FRiNGE. Support the vibers who keep the Living Map alive." },
       {
         name: "description",
         content:
           "FRiNGE is powered by people, not cameras. Real vibers on the ground capture what places feel like right now. Support the humans keeping the Living Map alive.",
       },
-      { property: "og:title", content: "FRiNGE — The Living Map, powered by people." },
+      { property: "og:title", content: "FRiNGE. The Living Map, powered by people." },
       {
         property: "og:description",
         content: "Behind every vibe is a human. Support the vibers who keep the Living Map alive.",
@@ -66,8 +66,8 @@ function HomePage() {
             Support the vibers who keep the Living Map alive.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base text-foreground/70 md:text-lg">
-            FRiNGE is built by real people showing what places feel like right now —
-            locals, travelers, surfers, kiters, food lovers, sunset chasers. Your
+            FRiNGE is built by real people showing what places feel like right now.
+            Locals, travelers, surfers, kiters, food lovers, sunset chasers. Your
             support helps the humans on the ground keep showing up.
           </p>
 
@@ -238,7 +238,7 @@ function FoundingMemberSection() {
     "Founding Member badge and number",
     "Early access to the Living Globe",
     "Early access to Boracay, Rio, and Hood River",
-    "First access to Shakas — tip any viber, any region",
+    "First access to Shakas. Tip any viber, any region",
     "Private founder updates",
     "Vote on future regions",
     "Invite codes for friends",
