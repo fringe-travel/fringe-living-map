@@ -90,7 +90,7 @@ function Page() {
       </header>
 
       {/* Two tiers */}
-      <div className="mt-14 grid gap-6 md:grid-cols-2">
+      <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* Membership */}
         <div className="flex flex-col rounded-3xl border border-border bg-surface/30 p-8 md:p-10">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
