@@ -103,14 +103,6 @@ function HomePage() {
 
           <div className="mt-8 flex flex-col items-center gap-3">
             <div className="flex flex-wrap items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/60">
-              <span className="inline-flex items-center gap-2 rounded-full border border-signal/40 bg-signal/5 px-3 py-1.5">
-                <span className="relative inline-flex size-1.5">
-                  <span className="absolute inset-0 animate-ping rounded-full bg-signal opacity-70" />
-                  <span className="relative size-1.5 rounded-full bg-signal" />
-                </span>
-                <span className="text-foreground">23</span> vibers active now
-              </span>
-              <span className="text-foreground/40">·</span>
               <span>54 fresh signals this hour</span>
             </div>
             <ShakasTicker />
