@@ -269,9 +269,36 @@ export type Database = {
         }
         Relationships: []
       }
+      viber_follows: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+          viber_handle: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+          viber_handle: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+          viber_handle?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      viber_follow_counts: {
+        Row: {
+          followers: number | null
+          viber_handle: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       claim_founding_member: {
