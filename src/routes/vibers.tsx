@@ -54,7 +54,31 @@ function buildGlobalFeed(): GlobalDrop[] {
 }
 
 function Page() {
-  const feed = buildGlobalFeed();
+  const { tab } = Route.useSearch();
+  const { user } = useAuth();
+  const allFeed = buildGlobalFeed();
+  const [followed, setFollowed] = useState<Set<string>>(new Set());
+  const [loadingFollows, setLoadingFollows] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      setFollowed(new Set());
+      return;
+    }
+    setLoadingFollows(true);
+    supabase
+      .from("viber_follows")
+      .select("viber_handle")
+      .eq("user_id", user.id)
+      .then(({ data }) => {
+        setFollowed(new Set((data ?? []).map((r) => r.viber_handle)));
+        setLoadingFollows(false);
+      });
+  }, [user]);
+
+  const feed = tab === "following"
+    ? allFeed.filter((d) => followed.has(d.by))
+    : allFeed;
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-24">
@@ -69,8 +93,30 @@ function Page() {
         The freshest drops from the people on the ground, wherever they are. Signed regions, wandering vibers, all in one place.
       </p>
 
+      {/* Tabs */}
+      <div className="mt-10 inline-flex rounded-full border border-border bg-background p-1">
+        <Link
+          to="/vibers"
+          search={{ tab: "latest" }}
+          className={`rounded-full px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors ${
+            tab === "latest" ? "bg-foreground text-background" : "text-foreground/60 hover:text-foreground"
+          }`}
+        >
+          Latest
+        </Link>
+        <Link
+          to="/vibers"
+          search={{ tab: "following" }}
+          className={`rounded-full px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors ${
+            tab === "following" ? "bg-foreground text-background" : "text-foreground/60 hover:text-foreground"
+          }`}
+        >
+          Following{user && followed.size > 0 ? ` · ${followed.size}` : ""}
+        </Link>
+      </div>
+
       {/* Global feed */}
-      <div className="mt-12 flex items-end justify-between gap-6 flex-wrap">
+      <div className="mt-8 flex items-end justify-between gap-6 flex-wrap">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50">
           {feed.length} drops · last hour
         </p>
@@ -82,49 +128,61 @@ function Page() {
         </Link>
       </div>
 
-      <ul className="mt-6 grid gap-4 md:grid-cols-2">
-        {feed.map((d, i) => (
-          <li
-            key={`${d.regionSlug}-${i}`}
-            className="flex flex-row overflow-hidden rounded-3xl border border-border bg-background"
-          >
-            <div className="relative aspect-[9/16] w-36 shrink-0 overflow-hidden bg-surface-2 sm:w-44">
-              <video
-                src="/fringe-app-preview.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-              <Link
-                to="/regions/$slug"
-                params={{ slug: d.regionSlug }}
-                className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-background/80 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-signal backdrop-blur-sm hover:text-foreground"
-              >
-                {d.regionName}
-              </Link>
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2">
-                  <ViberAvatar handle={d.by} size={24} />
-                  <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
-                    {d.spot} · @{d.by}
-                  </p>
+      {tab === "following" && !user ? (
+        <div className="mt-10 rounded-2xl border border-border bg-surface/40 p-8 text-foreground/70">
+          Sign in and tap <span className="font-bold">+ Follow</span> on any viber to build your own feed.
+        </div>
+      ) : tab === "following" && !loadingFollows && feed.length === 0 ? (
+        <div className="mt-10 rounded-2xl border border-border bg-surface/40 p-8 text-foreground/70">
+          You're not following anyone yet. Hit <span className="font-bold">+ Follow</span> on a viber in the Latest tab.
+        </div>
+      ) : (
+        <ul className="mt-6 grid gap-4 md:grid-cols-2">
+          {feed.map((d, i) => (
+            <li
+              key={`${d.regionSlug}-${i}`}
+              className="flex flex-row overflow-hidden rounded-3xl border border-border bg-background"
+            >
+              <div className="relative aspect-[9/16] w-36 shrink-0 overflow-hidden bg-surface-2 sm:w-44">
+                <video
+                  src="/fringe-app-preview.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <Link
+                  to="/regions/$slug"
+                  params={{ slug: d.regionSlug }}
+                  className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-background/80 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-signal backdrop-blur-sm hover:text-foreground"
+                >
+                  {d.regionName}
+                </Link>
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <ViberAvatar handle={d.by} size={24} />
+                    <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+                      {d.spot} · @{d.by}
+                    </p>
+                  </div>
+                  <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                    {d.minutesAgo}m ago
+                  </span>
                 </div>
-                <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                  {d.minutesAgo}m ago
-                </span>
+                <p className="mt-3 text-base font-medium text-foreground/90">{d.vibe}</p>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  <ShakaButton viberName={d.by} viberUserId={DEMO_VIBER_USER_ID} />
+                  <FollowButton handle={d.by} />
+                </div>
               </div>
-              <p className="mt-3 text-base font-medium text-foreground/90">{d.vibe}</p>
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <ShakaButton viberName={d.by} viberUserId={DEMO_VIBER_USER_ID} />
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      )}
+
 
       {/* Become a Viber */}
       <div className="mt-24 rounded-3xl border border-border bg-surface/40 p-8 md:p-12">
