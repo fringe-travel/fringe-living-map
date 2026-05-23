@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getRegion, DEMO_VIBER_USER_ID, type SignalDrop } from "@/lib/regions";
 import { RegionMap } from "@/components/RegionMap";
 import { ShakaButton } from "@/components/ShakaButton";
+import { FollowButton } from "@/components/FollowButton";
 import { UnlockButton } from "@/components/UnlockButton";
 import { FRINGE_MEMBERSHIP_PRICE_ID } from "@/lib/pricing-ids";
 import { ViberAvatar } from "@/components/ViberAvatar";
