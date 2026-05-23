@@ -1,10 +1,21 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import appPreview from "@/assets/fringe-app-preview.jpeg";
 import { regions, DEMO_VIBER_USER_ID, type SignalDrop } from "@/lib/regions";
 import { ViberAvatar } from "@/components/ViberAvatar";
 import { ShakaButton } from "@/components/ShakaButton";
+import { FollowButton } from "@/components/FollowButton";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+
+const searchSchema = z.object({
+  tab: fallback(z.enum(["latest", "following"]), "latest").default("latest"),
+});
 
 export const Route = createFileRoute("/vibers")({
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: "Vibers, the global feed on FRiNGE" },
